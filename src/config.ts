@@ -291,6 +291,12 @@ export const navBarConfig: NavBarConfig = {
 					icon: "material-symbols:devices",
 					external: false,
 				},
+				{
+					name: "komari",
+					url: "https://komari.mikus.ink",
+					external: true,
+					icon: "mdi:komari",
+				},
 			],
 		},
 		{
