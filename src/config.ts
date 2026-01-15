@@ -295,7 +295,6 @@ export const navBarConfig: NavBarConfig = {
 					name: "komari",
 					url: "https://komari.mikus.ink",
 					external: true,
-					icon: "mdi:komari",
 				},
 			],
 		},
