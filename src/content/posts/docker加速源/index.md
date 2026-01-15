@@ -4,7 +4,7 @@ published: 2026-01-14
 pinned: true
 description: "miku自建的docker加速源"
 tags: [docker, 加速]
-category: "docker"
+category: "docker加速源"
 licenseName: "MIT"
 author: "miku"
 draft: false
