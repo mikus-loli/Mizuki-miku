@@ -1,10 +1,10 @@
 ---
 title: "Meting API"
 published: 2026-01-15
-pinned: true
+pinned: false
 description: "miku自建的Meting API"
 tags: [meting, api]
-category: "Meting API"
+category: "API"
 licenseName: "MIT"
 author: "miku"
 draft: false
