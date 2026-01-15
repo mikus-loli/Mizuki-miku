@@ -6,7 +6,7 @@ description: "miku自建的docker加速源"
 tags: [docker, 加速]
 category: "加速源"
 licenseName: "MIT"
-author: "miku"
+author: "mikus"
 draft: false
 date: 2026-01-14
 image: 'https://picflow-api.mikus.ink/converted/pc/webp/3FA88D85EFFCBED67E3F6D79A7D57B9B.webp'

@@ -6,7 +6,7 @@ description: "miku自建的live2d-api"
 tags: [live2d, api]
 category: "API"
 licenseName: "MIT"
-author: "miku"
+author: "mikus"
 draft: false
 date: 2026-01-14
 image: 'https://picflow-api.mikus.ink/converted/pc/webp/8F54C70847A95D27A4BD911A42583576.webp'

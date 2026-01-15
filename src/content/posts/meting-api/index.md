@@ -6,7 +6,7 @@ description: "miku自建的Meting API"
 tags: [meting, api]
 category: "API"
 licenseName: "MIT"
-author: "miku"
+author: "mikus"
 draft: false
 date: 2026-01-15
 image: 'https://picflow-api.mikus.ink/converted/pc/webp/D7994B273C2F7698AE88E09D5F028FAC.webp'
