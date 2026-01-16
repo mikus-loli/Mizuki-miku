@@ -656,5 +656,9 @@ export const umamiConfig = {
 	baseUrl: "https://api.umami.is", // Umami Cloud API地址
 	scripts: `
 <script defer src="XXXX.XXX" data-website-id="ABCD1234"></script>
+<!-- waifu-tips.js 依赖 JQuery 库 -->放在body
+<script src="https://static.mikus.ink/live2d/jquery.min.js"></script>
+<!-- 使用 aotuload.js 引入看板娘 -->放在body
+<script src="https://static.mikus.ink/live2d/autoload.js"></script>
   `.trim(), // 上面填你要插入的Script,不用再去Layout中插入
 } as const;
