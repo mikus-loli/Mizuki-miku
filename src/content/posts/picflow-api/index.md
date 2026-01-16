@@ -19,35 +19,27 @@ picflow API 地址:https://picflow-api.mikus.ink
 # 接口用法
 PicFlow API 是一个智能图片服务API，支持多种图片格式转换、设备自适应和外链模式。
 
-基本信息
-API版本: 2.0
-请求方式: GET
-响应格式: JSON (默认) / TEXT / 重定向
-字符编码: UTF-8
-核心特性
-🎯 智能格式检测: 根据用户浏览器自动选择最优图片格式 (AVIF/WebP/JPEG)
-📱 设备自适应: 自动检测移动端/桌面端，返回对应尺寸图片
-🔄 多格式支持: 支持 JPEG、WebP、AVIF 等现代图片格式
-🌐 外链模式: 支持从外部链接获取图片
-⚡ 高性能: 只处理转换后的优化图片，提升响应速度
 请求地址
 ```
 GET /api_v2.php
 ```
-
 ## 请求参数
-基础参数
-参数名	类型	默认值	说明
-count	int	1	返回图片数量，范围: 1-50
-type	string	auto	设备类型: pc(桌面端) / pe(移动端) / auto(自动检测)
-format	string	json	响应格式: json / text / url
-return	string	json	返回类型: json / redirect(直接重定向到图片)
-图片格式参数
-参数名	类型	默认值	说明
-img_format	string	auto	图片格式: auto(智能选择) / jpeg / webp / avif
-外链模式参数
-参数名	类型	默认值	说明
-external	boolean	false	外链模式: true / false / 1 / 0
+#### 基础参数
+|参数名|类型|默认值|说明|
+| :----- | :------: | -----: |
+|count|int|1|返回图片数量，范围: 1-50|
+|type|string|auto|设备类型: pc(桌面端) / pe(移动端) / auto(自动检测)|
+|format|string|json|响应格式: json / text / url|
+|return|string|json|返回类型: json / redirect(直接重定向到图片)|
+
+#### 图片格式参数
+|参数名|类型|默认值|说明|
+| :----- | :------: | -----: |
+|img_format|string|auto|图片格式: auto(智能选择) / jpeg / webp / avif|
+#### 外链模式参数
+|参数名|类型|默认值|说明|
+| :----- | :------: | -----: |
+|external|boolean|false|外链模式: true / false / 1 / 0|
 ## 使用模式
 ### 1. 本地模式 (默认)
 本地模式从服务器的 converted 目录获取已转换的优化图片。
@@ -206,11 +198,12 @@ GET /api_v2.php?img_format=webp
 }
 ```
 常见错误
-错误信息	原因	解决方案
-没有找到转换后的图片，请检查 converted 目录	converted目录为空或不存在	确保converted目录存在且包含图片文件
-没有找到 webp 格式的图片	指定格式的图片不存在	检查对应格式目录是否有图片
-外链文件不存在: pc.txt	外链模式配置文件缺失	创建对应的.txt配置文件
-外链文件中没有有效的链接	配置文件为空或格式错误	检查.txt文件内容格式
+|错误信息|原因|解决方案|
+| :----- | :------: | -----: |
+|没有找到转换后的图片，请检查 converted 目录|converted目录为空或不存在|确保converted目录存在且包含图片文件|
+|没有找到 webp 格式的图片|指定格式的图片不存在|检查对应格式目录是否有图片|
+|外链文件不存在: pc.txt|外链模式配置文件缺失|创建对应的.txt配置文件|
+|外链文件中没有有效的链接|配置文件为空或格式错误|检查.txt文件内容格式|
 ## 性能优化建议
 1. 图片预处理
 提前将图片转换为多种格式 (JPEG/WebP/AVIF)
