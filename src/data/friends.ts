@@ -16,11 +16,18 @@ export const friendsData: FriendItem[] = [
 		id: 1,
 		title: "thoelc blog",
 		imgurl: "https://labwt.com/upload/favicon.png",
-		desc: "The web framework for content-driven websites",
+		desc: "QAQ",
 		siteurl: "https://labwt.com",
-		tags: ["Framework"],
+		tags: ["Blog"],
 	},
-	
+	{
+		id: 2,
+		title: "昆明湖 blog",
+		imgurl: "https://blog.91vip.ink/_astro/avatar.Bp1MIY3n_113upO.webp",
+		desc: "最喜欢宁宁",
+		siteurl: "https://blog.91vip.ink",
+		tags: ["Blog"],
+	},
 ];
 
 // 获取所有友情链接数据
