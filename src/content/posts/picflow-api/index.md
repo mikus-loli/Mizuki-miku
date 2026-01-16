@@ -13,33 +13,33 @@ image: 'https://picflow-api.mikus.ink/converted/pc/webp/776D61306E8A34920F1760BF
 pubDate: 2026-01-15
 ---
 
-# picflow API
-picflow API 地址:https://picflow-api.mikus.ink
+# PicFlow API
+PicFlow API 地址: https://picflow-api.mikus.ink
 
-# 接口用法
+## 接口用法
 PicFlow API 是一个智能图片服务API，支持多种图片格式转换、设备自适应和外链模式。
 
-请求地址
+### 请求地址
 ```
 GET /api_v2.php
 ```
 ## 请求参数
 #### 基础参数
-|参数名|类型|默认值|说明|
-| :----- | :------: | -----: |
-|count|int|1|返回图片数量，范围: 1-50|
-|type|string|auto|设备类型: pc(桌面端) / pe(移动端) / auto(自动检测)|
-|format|string|json|响应格式: json / text / url|
-|return|string|json|返回类型: json / redirect(直接重定向到图片)|
+| 参数名 | 类型 | 默认值 | 说明 |
+| :----- | :------: | :-----: | :----- |
+| count | int | 1 | 返回图片数量，范围: 1-50 |
+| type | string | auto | 设备类型: pc(桌面端) / pe(移动端) / auto(自动检测) |
+| format | string | json | 响应格式: json / text / url |
+| return | string | json | 返回类型: json / redirect(直接重定向到图片) |
 
 #### 图片格式参数
-|参数名|类型|默认值|说明|
-| :----- | :------: | -----: |
-|img_format|string|auto|图片格式: auto(智能选择) / jpeg / webp / avif|
+| 参数名 | 类型 | 默认值 | 说明 |
+| :----- | :------: | :-----: | :----- |
+| img_format | string | auto | 图片格式: auto(智能选择) / jpeg / webp / avif |
 #### 外链模式参数
-|参数名|类型|默认值|说明|
-| :----- | :------: | -----: |
-|external|boolean|false|外链模式: true / false / 1 / 0|
+| 参数名 | 类型 | 默认值 | 说明 |
+| :----- | :------: | :-----: | :----- |
+| external | boolean | false | 外链模式: true / false / 1 / 0 |
 ## 使用模式
 ### 1. 本地模式 (默认)
 本地模式从服务器的 converted 目录获取已转换的优化图片。
@@ -91,8 +91,7 @@ GET /api_v2.php?external=1&return=redirect
 ```
 ## 响应格式
 JSON响应 (默认)
-```
-
+```json
 {
   "success": true,
   "count": 2,
@@ -168,18 +167,19 @@ Location: https://example.com/converted/pc/webp/image1.webp
 ## 智能格式检测
 API会根据用户的浏览器User-Agent自动检测支持的最优图片格式：
 
-支持的格式优先级
+### 支持的格式优先级
 1. AVIF - 最新格式，文件最小
-- Chrome 85+
-- Firefox 93+
+   - Chrome 85+
+   - Firefox 93+
 2. WebP - 广泛支持，优秀压缩
-- Chrome (所有版本)
-- Firefox
-- Edge
-- Safari 14+
+   - Chrome (所有版本)
+   - Firefox
+   - Edge
+   - Safari 14+
 3. JPEG - 兜底格式，最佳兼容性
-- 所有浏览器
-格式检测示例
+   - 所有浏览器
+
+### 格式检测示例
 ```
 # 自动检测最优格式
 GET /api_v2.php?img_format=auto
@@ -188,8 +188,8 @@ GET /api_v2.php?img_format=auto
 GET /api_v2.php?img_format=webp
 ```
 ## 错误处理
-错误响应格式
-```
+### 错误响应格式
+```json
 {
   "success": false,
   "message": "错误描述",
@@ -197,13 +197,15 @@ GET /api_v2.php?img_format=webp
   "images": []
 }
 ```
-常见错误
-|错误信息|原因|解决方案|
-| :----- | :------: | -----: |
-|没有找到转换后的图片，请检查 converted 目录|converted目录为空或不存在|确保converted目录存在且包含图片文件|
-|没有找到 webp 格式的图片|指定格式的图片不存在|检查对应格式目录是否有图片|
-|外链文件不存在: pc.txt|外链模式配置文件缺失|创建对应的.txt配置文件|
-|外链文件中没有有效的链接|配置文件为空或格式错误|检查.txt文件内容格式|
+### 常见错误
+```
+## 常见错误
+| 错误信息 | 原因 | 解决方案 |
+| :----- | :------ | :----- |
+| 没有找到转换后的图片，请检查 converted 目录 | converted目录为空或不存在 | 确保converted目录存在且包含图片文件 |
+| 没有找到 webp 格式的图片 | 指定格式的图片不存在 | 检查对应格式目录是否有图片 |
+| 外链文件不存在: pc.txt | 外链模式配置文件缺失 | 创建对应的.txt配置文件 |
+| 外链文件中没有有效的链接 | 配置文件为空或格式错误 | 检查.txt文件内容格式 |
 ## 性能优化建议
 1. 图片预处理
 提前将图片转换为多种格式 (JPEG/WebP/AVIF)
@@ -219,7 +221,7 @@ GET /api_v2.php?img_format=webp
 合理配置链接数量
 ## 使用示例
 JavaScript调用
-```
+```javascript
 // 获取随机图片
 fetch('/api_v2.php?count=5&img_format=webp')
   .then(response => response.json())
@@ -236,7 +238,7 @@ const imgUrl = '/api_v2.php?return=redirect&img_format=auto';
 document.getElementById('myImg').src = imgUrl;
 ```
 PHP调用
-```
+```php
 // 获取API数据
 $response = file_get_contents('http://yoursite.com/api_v2.php?count=3&type=pc');
 $data = json_decode($response, true);
@@ -248,7 +250,7 @@ if ($data['success']) {
 }
 ```
 HTML直接使用
-```
+```html
 <!-- 直接重定向到图片 -->
 <img src="/api_v2.php?return=redirect&img_format=webp" alt="Random Image">
 <!-- 背景图片 -->
