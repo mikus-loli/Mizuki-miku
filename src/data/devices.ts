@@ -20,7 +20,7 @@ export const devicesData: DeviceCategory = {
 		{
 			name: "红米 K40",
 			image: "/images/device/k40.png",
-			specs: "幻境 / 8G + 128G",
+			specs: "幻境 / 6G + 128G",
 			description:
 				"性能有点狠，搭载年度旗舰骁龙 870,屏幕有点狠，新一代 E4 直屏，更斩获A+评级，游戏体验有点狠，电竞级高刷超级触控，",
 			link: "https://www.mi.com/redmik40",

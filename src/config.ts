@@ -137,18 +137,28 @@ export const siteConfig: SiteConfig = {
 		// 请自行搭建API
 
 		homeText: {
-			enable: false, // 在主页显示自定义文本
-			title: "美しいミズキ", // 主页横幅主标题
+			enable: true, // 在主页显示自定义文本
+			title: "Miku", // 主页横幅主标题
 
 			subtitle: [
-				"特別なことはないけど、君がいると十分です",
-				"今でもあなたは私の光",
-				"君ってさ、知らないうちに私の毎日になってたよ",
-				"君と話すと、なんか毎日がちょっと楽しくなるんだ",
-				"今日はなんでもない日。でも、ちょっとだけいい日",
+				"只想安安静静待在你身边",
+				"你笑起来的时候，我也会觉得开心",
+				"哪怕不言不语，陪着你就很好",
+				"日子平平淡淡就好，只要有你相伴",
+				"我一直在呀，就在这里陪着你",
+				"能遇见你，真是一件很幸运的事",
+				"你的一举一动，我都悄悄记着",
+				"平凡的时光，因为有你而变得珍贵",
+				"只要你需要，我就会一直在这里",
+				"看着你，就觉得心里暖暖的",
+				"有你在的每一天，都刚刚好",
+				"风很温柔，你很美好，一切都刚刚好",
+				"我的世界，因你而多了一抹温柔",
+				"不用奔赴山海，身边有你就足矣",
+				"慢慢陪伴，便是最长情的告白",
 			],
 			typewriter: {
-				enable: false, // 启用副标题打字机效果
+				enable: true, // 启用副标题打字机效果
 
 				speed: 100, // 打字速度（毫秒）
 				deleteSpeed: 50, // 删除速度（毫秒）
@@ -177,11 +187,11 @@ export const siteConfig: SiteConfig = {
 	generateOgImages: false, // 启用生成OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
 	favicon: [
 		// 留空以使用默认 favicon
-		 {
-		  src: '/favicon/miku.svg',    // 图标文件路径
-	      theme: 'light',              // 可选，指定主题 'light' | 'dark'
-		  sizes: '32x32',              // 可选，图标大小
-		 }
+		{
+			src: "/favicon/miku.svg", // 图标文件路径
+			theme: "light", // 可选，指定主题 'light' | 'dark'
+			sizes: "32x32", // 可选，图标大小
+		},
 	],
 
 	// 字体配置
@@ -624,7 +634,7 @@ export const pioConfig: import("./types/config").PioConfig = {
 	mode: "fixed", // 默认为可拖拽模式
 	hiddenOnMobile: true, // 默认在移动设备上隐藏
 	dialog: {
-		welcome: "欢迎来到 Mikus 的网站！", 
+		welcome: "欢迎来到 Mikus 的网站！",
 		touch: [
 			"你在干什么？",
 			"再摸我就报警了！",
