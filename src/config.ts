@@ -138,9 +138,10 @@ export const siteConfig: SiteConfig = {
 
 		homeText: {
 			enable: true, // 在主页显示自定义文本
-			title: "Miku", // 主页横幅主标题
+			title: "Mikus", // 主页横幅主标题
 
 			subtitle: [
+				"最喜欢Miku了",
 				"只想安安静静待在你身边",
 				"你笑起来的时候，我也会觉得开心",
 				"哪怕不言不语，陪着你就很好",
