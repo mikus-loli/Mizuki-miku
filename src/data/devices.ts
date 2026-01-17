@@ -36,4 +36,21 @@ export const devicesData: DeviceCategory = {
 			link: "https://www.mi.com/xiaomi-ax3000t",
 		},
 	],
+	外设: [
+		{
+			name: "迈从A7 Pro",
+			image: "/images/device/A7Pro.png",
+			specs: "DPI 26000 / PAW3950 Ultra",
+			description: "响应超快，超轻量化，游戏&办公双巅峰",
+			link: "https://www.maicong.cn/detail?link_product=c7188fb0a718de9d8a67c458471f5b06",
+		},
+
+		{
+			name: "艾石头ND63 Pro",
+			image: "/images/device/ND63Pro.png",
+			specs: "480MHZ主控芯片 / 8KHZ回报率",
+			description: "0.001MMRT精度，双死区可调 不断触",
+			link: "https://www.irok.cn/item/366",
+		},
+	],
 };
