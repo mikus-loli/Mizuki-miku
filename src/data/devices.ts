@@ -28,7 +28,7 @@ export const devicesData: DeviceCategory = {
 	],
 	路由器: [
 		{
-			name: "小米路由器 AX3000T",
+			name: "小米路由器 AX3000T", 
 			image: "/images/device/ax3000t.png",
 			specs: "1000Mbps / 1G",
 			description:

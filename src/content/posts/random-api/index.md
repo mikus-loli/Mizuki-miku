@@ -1,8 +1,8 @@
 ---
-title: "random-pic API-随机图片"
+title: "Random-pic API-随机图片"
 published: 2026-01-15
 pinned: false
-description: "miku自建的random-pic API（随机图片）"
+description: "miku自建的Random-pic API（随机图片）"
 tags: [random-pic, api]
 category: "API"
 licenseName: "MIT"
