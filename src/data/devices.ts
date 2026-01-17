@@ -18,6 +18,14 @@ export type DeviceCategory = {
 export const devicesData: DeviceCategory = {
 	手机: [
 		{
+			name: "红米 K40",
+			image: "/images/device/k40.png",
+			specs: "墨羽 / 8G + 128G",
+			description:
+				"性能有点狠，搭载年度旗舰骁龙 870,屏幕有点狠，新一代 E4 直屏，更斩获A+评级，游戏体验有点狠，电竞级高刷超级触控，",
+			link: "https://www.mi.com/redmik40",
+		},
+		{
 			name: "红米 K60",
 			image: "/images/device/k60.png",
 			specs: "墨羽 / 8G + 256G",
@@ -28,7 +36,7 @@ export const devicesData: DeviceCategory = {
 	],
 	路由器: [
 		{
-			name: "小米路由器 AX3000T", 
+			name: "小米路由器 AX3000T",
 			image: "/images/device/ax3000t.png",
 			specs: "1000Mbps / 1G",
 			description:
@@ -36,10 +44,10 @@ export const devicesData: DeviceCategory = {
 			link: "https://www.mi.com/xiaomi-ax3000t",
 		},
 	],
-	
+
 	音箱: [
 		{
-			name: "小米小爱音箱Play 增强版", 
+			name: "小米小爱音箱Play 增强版",
 			image: "/images/device/Play.png",
 			specs: "小米 MEssh 1.0 / WiFi 2.4,BT 5.0",
 			description:
@@ -48,11 +56,10 @@ export const devicesData: DeviceCategory = {
 		},
 
 		{
-			name: "小米AI音箱（第二代）", 
+			name: "小米AI音箱（第二代）",
 			image: "/images/device/Ai-2.png",
 			specs: "组合立体声 / 低频饱满",
-			description:
-				"经典延续，体验升级低频饱满有深度，人声清晰有细节 ",
+			description: "经典延续，体验升级低频饱满有深度，人声清晰有细节 ",
 			link: "https://www.mi.com/shop/buy/detail?product_id=13878&cfrom=search",
 		},
 	],
