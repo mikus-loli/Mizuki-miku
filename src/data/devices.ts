@@ -16,7 +16,7 @@ export type DeviceCategory = {
 };
 
 export const devicesData: DeviceCategory = {
-	OnePlus: [
+	手机: [
 		{
 			name: "红米 K60",
 			image: "/images/device/k60.png",
@@ -26,7 +26,7 @@ export const devicesData: DeviceCategory = {
 			link: "https://www.mi.com/redmi-k60",
 		},
 	],
-	Router: [
+	路由器: [
 		{
 			name: "小米路由器 AX3000T",
 			image: "/images/device/ax3000t.png",
