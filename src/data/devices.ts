@@ -29,11 +29,11 @@ export const devicesData: DeviceCategory = {
 	Router: [
 		{
 			name: "小米路由器 AX3000T",
-			image: "/images/device/mt3000.png",
-			specs: "1000Mbps / 2.5G",
+			image: "/images/device/ax3000t.png",
+			specs: "1000Mbps / 1G",
 			description:
-				"Portable WiFi 6 router suitable for business trips and home use.",
-			link: "https://www.gl-inet.cn/products/gl-mt3000/",
+				"满血 WiFi6疾速快人一步 3000兆级无线速率 加倍吞吐量 网速疾驰 4K电影拖拽秒缓冲",
+			link: "https://www.mi.com/xiaomi-ax3000t",
 		},
 	],
 };
