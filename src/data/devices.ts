@@ -36,6 +36,27 @@ export const devicesData: DeviceCategory = {
 			link: "https://www.mi.com/xiaomi-ax3000t",
 		},
 	],
+	
+	音箱: [
+		{
+			name: "小米小爱音箱Play 增强版", 
+			image: "/images/device/Play.png",
+			specs: "小米 MEssh 1.0 / WiFi 2.4,BT 5.0",
+			description:
+				"内置红外遥控，一句话控制传统家电内置红外遥控，一句话控制传统家电",
+			link: "https://www.mi.com/shop/buy/detail?product_id=14596&cfrom=search",
+		},
+
+		{
+			name: "小米AI音箱（第二代）", 
+			image: "/images/device/Ai-2.png",
+			specs: "组合立体声 / 低频饱满",
+			description:
+				"经典延续，体验升级低频饱满有深度，人声清晰有细节 ",
+			link: "https://www.mi.com/shop/buy/detail?product_id=13878&cfrom=search",
+		},
+	],
+
 	外设: [
 		{
 			name: "迈从A7 Pro",
