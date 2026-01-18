@@ -32,7 +32,7 @@ export const friendsData: FriendItem[] = [
 	{
 		id: 3,
 		title: "璃奈的小窝",
-		imgurl: "https://arkn.icu/images/redefine-logo.png",
+		imgurl: "https://easyimage.mikus.ink/i/u/2026/01/18/xksikg.webp",
 		desc: "欢迎来到猪咪的小窝喵！",
 		siteurl: "https://arkn.icu/",
 		tags: ["Blog"],
