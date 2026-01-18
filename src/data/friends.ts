@@ -28,6 +28,15 @@ export const friendsData: FriendItem[] = [
 		siteurl: "https://blog.91vip.ink",
 		tags: ["Blog"],
 	},
+
+	{
+		id: 3,
+		title: "璃奈的小窝",
+		imgurl: "https://arkn.icu/images/redefine-logo.png",
+		desc: "欢迎来到猪咪的小窝喵！",
+		siteurl: "https://arkn.icu/",
+		tags: ["Blog"],
+	},
 ];
 
 // 获取所有友情链接数据
