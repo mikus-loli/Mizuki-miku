@@ -33,6 +33,22 @@ const localAnimeList: AnimeItem[] = [
 		startDate: "2022-07",
 		endDate: "2022-09",
 	},
+	{
+		title: "轻音少女 第二季",
+		status: "completed",
+		rating: 9.9,
+		cover: "/assets/anime/轻音少女 第二季.webp",
+		description: "女孩子们的日常，甜美治愈",
+		episodes: "27 episodes",
+		year: "2015",
+		genre: ["日常", "治愈"],
+		studio: "京都动画",
+		link: "https://www.bilibili.com/bangumi/media/md28220984",
+		progress: 27,
+		totalEpisodes: 27,
+		startDate: "2022-07",
+		endDate: "2022-09",
+	},
 ];
 
 export default localAnimeList;
