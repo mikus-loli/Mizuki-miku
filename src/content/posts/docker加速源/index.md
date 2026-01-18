@@ -98,8 +98,8 @@ docker pull ghcr.docker.mikus.ink/microsoft/vscode:latest
 # 等同于 docker pull ghcr.io/microsoft/vscode:latest
 ```
 
-# 注意事项
-1. 如遇无法拉取镜像，请尝试刷新 DNS 或更换网络环境  
-2. 加速源仅用于个人学习和研究使用，禁止违法用途  
-3. 请勿滥用，否则可能会被限制访问或封禁 IP  
-4. 若有疑问或建议，可通过博客评论区或邮箱联系博主
+:::caution[注意]
+1. 仅用于个人学习和研究使用，禁止违法用途  
+2. 请勿滥用，否则可能会被限制访问或封禁 IP  
+3. 若有疑问或建议，可通过博客评论区或邮箱联系博主
+:::
