@@ -2,7 +2,7 @@
 title: "Live2D API"
 published: 2026-01-14
 pinned: false
-description: "miku自建的live2d-api"
+description: "mikus自建的live2d-api"
 tags: [live2d, api]
 category: "API"
 licenseName: "MIT"
