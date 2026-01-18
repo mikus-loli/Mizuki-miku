@@ -24,7 +24,7 @@ const SITE_TIMEZONE = 8; //设置你的网站时区 from -12 to 12 default in UT
 export const siteConfig: SiteConfig = {
 	title: "mikus",
 	subtitle: "Ciallo～(∠・ω< )⌒☆",
-	siteURL: "https://blog.mikus.ink/", // 请替换为你的站点URL，以斜杠结尾
+	siteURL: "https://mikus.ink/", // 请替换为你的站点URL，以斜杠结尾
 	siteStartDate: "2024-01-01", // 站点开始运行日期，用于站点统计组件计算运行天数
 
 	timeZone: SITE_TIMEZONE,
