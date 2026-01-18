@@ -21,7 +21,7 @@ NodeQuality 是一个功能强大的服务器性能测试工具，能够测试�
 
 ## 原项目
 
-- **GitHub 仓库**: ::github{repo="LloydAsp/NodeQuality"}
+::github{repo="LloydAsp/NodeQuality"}
 
 ## 适配说明
 
