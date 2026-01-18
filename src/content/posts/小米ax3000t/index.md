@@ -46,7 +46,8 @@ curl -X POST http://192.168.10.1/cgi-bin/luci/;stok=0a53ad5b8027c954d73b12ba8622
 固化ssh后，重启系统后不会丢失ssh连接
 :::
 小米路由器是 Snapshot 系统，重启会重置为最初状态，导致解锁 SSH 失效。提示为connect to host 192.168.10.1 port 22: Connection refused
-小米路由器固化ssh挺麻烦的，网上也没有ax3000t的教程，但我们可以设置一个开机启动ssh的脚本来实现重启后开启ssh服务。
+小米路由器固化ssh挺麻烦的，可以lemoeo/AX6S的开机启动ssh的脚本来实现重启后开启ssh服务。
+::github{repo="lemoeo/AX6S"}
 ```bash
 1. 创建目录
 mkdir /data/auto_ssh && cd /data/auto_ssh
