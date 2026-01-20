@@ -48,12 +48,21 @@ export const siteConfig: SiteConfig = {
 		devices: true, // 设备页面开关
 	},
 
-	// 顶栏标题配置
 	navbarTitle: {
+		// 显示模式："text-icon" 显示图标+文本，"logo" 仅显示Logo
+		mode: "logo",
 		// 顶栏标题文本
 		text: "Mikus",
 		// 顶栏标题图标路径，默认使用 public/assets/home/home.png
 		icon: "assets/home/miku.svg",
+		// 网站Logo图片路径
+		logo: "/favicon/miku.svg",
+	},
+
+	// 页面自动缩放配置
+	pageScaling: {
+		enable: true, // 是否开启自动缩放
+		targetWidth: 2000, // 目标宽度，低于此宽度时开始缩放
 	},
 
 	bangumi: {
