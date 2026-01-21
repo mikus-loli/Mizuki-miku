@@ -105,20 +105,20 @@ export const siteConfig: SiteConfig = {
 		// 支持单张图片或图片数组，当数组长度 > 1 时自动启用轮播
 		src: {
 			desktop: [
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&return=redirect",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&return=redirect&t=1",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&return=redirect&t=2",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&return=redirect&t=3",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&return=redirect&t=4",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&return=redirect&t=5",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=1",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=2",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=3",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=4",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=5",
 			], // 桌面横幅图片
 			mobile: [
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&return=redirect",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&return=redirect&t=1",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&return=redirect&t=2",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&return=redirect&t=3",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&return=redirect&t=4",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&return=redirect&t=5",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=1",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=2",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=3",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=4",
+				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=5",
 			], // 移动横幅图片
 		}, // 使用本地横幅图片
 
