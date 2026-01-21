@@ -48,8 +48,7 @@ RUN rm -rf /usr/share/nginx/html/*
 # 安装git工具
 RUN apk add --no-cache git \
     && rm -rf /var/cache/apk/*
-# 克隆Mikutap源码到容器的Nginx静态目录（国内可替换为Gitee镜像）
-# 国内用户建议替换为：https://gitee.com/mirrors/mikutap.git
+# 克隆Mikutap源码到容器的Nginx静态目录
 RUN git clone https://mirror.mikus.ink/https://github.com/AkariRin/mikutap.git /usr/share/nginx/html/
 
 # 暴露80端口（容器对外提供服务的端口）
