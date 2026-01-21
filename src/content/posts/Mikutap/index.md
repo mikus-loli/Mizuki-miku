@@ -2,7 +2,7 @@
 title: "Mikutap Docker版部署指南"
 published: 2026-01-21
 pinned: false
-description: "Mikutap DDocker镜像，无需部署，直接使用即可"
+description: "Mikutap Docker镜像，无需部署，直接使用即可"
 tags: [Mikutap,docker]
 category: "Mikutap"
 licenseName: "MIT"
