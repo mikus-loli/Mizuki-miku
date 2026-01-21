@@ -19,7 +19,9 @@ pubDate: 2026-01-21
 Mikutap 是由日本知名 Vocaloid 音乐人*daniwell*开发的一款极简交互式声音艺术装置，灵感来源于 Patatap，核心特点是无需任何音乐基础，通过简单的点击操作就能生成初音未来风格的电音旋律，配合绚丽的粒子动画，带来极致的解压体验。它没有复杂的规则，没有失败惩罚，只有纯粹的创作乐趣和感官享受。 miku厨狂喜
 
 # 使用方法
-## 部署前需确保服务器/本地已安装Docker和Docker Compose
+:::caution[注意]
+部署前需确保服务器/本地已安装Docker和Docker Compose
+:::
 ## 1.使用mikus构建好的镜像 （推荐）
 1. 创建docker-compose.yml文件
 ```docker compose
@@ -75,7 +77,7 @@ docker run -d \
   mikutap:latest
 ```
 
-# 访问验证
+## 访问验证
 部署完成后，通过以下方式验证是否成功：
 1. 本地访问：打开浏览器，输入 http://localhost:8080
 2. 服务器访问：输入 http://服务器IP:8080
@@ -88,6 +90,7 @@ docker logs mikutap
 ```
 
 # 预览网址
+
 - https://aidn.jp/mikutap/
 - https://mikutap.mikus.ink/ （mikus部署的Mikutap 国内访问优化）
 
