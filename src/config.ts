@@ -340,6 +340,12 @@ export const navBarConfig: NavBarConfig = {
 					url: "https://komari.mikus.ink",
 					external: true,
 				},
+
+				{
+					name: "Mikutap",
+					url: "https://mikutap.mikus.ink",
+					external: true,
+				},
 			],
 		},
 	],
