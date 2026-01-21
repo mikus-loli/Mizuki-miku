@@ -11,7 +11,11 @@
 [**🖥️ 線上演示**](https://mizuki.mysqil.com/) | [**📝 使用者文檔**](https://docs.mizuki.mysqil.com/)
 
 🌏 README 語言
+<<<<<<< HEAD
 [**English**](../README.md) / [**中文**](../README.zh.md) / [**日本語**](./README.ja.md) / [**中文繁体**](./README.tw.md) /
+=======
+[**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**中文繁体**](./README.tw.md) /
+>>>>>>> upstream/master
 
 透過我們的綜合文檔快速開始。無論是自訂主題、配置功能，還是部署到生產環境，文檔涵蓋了您成功啟動部落格所需的所有內容。
 
@@ -37,14 +41,22 @@
 > **🎯 自動解析度演算法** - 智能適配內容佈局基於裝置螢幕解析度，為所有裝置提供最佳觀看體驗
 
 🌏 README 語言
+<<<<<<< HEAD
 [**English**](../README.md) /
 [**中文**](../README.zh.md) /
+=======
+[**English**](./README.md) /
+[**中文**](./README.zh.md) /
+>>>>>>> upstream/master
 [**日本語**](./README.ja.md) /
 [**中文繁体**](./README.tw.md) /
 
 
 
+<<<<<<< HEAD
 ![Configuration](../configuration.svg)
+=======
+>>>>>>> upstream/master
 
 ### 🔧 元件配置系統重構
 - **統一配置架構：** 全新的模組化元件配置體系，支援動態元件管理和順序配置
@@ -266,6 +278,48 @@ export const siteConfig: SiteConfig = {
 - **日記頁面：** 在 `src/pages/diary.astro` 中編輯動態
 - **關於頁面：** 在 `src/content/spec/about.md` 中編輯內容
 
+<<<<<<< HEAD
+=======
+### 📦 代碼內容分離 (可選)
+
+Mizuki 支援將代碼和內容分成兩個獨立的倉庫管理，適合團隊協作和大型專案。
+
+**快速選擇**:
+
+| 使用場景 | 配置方式 | 適合人群 |
+|---------|---------|---------|
+| 🆕 **本地模式** (預設) | 不配置，直接使用 | 新手、個人部落格 |
+| 🔧 **分離模式** | 設置 `ENABLE_CONTENT_SYNC=true` | 團隊協作、私有內容 |
+
+**一鍵啟用/禁用**:
+
+```bash
+# 方式 1: 本地模式 (推薦新手)
+# 不創建 .env 文件，直接運行
+pnpm dev
+
+# 方式 2: 內容分離模式
+# 1. 複製配置文件
+cp .env.example .env
+
+# 2. 編輯 .env，啟用內容分離
+ENABLE_CONTENT_SYNC=true
+CONTENT_REPO_URL=https://github.com/your-username/Mizuki-Content.git
+
+# 3. 同步內容
+pnpm run sync-content
+```
+
+**功能特性**:
+- ✅ 支援公開和私有倉庫 🔐
+- ✅ 一鍵啟用/禁用，無需修改代碼
+- ✅ 自動同步，開發前自動拉取最新內容
+
+📖 **詳細配置**: [內容分離完整指南](docs/CONTENT_SEPARATION.md)
+🔄 **遷移教程**: [從單倉庫遷移到分離模式](docs/MIGRATION_GUIDE.md)
+📚 **更多文檔**: [文檔索引](docs/README.md)
+
+>>>>>>> upstream/master
 ## ✏️ 貢獻
 
 我們歡迎貢獻！請隨時提交問題和拉取請求。
@@ -278,7 +332,11 @@ export const siteConfig: SiteConfig = {
 
 ## 📄 許可證
 
+<<<<<<< HEAD
 本專案基於 Apache 許可證 2.0 - 查看 [LICENSE](../LICENSE) 檔案了解詳情。
+=======
+本專案基於 Apache 許可證 2.0 - 查看 [LICENSE](./LICENSE) 檔案了解詳情。
+>>>>>>> upstream/master
 
 ### 原始專案許可證
 
