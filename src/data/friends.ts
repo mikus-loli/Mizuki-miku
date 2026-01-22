@@ -37,6 +37,15 @@ export const friendsData: FriendItem[] = [
 		siteurl: "https://arkn.icu/",
 		tags: ["Blog"],
 	},
+
+	{
+		id: 4,
+		title: "WitchCat",
+		imgurl: "https://www.witchcat.cn/api/proxy-image?url=http%3A%2F%2F121.40.94.142%3A9000%2Fwitchcat-files%2Fsite_images%2Fprofile%2F8567d1f6-62a3-412e-b9b1-76d2f9c10c6c.jpg",
+		desc: "可爱的女巫的折耳猫的小站",
+		siteurl: "https://www.witchcat.cn",
+		tags: ["Blog"],
+	},
 ];
 
 // 获取所有友情链接数据
