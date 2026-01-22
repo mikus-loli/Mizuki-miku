@@ -2,7 +2,7 @@
 title: "NodeQuality 适配国内环境"
 published: 2026-01-18
 pinned: false
-description: "NodeQuality 是一个服务器性能测试工具，mikus提供了适配国内网络环境的修改版本。"
+description: "NodeQuality 是一个服务器性能测试脚本，mikus提供了适配国内网络环境的修改版本。"
 tags: ["NodeQuality", "服务器测试", "脚本",]
 category: "脚本"
 licenseName: "MIT"
