@@ -1,6 +1,6 @@
 ((global) => {
 	const cacheKey = "umami-share-cache";
-	const cacheTTL = 3600_000; // 1h
+	const cacheTTL = 60000; // 1min
 
 	/**
 	 * 获取网站统计数据
@@ -24,7 +24,7 @@
 		}
 
 		const currentTimestamp = Date.now();
-		// 修改API路径，注意自建Umami可能没有/v1，而是直接/api
+		// 修改API路径，注意自建Umami没有/v1，而是直接/api
 		const statsUrl = `${baseUrl}/websites/${websiteId}/stats?startAt=0&endAt=${currentTimestamp}`;
 
 		const res = await fetch(statsUrl, {
