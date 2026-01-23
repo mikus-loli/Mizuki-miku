@@ -4,8 +4,8 @@
 
 	/**
 	 * 获取网站统计数据
-	 * @param {string} baseUrl - Umami Cloud API基础URL
-	 * @param {string} apiKey - API密钥
+	 * @param {string} baseUrl - Umami API基础URL（例如：http://localhost:3000/api）
+	 * @param {string} apiKey - API密钥（Bearer Token）
 	 * @param {string} websiteId - 网站ID
 	 * @returns {Promise<object>} 网站统计数据
 	 */
@@ -24,11 +24,13 @@
 		}
 
 		const currentTimestamp = Date.now();
-		const statsUrl = `${baseUrl}/v1/websites/${websiteId}/stats?startAt=0&endAt=${currentTimestamp}`;
+		// 修改API路径，注意自建Umami可能没有/v1，而是直接/api
+		const statsUrl = `${baseUrl}/websites/${websiteId}/stats?startAt=0&endAt=${currentTimestamp}`;
 
 		const res = await fetch(statsUrl, {
 			headers: {
-				"x-umami-api-key": apiKey,
+				// 修改认证头为Bearer Token
+				Authorization: `Bearer ${apiKey}`,
 			},
 		});
 
@@ -49,7 +51,7 @@
 
 	/**
 	 * 获取特定页面的统计数据
-	 * @param {string} baseUrl - Umami Cloud API基础URL
+	 * @param {string} baseUrl - Umami API基础URL
 	 * @param {string} apiKey - API密钥
 	 * @param {string} websiteId - 网站ID
 	 * @param {string} urlPath - 页面路径
@@ -65,11 +67,13 @@
 		startAt = 0,
 		endAt = Date.now(),
 	) {
-		const statsUrl = `${baseUrl}/v1/websites/${websiteId}/stats?startAt=${startAt}&endAt=${endAt}&path=${encodeURIComponent(urlPath)}`;
+		// 修改API路径
+		const statsUrl = `${baseUrl}/websites/${websiteId}/stats?startAt=${startAt}&endAt=${endAt}&path=${encodeURIComponent(urlPath)}`;
 
 		const res = await fetch(statsUrl, {
 			headers: {
-				"x-umami-api-key": apiKey,
+				// 修改认证头为Bearer Token
+				Authorization: `Bearer ${apiKey}`,
 			},
 		});
 
@@ -82,7 +86,7 @@
 
 	/**
 	 * 获取 Umami 网站统计数据
-	 * @param {string} baseUrl - Umami Cloud API基础URL
+	 * @param {string} baseUrl - Umami API基础URL
 	 * @param {string} apiKey - API密钥
 	 * @param {string} websiteId - 网站ID
 	 * @returns {Promise<object>} 网站统计数据
@@ -97,7 +101,7 @@
 
 	/**
 	 * 获取特定页面的 Umami 统计数据
-	 * @param {string} baseUrl - Umami Cloud API基础URL
+	 * @param {string} baseUrl - Umami API基础URL
 	 * @param {string} apiKey - API密钥
 	 * @param {string} websiteId - 网站ID
 	 * @param {string} urlPath - 页面路径
