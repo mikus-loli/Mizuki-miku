@@ -678,7 +678,7 @@ export const widgetConfigs = {
 export const umamiConfig = {
 	enabled: true, // 是否显示Umami统计
 	apiKey: "5mr6LvdKJw6XAMS8QSiIw5NkSkzFyw+UwiPWydZ972eA5FCee3k53c86asApaRZP45HOe50tdKN/bnUwbDiypnh3Z8FFnj2ZEi2XB6MUU7KoX+DZ9xZZ1RiRNxD79mUOUYVf8gHqXwtJDgpyv5rvMmF9IDp74nIxbjk2CiCM3fb2mD80SRnkpayNmNyO6r2wGDYLnAUSbyGR7jDdUpnarX5It7ldc9qu/o1WqwNAPCOuCbLb7IHHsQ9+9YZoqBrEYwGyZKI5hBHbn/i0x1QTPHuDLZ3VPtH0hv6XfKAUZ2QIo1++CaM6TrAMqlgpnLhXSn9xfTuiyUIzRouWqGkxGTMaevf3IoJib2CQ8P/ngCY6FQ1rWVRcrV2Bov+F", // API密钥优先从环境变量读取，否则使用配置文件中的值
-	baseUrl: "https://umami.mikus.ink/api", // Umami Cloud API地址
+	baseUrl: "https://umami.mikus.ink/api/", // Umami Cloud API地址
 	scripts:
 		`<script defer src="https://umami.mikus.ink/script.js" data-website-id="f4320e52-859c-4431-bfab-6e43f70aeec0"></script>
 		`.trim(), // 上面填你要插入的Script,不用再去Layout中插入
