@@ -3,7 +3,7 @@ title: "Umami Docker 部署"
 published: 2026-01-29
 pinned: false
 description: "Umami 是一个开源、轻量级的网站分析工具，使用 Docker 快速部署，保护用户隐私的同时提供详细的流量统计"
-tags: ["Umami", "分析工具", "Docker", "部署"]
+tags: ["Umami", "分析工具", "docker"]
 category: "工具"
 licenseName: "MIT"
 author: "mikus"
