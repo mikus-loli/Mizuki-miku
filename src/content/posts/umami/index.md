@@ -114,7 +114,7 @@ docker-compose up -d
 ## 安全配置
 
 1. **修改默认密码**
-2. **使用 HTTPS** 推荐使用 Nginx 或 Caddy 作为反向代理，并配置 SSL 证书：
+2. **使用 HTTPS** 推荐使用 Nginx 或 Caddy 作为反向代理，并配置 SSL 证书
 
 ## 使用方法
 
