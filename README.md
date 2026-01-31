@@ -263,6 +263,8 @@ export const siteConfig: SiteConfig = {
 - **Diary Page:** Edit moments in `src/pages/diary.astro`
 - **About Page:** Edit content in `src/content/spec/about.md`
 
+<<<<<<< HEAD
+=======
 ### 📦 Code-Content Separation (Optional)
 
 Mizuki supports separating code and content into two independent repositories, suitable for team collaboration and large projects.
@@ -302,6 +304,7 @@ pnpm run sync-content
 🔄 **Migration Tutorial**: [Migrate from Single Repo to Separation Mode](docs/MIGRATION_GUIDE.md)
 📚 **More Documentation**: [Documentation Index](docs/README.md)
 
+>>>>>>> upstream/master
 ## ✏️ Contributing
 
 Contributions are welcome! Feel free to submit issues and pull requests.
