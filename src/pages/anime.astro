@@ -10,6 +10,20 @@ import path from "node:path";
 import { widgetManager } from "../utils/widget-manager";
 import "../styles/anime.css";
 
+interface RawAnimeItem {
+	title?: string;
+	cover?: string;
+	link?: string;
+	status?: string;
+	rating?: number | string;
+	progress?: number | string;
+	totalEpisodes?: number | string;
+	description?: string;
+	year?: string;
+	studio?: string;
+	genre?: string[];
+}
+
 interface AnimeItem {
 	title: string;
 	cover: string;
@@ -24,140 +38,173 @@ interface AnimeItem {
 	genre: string[];
 }
 
+type AnimeSourceConfig =
+	| { type: "local"; data: AnimeItem[] }
+	| {
+			type: "json";
+			filename: string;
+			fetchOnDev?: boolean;
+			emptyDescription?: string; // 可选：特定源的空状态描述
+	  };
+
 if (!siteConfig.featurePages.anime) {
 	return Astro.redirect("/404/");
 }
 
 const hasRightSidebars =
-	widgetManager.getComponentsByPosition("top", "right", "desktop").length > 0 ||
-	widgetManager.getComponentsByPosition("sticky", "right", "desktop").length > 0;
+	widgetManager.getComponentsByPosition("top", "right", "desktop").length >
+		0 ||
+	widgetManager.getComponentsByPosition("sticky", "right", "desktop").length >
+		0;
+
 const BANGUMI_USER_ID = siteConfig.bangumi?.userId || "your-user-id";
 const BILIBILI_VMID = siteConfig.bilibili?.vmid || "";
 const ANIME_MODE = siteConfig.anime?.mode || "bangumi";
 
-let animeList: AnimeItem[] = [];
+const sourceConfigs: Record<string, AnimeSourceConfig> = {
+	local: {
+		type: "local",
+		data: localAnimeList,
+	},
+	bilibili: {
+		type: "json",
+		filename: "bilibili-data.json",
+		fetchOnDev: siteConfig.bilibili?.fetchOnDev,
+		emptyDescription: i18n(I18nKey.animeEmptyBilibili),
+	},
+	bangumi: {
+		type: "json",
+		filename: "bangumi-data.json",
+		fetchOnDev: siteConfig.bangumi?.fetchOnDev,
+		emptyDescription: i18n(I18nKey.animeEmptyBangumi),
+	},
+	// 示例：未来扩展 MyAnimeList
+	// myanimelist: {
+	//     type: "json",
+	//     filename: "mal-data.json",
+	//     fetchOnDev: siteConfig.mal?.fetchOnDev
+	// }
+};
 
-if (ANIME_MODE === "local") {
-	animeList = localAnimeList;
-} else if (ANIME_MODE === "bilibili") {
-	const isDev = import.meta.env.DEV;
-	const shouldFetchOnDev = siteConfig.bilibili?.fetchOnDev ?? false;
-	const skipLoad = isDev && !shouldFetchOnDev;
+function loadAnimeData(filename: string): AnimeItem[] {
+	const dataPath = path.join(process.cwd(), `src/data/${filename}`);
 
-	if (skipLoad) {
-		console.log("[Dev] Skipping Bilibili data load (fetchOnDev is off).");
-		animeList = [];
-	} else {
-		try {
-			const dataPath = path.join(
-				process.cwd(),
-				"src/data/bilibili-data.json",
-			);
-			if (fs.existsSync(dataPath)) {
-				const fileContent = fs.readFileSync(dataPath, "utf-8");
-				const rawData = JSON.parse(fileContent);
-				animeList = rawData.map((item: any) => ({
-					title: item.title || "Unknown",
-					cover: item.cover || "",
-					link: item.link || "",
-					status: item.status || "planned",
-					rating: Number(item.rating) || 0,
-					progress: Number(item.progress) || 0,
-					totalEpisodes: Number(item.totalEpisodes) || 12,
-					description: item.description || "",
-					year: item.year || "",
-					studio: item.studio || "",
-					genre: Array.isArray(item.genre) ? item.genre : [],
-				}));
-			} else {
-				console.warn(`Bilibili data file not found at ${dataPath}.`);
-				animeList = [];
-			}
-		} catch (error) {
-			console.error("Failed to load Bilibili anime data:", error);
-			animeList = [];
-		}
+	if (!fs.existsSync(dataPath)) {
+		console.warn(`[Anime] Data file not found: ${dataPath}`);
+		return [];
 	}
-} else {
-	const isDev = import.meta.env.DEV;
-	const shouldFetchOnDev = siteConfig.bangumi?.fetchOnDev ?? false;
-	const skipLoad = isDev && !shouldFetchOnDev;
 
-	if (skipLoad) {
-		console.log("[Dev] Skipping Bangumi data load (fetchOnDev is off).");
-		animeList = [];
-	} else {
-		try {
-			const dataPath = path.join(
-				process.cwd(),
-				"src/data/bangumi-data.json",
-			);
-			if (fs.existsSync(dataPath)) {
-				const fileContent = fs.readFileSync(dataPath, "utf-8");
-				const rawData = JSON.parse(fileContent);
-				animeList = rawData.map((item: any) => ({
-					title: item.title || "Unknown",
-					cover: item.cover || "",
-					link: item.link || "",
-					status: item.status || "planned",
-					rating: Number(item.rating) || 0,
-					progress: Number(item.progress) || 0,
-					totalEpisodes: Number(item.totalEpisodes) || 12,
-					description: item.description || "",
-					year: item.year || "",
-					studio: item.studio || "",
-					genre: Array.isArray(item.genre) ? item.genre : [],
-				}));
-			} else {
-				console.warn(`Bangumi data file not found at ${dataPath}.`);
-				animeList = [];
-			}
-		} catch (error) {
-			console.error("Failed to load anime data:", error);
-			animeList = [];
-		}
+	try {
+		const fileContent = fs.readFileSync(dataPath, "utf-8");
+		const rawData = JSON.parse(fileContent) as RawAnimeItem[];
+
+		return rawData.map((item) => ({
+			title: item.title || "Unknown",
+			cover: item.cover || "",
+			link: item.link || "",
+			status: item.status || "planned",
+			rating: Number(item.rating) || 0,
+			progress: Number(item.progress) || 0,
+			totalEpisodes: Number(item.totalEpisodes) || 12,
+			description: item.description || "",
+			year: item.year || "",
+			studio: item.studio || "",
+			genre: Array.isArray(item.genre) ? item.genre : [],
+		}));
+	} catch (error) {
+		console.error(`[Anime] Failed to parse ${filename}:`, error);
+		return [];
 	}
 }
 
-function getStatusInfo(status: string) {
-	switch (status) {
-		case "watching":
-			return {
-				text: i18n(I18nKey.animeStatusWatching),
-				class: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-				icon: "▶",
-			};
-		case "completed":
-			return {
-				text: i18n(I18nKey.animeStatusCompleted),
-				class: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-				icon: "✓",
-			};
-		case "planned":
-			return {
-				text: i18n(I18nKey.animeStatusPlanned),
-				class: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
-				icon: "❤",
-			};
-		case "onhold":
-			return {
-				text: i18n(I18nKey.animeStatusOnHold),
-				class: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
-				icon: "⏸",
-			};
-		case "dropped":
-			return {
-				text: i18n(I18nKey.animeStatusDropped),
-				class: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-				icon: "✗",
-			};
-		default:
-			return {
-				text: status,
-				class: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
-				icon: "?",
-			};
+let animeList: AnimeItem[] = [];
+const currentConfig = sourceConfigs[ANIME_MODE];
+
+if (currentConfig) {
+	if (currentConfig.type === "local") {
+		animeList = currentConfig.data;
+	} else if (currentConfig.type === "json") {
+		const isDev = import.meta.env.DEV;
+		const shouldFetchOnDev = currentConfig.fetchOnDev ?? false;
+		const skipLoad = isDev && !shouldFetchOnDev;
+
+		if (skipLoad) {
+			console.log(
+				`[Dev] Skipping ${ANIME_MODE} data load (fetchOnDev is off).`,
+			);
+			animeList = [];
+		} else {
+			animeList = loadAnimeData(currentConfig.filename);
+		}
 	}
+} else {
+	console.warn(`[Anime] Unknown or unconfigured mode: ${ANIME_MODE}`);
+}
+
+let emptyMessage = i18n(I18nKey.animeEmpty);
+let emptyDescription = "";
+let showEmptyState = false;
+
+if (ANIME_MODE === "bilibili" && (!BILIBILI_VMID || BILIBILI_VMID === "")) {
+	showEmptyState = true;
+	emptyDescription = i18n(I18nKey.animeConfigBilibili);
+} else if (ANIME_MODE === "bangumi" && BANGUMI_USER_ID === "your-user-id") {
+	showEmptyState = true;
+	emptyDescription = i18n(I18nKey.animeConfigBangumi);
+} else if (animeList.length === 0) {
+	showEmptyState = true;
+	// 优先使用配置中的空描述，否则回退到默认
+	if (
+		currentConfig &&
+		currentConfig.type === "json" &&
+		currentConfig.emptyDescription
+	) {
+		emptyDescription = currentConfig.emptyDescription;
+	} else if (ANIME_MODE === "local") {
+		emptyDescription = i18n(I18nKey.animeEmptyLocal);
+	} else {
+		emptyDescription = "No anime data found.";
+	}
+}
+
+// 状态样式映射
+const statusMap: Record<string, { text: string; class: string; icon: string }> =
+	{
+		watching: {
+			text: i18n(I18nKey.animeStatusWatching),
+			class: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
+			icon: "▶",
+		},
+		completed: {
+			text: i18n(I18nKey.animeStatusCompleted),
+			class: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
+			icon: "✓",
+		},
+		planned: {
+			text: i18n(I18nKey.animeStatusPlanned),
+			class: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+			icon: "❤",
+		},
+		onhold: {
+			text: i18n(I18nKey.animeStatusOnHold),
+			class: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300",
+			icon: "⏸",
+		},
+		dropped: {
+			text: i18n(I18nKey.animeStatusDropped),
+			class: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
+			icon: "✗",
+		},
+	};
+
+function getStatusInfo(status: string) {
+	return (
+		statusMap[status] || {
+			text: status,
+			class: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+			icon: "?",
+		}
+	);
 }
 
 const INITIAL_DISPLAY_COUNT = 24;
@@ -204,7 +251,7 @@ const hiddenAnimeList = animeList.slice(INITIAL_DISPLAY_COUNT);
 							>{i18n(I18nKey.animeStatusCompleted)}</button
 						>
 						{
-							(ANIME_MODE === "bangumi" || ANIME_MODE === "bilibili") && (
+							ANIME_MODE === "bangumi" && (
 								<>
 									<button
 										class="anime-filter-tag"
@@ -226,33 +273,18 @@ const hiddenAnimeList = animeList.slice(INITIAL_DISPLAY_COUNT);
 			</div>
 
 			<div class="mb-8">
-					{
-						ANIME_MODE === "bilibili" &&
-						(!BILIBILI_VMID || BILIBILI_VMID === "") ? (
-							<div class="text-center py-12">
-								<div class="text-5xl mb-4">😢</div>
-								<h3 class="text-xl font-medium text-black/80 dark:text-white/80 mb-2">
-									{i18n(I18nKey.animeEmpty)}
-								</h3>
-								<p class="text-black/60 dark:text-white/60">
-									Please set your Bilibili vmid in the
-									src/config.ts file
-								</p>
-							</div>
-						) : ANIME_MODE !== "local" &&
-							ANIME_MODE !== "bilibili" &&
-							BANGUMI_USER_ID === "your-user-id" ? (
+				{
+					showEmptyState ? (
 						<div class="text-center py-12">
 							<div class="text-5xl mb-4">😢</div>
 							<h3 class="text-xl font-medium text-black/80 dark:text-white/80 mb-2">
-								{i18n(I18nKey.animeEmpty)}
+								{emptyMessage}
 							</h3>
 							<p class="text-black/60 dark:text-white/60">
-								Please set your Bangumi userId in the
-								src/config.ts file
+								{emptyDescription}
 							</p>
 						</div>
-					) : visibleAnimeList.length > 0 ? (
+					) : (
 						<>
 							<div
 								id="anime-list-container"
@@ -548,20 +580,6 @@ const hiddenAnimeList = animeList.slice(INITIAL_DISPLAY_COUNT);
 								</div>
 							)}
 						</>
-					) : (
-						<div class="text-center py-12">
-							<div class="text-5xl mb-4">😢</div>
-							<h3 class="text-xl font-medium text-black/80 dark:text-white/80 mb-2">
-								{i18n(I18nKey.animeEmpty)}
-							</h3>
-							<p class="text-black/60 dark:text-white/60">
-								{ANIME_MODE === "local"
-									? i18n(I18nKey.animeEmptyLocal)
-									: ANIME_MODE === "bilibili"
-										? "Bilibili数据为空，请运行 pnpm run update-bilibili 获取数据"
-										: i18n(I18nKey.animeEmptyBangumi)}
-							</p>
-						</div>
 					)
 				}
 			</div>
@@ -655,7 +673,6 @@ const hiddenAnimeList = animeList.slice(INITIAL_DISPLAY_COUNT);
 					"md:grid-cols-2",
 					"lg:grid-cols-3",
 				);
-
 				if (layout === "grid") {
 					animeListContainer.classList.add("anime-grid-mode");
 					const rightSidebar = document.querySelector(
@@ -767,7 +784,6 @@ const hiddenAnimeList = animeList.slice(INITIAL_DISPLAY_COUNT);
 				element.removeEventListener(type, handler);
 			});
 			window.animeFilterEventListeners = [];
-
 			filterTags.forEach((tag) => {
 				const clickHandler = function () {
 					if (this.classList.contains("anime-active")) return;
@@ -896,7 +912,6 @@ const hiddenAnimeList = animeList.slice(INITIAL_DISPLAY_COUNT);
 							);
 						});
 					};
-
 					if (itemsToHide.length > 0) {
 						itemsToHide.forEach((item) =>
 							item.classList.add("anime-fade-out"),

@@ -1,4 +1,5 @@
-# 🌸 Mizuki <img align='right' src='logo.png' width='200px' alt="Mizuki logo">
+# 🌸 Mizuki
+<img align='right' src='logo.png' width='200px' alt="Mizuki logo">
 
 一個現代化、功能豐富的靜態部落格模板，基於 [Astro](https://astro.build) 構建，具有先進的功能和精美的設計。
 
@@ -10,10 +11,7 @@
 
 [**🖥️ 線上演示**](https://mizuki.mysqil.com/) | [**📝 使用者文檔**](https://docs.mizuki.mysqil.com/)
 
-🌏 README 語言
-<<<<<<< HEAD
-[**English**](../README.md) / [**中文**](../README.zh.md) / [**日本語**](./README.ja.md) / [**中文繁体**](./README.tw.md) /
-=======
+🌏 **README 語言:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**中文繁体**](./README.tw.md) /
 >>>>>>> upstream/master
 
@@ -179,6 +177,7 @@ tags: [標籤1, 標籤2]
 category: 前端
 draft: false
 pinned: false
+comment: true
 lang: zh-TW      # 僅當文章語言與 config.ts 中的網站語言不同時設置
 ---
 ```
@@ -193,6 +192,7 @@ lang: zh-TW      # 僅當文章語言與 config.ts 中的網站語言不同時�
 - **category**: 文章分類
 - **draft**: 設置為 `true` 在生產環境中隱藏文章
 - **pinned**: 設置為 `true` 將文章置頂
+- **comment**: 設置為 `true` 啟用文章評論區（需全域啟用評論功能）
 - **lang**: 文章語言（僅當與網站預設語言不同時設置）
 
 ### 置頂文章功能
@@ -208,6 +208,19 @@ pinned: false # 普通文章（預設）
 **排序規則：**
 1. 置頂文章優先顯示，按發布日期排序（最新在前）
 2. 普通文章隨後顯示，按發布日期排序（最新在前）
+
+### 文章級評論控制
+
+`comment` 欄位允許您單獨控制每篇文章評論區的開啟與關閉。
+
+**使用方法：**
+```yaml
+comment: true  # 啟用評論（預設）
+comment: false # 禁用評論
+```
+
+**注意：**
+此功能需要先在 `src/config.ts` 中啟用評論系統。
 
 ## 🧩 Markdown 擴展語法
 

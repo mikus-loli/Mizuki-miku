@@ -1,4 +1,5 @@
-# 🌸 Mizuki <img align='right' src='logo.png' width='200px' alt="Mizuki logo">
+# 🌸 Mizuki
+<img align='right' src='logo.png' width='200px' alt="Mizuki logo">
 
 一个现代化、功能丰富的静态博客模板，基于 [Astro](https://astro.build) 构建，具有先进的功能和精美的设计。
 
@@ -10,7 +11,7 @@
 
 [**🖥️ 在线演示**](https://mizuki.mysqil.com/) | [**📝 用户文档**](https://docs.mizuki.mysqil.com/)
 
-🌏 README 语言
+🌏 **README 语言:**
 [**English**](./README.md) / [**中文**](./README.zh.md) / [**日本語**](./README.ja.md) / [**中文繁体**](./README.tw.md) /
 
 通过我们的综合文档快速开始。无论是自定义主题、配置功能，还是部署到生产环境，文档涵盖了您成功启动博客所需的所有内容。
@@ -184,6 +185,7 @@ tags: [标签1, 标签2]
 category: 前端
 draft: false
 pinned: false
+comment: true
 lang: zh-CN      # 仅当文章语言与 config.ts 中的站点语言不同时设置
 ---
 ```
@@ -198,6 +200,7 @@ lang: zh-CN      # 仅当文章语言与 config.ts 中的站点语言不同时�
 - **category**: 文章分类
 - **draft**: 设置为 `true` 在生产环境中隐藏文章
 - **pinned**: 设置为 `true` 将文章置顶
+- **comment**: 设置为 `true` 启用文章评论区（需全局启用评论功能）
 - **lang**: 文章语言（仅当与站点默认语言不同时设置）
 
 ### 置顶文章功能
@@ -213,6 +216,19 @@ pinned: false # 普通文章（默认）
 **排序规则：**
 1. 置顶文章优先显示，按发布日期排序（最新在前）
 2. 普通文章随后显示，按发布日期排序（最新在前）
+
+### 文章级评论控制
+
+`comment` 字段允许您单独控制每篇文章评论区的开启与关闭。
+
+**使用方法：**
+```yaml
+comment: true  # 启用评论（默认）
+comment: false # 禁用评论
+```
+
+**注意：**
+此功能需要先在 `src/config.ts` 中启用评论系统。
 
 ## 🧩 Markdown 扩展语法
 

@@ -277,13 +277,13 @@ export const navBarConfig: NavBarConfig = {
 					name: "GitHub",
 					url: "https://github.com/mikus-loli",
 					external: true,
-					icon: "fa6-brands:github",
+					icon: "fa7-brands:github",
 				},
 				{
 					name: "Bilibili",
 					url: "https://space.bilibili.com/239667666",
 					external: true,
-					icon: "fa6-brands:bilibili",
+					icon: "fa7-brands:bilibili",
 				},
 				{
 					name: "Gitee",
@@ -552,7 +552,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 	components: {
 		left: ["profile", "announcement", "categories", "tags"],
 		right: ["site-stats", "calendar"],
-		drawer: ["profile", "announcement"],
+		drawer: ["profile", "announcement", "categories", "tags"],
 	},
 
 	// 默认动画配置

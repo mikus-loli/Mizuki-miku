@@ -66,12 +66,23 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 0.75rem 1rem;
+  min-width: 0;
 }
 
 .anime-grid-container.anime-list-mode h3 {
   -webkit-line-clamp: unset;
   line-clamp: unset;
   white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.anime-grid-container.anime-list-mode .p-3 .flex.flex-wrap span {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .anime-grid-container.anime-list-mode .group p.text-xs {

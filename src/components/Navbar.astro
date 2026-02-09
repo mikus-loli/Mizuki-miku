@@ -35,24 +35,24 @@ let links: NavBarLink[] = navBarConfig.links.map(
 	},
 );
 ---
-<div id="navbar" class="z-50 onload-animation" data-transparent-mode={navbarTransparentMode} data-is-home={isHomePage}>
+<div id="navbar" class="z-50 onload-animation group" data-transparent-mode={navbarTransparentMode} data-is-home={isHomePage}>
     <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div> <!-- used for onload animation -->
     <div class:list={[className, "!overflow-visible max-w-[var(--page-width)] h-[4.5rem] mx-auto flex items-center justify-between px-4"]}>
-        <a href={url('/')} class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
+        <a href={url('/')} class="btn-plain scale-animation rounded-lg h-[2.5rem] md:h-[3.25rem] md:[.enable-banner_&]:h-[2.5rem] md:[.enable-banner_&]:group-[.scrolled]:h-[3.25rem] px-5 font-bold active:scale-95 shrink-0 transition-all duration-300">
             <div class="flex flex-row items-center text-md">
 				{/* 使用navbarTitle配置或默认配置 */}
                 {siteConfig.navbarTitle ? (
                     siteConfig.navbarTitle.mode === "logo" ? (
-                        <img src={url(siteConfig.navbarTitle.logo || "/assets/home/default-logo.png")} alt={siteConfig.navbarTitle.text} class="h-[3.5rem] max-w-full object-contain" loading="lazy" />
+                        <img src={url(siteConfig.navbarTitle.logo || "/assets/home/default-logo.png")} alt={siteConfig.navbarTitle.text} class="h-[2.5rem] md:h-[3.25rem] md:[.enable-banner_&]:h-[2.5rem] md:[.enable-banner_&]:group-[.scrolled]:h-[3.25rem] max-w-full object-contain transition-all duration-300" loading="lazy" />
                     ) : (
                         <>
-                            <img src={url(siteConfig.navbarTitle.icon || "/assets/home/home.png")} alt={siteConfig.navbarTitle.text} class="h-[1.75rem] w-[1.75rem] mb-1 mr-2 object-contain" loading="lazy" />
+                            <img src={url(siteConfig.navbarTitle.icon || "/assets/home/home.png")} alt={siteConfig.navbarTitle.text} class="h-[1.75rem] w-[1.75rem] mr-2 object-contain" loading="lazy" />
                             <span class="dark:text-white text-black">{siteConfig.navbarTitle.text}</span>
                         </>
                     )
                 ) : (
                     <>
-                        <Icon name="material-symbols:home-pin-outline" class="text-[1.75rem] mb-1 mr-2" />
+                        <Icon name="material-symbols:home-pin-outline" class="text-[1.75rem] mr-2" />
                         <span class="dark:text-white text-black">{siteConfig.title}</span>
                     </>
                 )}
@@ -189,28 +189,22 @@ function initSemifullScrollDetection() {
     const navbar = document.getElementById('navbar');
     if (!navbar) return;
     
-    const transparentMode = navbar.getAttribute('data-transparent-mode');
-    if (transparentMode !== 'semifull') return;
-    
-    const isHomePage = navbar.getAttribute('data-is-home') === 'true';
-    
-    // 如果不是首页，移除滚动事件监听器并设置为半透明状态
-    if (!isHomePage) {
-        // 移除之前的滚动事件监听器（如果存在）
+    // 移除之前的滚动事件监听器（如果存在）
+    // @ts-ignore
+    if (window.semifullScrollHandler) {
         // @ts-ignore
-        if (window.semifullScrollHandler) {
-            // @ts-ignore
-            window.removeEventListener('scroll', window.semifullScrollHandler);
-            // @ts-ignore
-            window.semifullScrollHandler = null;
-        }
-        // 设置为半透明状态
+        window.removeEventListener('scroll', window.semifullScrollHandler);
+    }
+    
+    // 获取当前是否为首页
+    // @ts-ignore
+    const isHomePage = navbar.dataset.isHome === 'true';
+
+    // 如果不是首页，在平板/桌面端强制显示为scrolled状态
+    if (!isHomePage) {
         navbar.classList.add('scrolled');
         return;
     }
-    
-    // 移除现有的scrolled类，重置状态
-    navbar.classList.remove('scrolled');
     
     let ticking = false;
     
@@ -232,13 +226,6 @@ function initSemifullScrollDetection() {
             requestAnimationFrame(updateNavbarState);
             ticking = true;
         }
-    }
-    
-    // 移除之前的滚动事件监听器（如果存在）
-    // @ts-ignore
-    if (window.semifullScrollHandler) {
-        // @ts-ignore
-        window.removeEventListener('scroll', window.semifullScrollHandler);
     }
     
     // 保存新的事件处理器引用
