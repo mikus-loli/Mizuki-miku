@@ -73,7 +73,12 @@ export const zh_CN: Translation = {
 	[Key.animeStudio]: "制作",
 	[Key.animeEmpty]: "暂无追番数据",
 	[Key.animeEmptyBangumi]: "请检查 Bangumi 配置或网络连接",
+	[Key.animeEmptyBilibili]: "请检查 Bilibili 配置或网络连接",
 	[Key.animeEmptyLocal]: "请在 src/data/anime.ts 文件中添加番剧信息",
+	[Key.animeConfigBilibili]:
+		"请在 src/config.ts 文件中设置您的 Bilibili vmid",
+	[Key.animeConfigBangumi]:
+		"请在 src/config.ts 文件中设置您的 Bangumi userId",
 
 	// 短文页面
 	[Key.diarySubtitle]: "随时随地，分享生活",
@@ -326,6 +331,10 @@ export const zh_CN: Translation = {
 	[Key.profileStatsPageViews]: "浏览量",
 	[Key.profileStatsVisits]: "访问次数",
 	[Key.profileStatsUnavailable]: "统计不可用",
+
+	// 页面访问量统计
+	[Key.pageViewsLoading]: "统计加载中...",
+	[Key.pageViewsUnavailable]: "统计不可用",
 
 	// 布局切换按钮
 	[Key.switchToGridMode]: "切换到网格模式",
