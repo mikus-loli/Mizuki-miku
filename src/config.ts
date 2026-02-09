@@ -370,7 +370,7 @@ export const profileConfig: ProfileConfig = {
 	links: [
 		{
 			name: "Bilibli",
-			icon: "fa6-brands:bilibili",
+			icon: "fa7-brands:bilibili",
 			url: "https://space.bilibili.com/239667666",
 		},
 		{
@@ -380,7 +380,7 @@ export const profileConfig: ProfileConfig = {
 		},
 		{
 			name: "GitHub",
-			icon: "fa6-brands:github",
+			icon: "fa7-brands:github",
 			url: "https://github.com/mikus-loli",
 		},
 	],
