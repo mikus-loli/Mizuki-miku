@@ -21,7 +21,7 @@ https://random.api.mikus.ink/pc
 ```
 /mobile 为竖图
 ```
-例 https://random.api.mikus.ink/mobile
+https://random.api.mikus.ink/mobile
 ```
 :::caution[注意]
 1. 仅用于个人学习和研究使用，禁止违法用途  
