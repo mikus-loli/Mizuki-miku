@@ -46,7 +46,7 @@ let isLoading = false;
 // 是否随机播放，默认为 false
 let isShuffled = false;
 // 循环模式，0: 不循环, 1: 单曲循环, 2: 列表循环，默认为 0
-let isRepeating = 0;
+let isRepeating = 2;
 // 错误信息，默认为空字符串
 let errorMessage = "";
 // 是否显示错误信息，默认为 false
