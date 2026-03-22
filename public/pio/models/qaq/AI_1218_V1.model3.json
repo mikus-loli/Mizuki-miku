@@ -1,0 +1,26 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "AI_1218_V1.moc3",
+		"Textures": [
+			"AI_1218_V1.8192/texture_00.png"
+		],
+		"Physics": "AI_1218_V1.physics3.json",
+		"DisplayInfo": "AI_1218_V1.cdi3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamEyeLOpen",
+				"ParamEyeROpen"
+			]
+		}
+	]
+}

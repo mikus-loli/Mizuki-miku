@@ -2,113 +2,124 @@
 import { onDestroy, onMount } from "svelte";
 import { pioConfig } from "@/config";
 
-// 将配置转换为 Pio 插件需要的格式
 const pioOptions = {
-	mode: pioConfig.mode,
-	hidden: pioConfig.hiddenOnMobile,
-	content: pioConfig.dialog || {},
-	model: pioConfig.models || ["/pio/models/pio/model.json"],
+    mode: pioConfig.mode,
+    hidden: pioConfig.hiddenOnMobile,
+    content: pioConfig.dialog || {},
+    model: pioConfig.models || ["/pio/models/pio/model.json"],
 };
 
-// 全局Pio实例引用
-let pioInstance = null;
-let pioInitialized = false;
+// 判断是否为 Model3 (SDK 4)
+const isModel3 = pioOptions.model[0].includes("model3.json");
+
 let pioContainer;
 let pioCanvas;
+let pioInitialized = false;
 
-// 样式已通过 Layout.astro 静态引入，无需动态加载
-
-// 等待 DOM 加载完成后再初始化 Pio
+// 初始化函数
 function initPio() {
-	if (typeof window !== "undefined" && typeof Paul_Pio !== "undefined") {
-		try {
-			// 确保DOM元素存在
-			if (pioContainer && pioCanvas && !pioInitialized) {
-				pioInstance = new Paul_Pio(pioOptions);
-				pioInitialized = true;
-				console.log("Pio initialized successfully (Svelte)");
-			} else if (!pioContainer || !pioCanvas) {
-				console.warn("Pio DOM elements not found, retrying...");
-				setTimeout(initPio, 100);
-			}
-		} catch (e) {
-			console.error("Pio initialization error:", e);
-		}
-	} else {
-		// 如果 Paul_Pio 还未定义，稍后再试
-		setTimeout(initPio, 100);
-	}
+    if (typeof window !== "undefined" && typeof Paul_Pio !== "undefined") {
+        try {
+            if (pioContainer && pioCanvas && !pioInitialized) {
+                // 如果是 SDK4 ，手动初始化 Pixi 环境
+                if (isModel3 && typeof window.initPioPixi === "function") {
+                    // 将 'left' 或 'right' 传给 SDK4 用于初始化对齐
+                    window.initPioPixi(pioConfig.position || 'left');
+                }
+
+                // 实例化 Paul_Pio
+                new Paul_Pio(pioOptions);
+                pioInitialized = true;
+                console.log(`Pio initialized successfully (${isModel3 ? 'SDK4' : 'SDK2'})`);
+            }
+        } catch (e) {
+            console.error("Pio initialization error:", e);
+        }
+    } else {
+        // 轮询等待脚本加载完成
+        setTimeout(initPio, 100);
+    }
 }
 
-// 样式已通过 Layout.astro 静态引入，无需动态加载函数
+// 核心：资源加载器
+async function loadPioAssets() {
+    if (typeof window === "undefined") return;
 
-// 加载必要的脚本
-function loadPioAssets() {
-	if (typeof window === "undefined") return;
+    // 辅助函数：加载单个脚本
+    const loadScript = (src, id) => {
+        return new Promise((resolve, reject) => {
+            if (document.querySelector(`#${id}`)) {
+                resolve(); // 已存在则直接成功
+                return;
+            }
+            const script = document.createElement("script");
+            script.id = id;
+            script.src = src;
+            script.onload = () => resolve();
+            script.onerror = (e) => reject(e);
+            document.head.appendChild(script);
+        });
+    };
 
-	// 样式已通过 Layout.astro 静态引入
+    try {
+        if (isModel3) {
+            // === SDK 4 加载流程 ( 严格顺序 ) ===
 
-	// 加载JS脚本
-	const loadScript = (src, id) => {
-		return new Promise((resolve, reject) => {
-			if (document.querySelector(`#${id}`)) {
-				resolve();
-				return;
-			}
-			const script = document.createElement("script");
-			script.id = id;
-			script.src = src;
-			script.onload = resolve;
-			script.onerror = reject;
-			document.head.appendChild(script);
-		});
-	};
+            // 1. 加载 Live2D Cubism Core ( 必须第一个 )
+            await loadScript("https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js", "cubism-core");
 
-	// 按顺序加载脚本
-	loadScript("/pio/static/l2d.js", "pio-l2d-script")
-		.then(() => loadScript("/pio/static/pio.js", "pio-main-script"))
-		.then(() => {
-			// 脚本加载完成后初始化
-			setTimeout(initPio, 100);
-		})
-		.catch((error) => {
-			console.error("Failed to load Pio scripts:", error);
-		});
+            // 2. 加载 PixiJS ( 必须第二个 )
+            await loadScript("https://cdn.jsdelivr.net/npm/pixi.js@5.3.6/dist/pixi.min.js", "pixi-js");
+
+            // 3. 加载 Pixi-Live2D-Display ( 必须等 Pixi 加载完 )
+            // 注意：这里使用了 cubism4.min.js 而不是 index.min.js，避免报 SDK2 错误
+            await loadScript("https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/cubism4.min.js", "pixi-live2d-display");
+
+            // 4. 加载本地适配器
+            await loadScript("/pio/static/pio_sdk4.js", "pio-sdk4-adapter");
+
+            // 5. 加载 UI 逻辑
+            await loadScript("/pio/static/pio.js", "pio-main");
+
+        } else {
+            // === SDK 2 加载流程 ===
+            await loadScript("/pio/static/l2d.js", "l2d-lib");
+            await loadScript("/pio/static/pio.js", "pio-main");
+        }
+
+        // 全部加载完成后，初始化
+        setTimeout(initPio, 100);
+
+    } catch (err) {
+        console.error("Failed to load Pio assets:", err);
+    }
 }
-
-// 样式已通过 Layout.astro 静态引入，无需页面切换监听
 
 onMount(() => {
-	if (!pioConfig.enable) return;
+    if (!pioConfig.enable) return;
+    if (pioConfig.hiddenOnMobile && window.matchMedia("(max-width: 1280px)").matches) return;
 
-	// 如果配置了手机端隐藏，且当前屏幕宽度小于 1280px (平板/手机)，则直接终止，不加载脚本
-    if (pioConfig.hiddenOnMobile && window.matchMedia("(max-width: 1280px)").matches) {
-        return;
-    }
-
-	// 加载资源并初始化
-	loadPioAssets();
-});
-
-onDestroy(() => {
-	// Svelte 组件销毁时不需要清理 Pio 实例
-	// 因为我们希望它在页面切换时保持状态
-	console.log("Pio Svelte component destroyed (keeping instance alive)");
+    // 延时一点执行，确保 DOM 已挂载
+    setTimeout(loadPioAssets, 0);
 });
 </script>
 
 {#if pioConfig.enable}
-  <div class={`pio-container ${pioConfig.position || 'right'}`} bind:this={pioContainer}>
+<!-- 添加 pointer-events-none 样式类供调试，根据需要调整 css -->
+<!-- 最后一行修复幕布和模型大小不匹配 -->
+<div class={`pio-container ${pioConfig.position || 'left'}`} bind:this={pioContainer}>
     <div class="pio-action"></div>
-    <canvas 
-      id="pio" 
-      bind:this={pioCanvas}
-      width={pioConfig.width || 280} 
-      height={pioConfig.height || 250}
+    <canvas
+    id="pio"
+    bind:this={pioCanvas}
+    width={pioConfig.width || 280}
+    height={pioConfig.height || 250}
+    style="width: {pioConfig.width || 280}px; height: {pioConfig.height || 250}px;"
     ></canvas>
-  </div>
+</div>
 {/if}
 
 <style>
-  /* Pio 相关样式将通过外部CSS文件加载 */
+    /* 确保 canvas 可见 */
+    #pio { display: block; }
 </style>
