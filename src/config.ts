@@ -609,8 +609,8 @@ export const pioConfig: import("./types/config").PioConfig = {
 	enable: true, // 启用看板娘
 	models: ["/pio/models/六初/六初.model3.json"], // 默认模型路径
 	position: "left", // 默认位置在右侧
-	width: 250, // 默认宽度
-	height: 400, // 默认高度
+	width: 260, // 默认宽度
+	height: 480, // 默认高度
 	mode: "fixed", // 默认为可拖拽模式
 	hiddenOnMobile: true, // 默认在移动设备上隐藏
 	dialog: {
