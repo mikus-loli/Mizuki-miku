@@ -118,7 +118,6 @@ export const siteConfig: SiteConfig = {
 				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=2",
 				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=3",
 				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=4",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=5",
 			], // 桌面横幅图片
 			mobile: [
 				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect",
@@ -126,7 +125,6 @@ export const siteConfig: SiteConfig = {
 				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=2",
 				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=3",
 				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=4",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=5",
 			], // 移动横幅图片
 		}, // 使用本地横幅图片
 
@@ -580,7 +578,7 @@ export const sidebarLayoutConfig: SidebarLayoutConfig = {
 };
 
 export const sakuraConfig: SakuraConfig = {
-	enable: true, // 默认关闭樱花特效
+	enable: false, // 默认关闭樱花特效
 	sakuraNum: 16, // 樱花数量
 	limitTimes: -1, // 樱花越界限制次数，-1为无限循环
 	size: {
