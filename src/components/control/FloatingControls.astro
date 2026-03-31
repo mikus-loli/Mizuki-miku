@@ -226,9 +226,16 @@ const { headings = [] } = Astro.props;
 		window.__floatingControlObservers = new Map();
 	}
 
-	let isMusicPanelExpanded = false;
-	let visibilityUpdateScheduled = false;
-	const controlButtonIds = [
+	if (typeof window.__isMusicPanelExpanded === "undefined") {
+		window.__isMusicPanelExpanded = false;
+	}
+	if (typeof window.__visibilityUpdateScheduled === "undefined") {
+		window.__visibilityUpdateScheduled = false;
+	}
+
+	var isMusicPanelExpanded = window.__isMusicPanelExpanded;
+	var visibilityUpdateScheduled = window.__visibilityUpdateScheduled;
+	var controlButtonIds = [
 		"floating-toc-btn",
 		"back-to-home-btn",
 		"back-to-top-btn",
@@ -384,10 +391,11 @@ const { headings = [] } = Astro.props;
 
 	function handleMusicPanelState(event) {
 		const expanded = Boolean(event?.detail?.isExpanded);
-		if (expanded === isMusicPanelExpanded) {
+		if (expanded === window.__isMusicPanelExpanded) {
 			return;
 		}
 
+		window.__isMusicPanelExpanded = expanded;
 		isMusicPanelExpanded = expanded;
 		if (isMusicPanelExpanded) {
 			lockFloatingControlVisibility();
@@ -397,8 +405,8 @@ const { headings = [] } = Astro.props;
 		}
 	}
 
-	let mermaidRendering = false;
-	let mermaidRenderTimer = null;
+	var mermaidRendering = false;
+	var mermaidRenderTimer = null;
 
 	function handleMermaidRenderStart() {
 		mermaidRendering = true;
