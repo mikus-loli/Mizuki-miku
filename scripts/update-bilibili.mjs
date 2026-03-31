@@ -2,6 +2,9 @@ import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 import axios from "axios";
+import { loadEnv } from "./load-env.js";
+
+loadEnv();
 
 const API_BASE = "https://api.bilibili.com/x/space/bangumi/follow/list";
 const PAGE_SIZE = 30;
@@ -60,13 +63,7 @@ async function getUserIdFromConfig() {
 }
 
 async function getSessdataFromConfig() {
-	try {
-		const configContent = await fs.readFile(CONFIG_PATH, "utf-8");
-		const match = configContent.match(/SESSDATA:\s*["']([^"']*)["']/);
-		return match ? match[1] : "";
-	} catch {
-		return "";
-	}
+	return process.env.BILI_SESSDATA || "";
 }
 
 async function getCoverMirrorFromConfig() {

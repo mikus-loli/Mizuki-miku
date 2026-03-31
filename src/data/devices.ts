@@ -9,18 +9,22 @@ export interface Device {
 }
 
 // 设备类别类型，支持品牌和自定义类别
-export type DeviceCategory = {
-	[categoryName: string]: Device[];
-} & {
+export type DeviceCategory = Record<string, Device[]> & {
 	自定义?: Device[];
 };
 
 export const devicesData: DeviceCategory = {
 	手机: [
 		{
+<<<<<<< HEAD
 			name: "红米 K40",
 			image: "/images/device/k40.png",
 			specs: "幻境 / 6G + 128G",
+=======
+			name: "OnePlus 13T",
+			image: "/images/device/oneplus13t.webp",
+			specs: "Gray / 16G + 1TB",
+>>>>>>> upstream/master
 			description:
 				"性能有点狠，搭载年度旗舰骁龙 870,屏幕有点狠，新一代 E4 直屏，更斩获A+评级，游戏体验有点狠，电竞级高刷超级触控，",
 			link: "https://www.mi.com/redmik40",
@@ -36,9 +40,15 @@ export const devicesData: DeviceCategory = {
 	],
 	路由器: [
 		{
+<<<<<<< HEAD
 			name: "小米路由器 AX3000T",
 			image: "/images/device/ax3000t.png",
 			specs: "1000Mbps / 1G",
+=======
+			name: "GL-MT3000",
+			image: "/images/device/mt3000.webp",
+			specs: "1000Mbps / 2.5G",
+>>>>>>> upstream/master
 			description:
 				"满血 WiFi6疾速快人一步 3000兆级无线速率 加倍吞吐量 网速疾驰 4K电影拖拽秒缓冲",
 			link: "https://www.mi.com/xiaomi-ax3000t",

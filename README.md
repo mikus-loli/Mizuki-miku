@@ -33,6 +33,15 @@ Get started quickly with our comprehensive documentation. Whether you're customi
   <tr>
 </table>
 
+## 🚀 NEW: Automatic Resolution Adaptation
+
+> **🎯 Automatic Resolution Algorithm** - Intelligently adapts content layout based on device screen resolution, providing the best viewing experience for all devices
+
+🌏 README Language
+[**English**](./README.md) /
+[**中文**](./README.zh.md) /
+[**日本語**](./README.ja.md) /
+[**中文繁体**](./README.tw.md) /
 
 
 ### 🔧 Component Configuration System Restructuring
@@ -140,15 +149,7 @@ Deploy your blog to any static hosting platform:
 - **GitHub Pages:** Use the included GitHub Actions workflow
 - **Cloudflare Pages:** Connect your repository
 
-- **Environment Variable Configuration (Optional):** Configure in `.env` file or deployment platform
-
-```bash
-# Umami API key for accessing Umami analytics data
-# If Umami is enabled in config.ts, it's recommended to configure the API key here
-UMAMI_API_KEY=your_umami_api_key_here
-# bcrypt salt rounds (10-14 recommended, default 12)
-BCRYPT_SALT_ROUNDS=12
-```
+- **Environment Variable Configuration (Optional):** Refer to `.env.example` for configuration
 
 Before deployment, update the `siteURL` in `src/config.ts`.
 **Not recommended** to commit the `.env` file to Git. The `.env` file should only be used for local debugging or building. For cloud platform deployment, it's recommended to configure via the platform's `environment variables` settings.

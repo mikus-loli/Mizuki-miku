@@ -160,15 +160,7 @@
 - **GitHub Pages：** 使用包含的 GitHub Actions 工作流
 - **Cloudflare Pages：** 连接您的仓库
 
-- **环境变量配置（可选）：** 在 `.env` 文件或部署平台配置
-
-```bash
-# Umami API 密钥，用于访问 Umami 统计数据
-# 如果在 config.ts 中启用了 Umami，建议在此配置 API 密钥
-UMAMI_API_KEY=your_umami_api_key_here
-# bcrypt 盐值轮数（10-14 推荐，默认 12）
-BCRYPT_SALT_ROUNDS=12
-```
+- **环境变量配置（可选）：** 可参照 `.env.example` 来配置
 
 部署前，请在 `src/config.ts` 中更新 `siteURL`。
 **不建议**将 `.env` 文件提交到 Git，`.env` 应该仅在本地调试或构建使用。若要将项目在云平台部署，建议通过平台上的 `环境变量` 配置传入。

@@ -161,9 +161,10 @@
 - **GitHub Pages：** 使用包含的 GitHub Actions 工作流
 - **Cloudflare Pages：** 連接您的儲存庫
 
-部署前，請在 `astro.config.mjs` 中更新 `site` URL。
+部署前，請在 `src/config.ts` 中更新 `siteURL`。
 
-- **環境變數配置：** 如果你需要使用 Umami 統計，建議在部署平台設定環境變數 `UMAMI_API_KEY` 為你的 Umami API 金鑰，或直接在配置檔中修改。
+- **環境變數配置（可選）：** 可參照 `.env.example` 來配置
+**不建議**將 `.env` 檔案提交到 Git，`.env` 應該僅在本地調試或構建使用。若要將項目在雲平台部署，建議通過平台上的 `環境變數` 配置傳入。
 
 ## 📝 文章前言格式
 
