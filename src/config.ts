@@ -53,7 +53,6 @@ export const siteConfig: SiteConfig = {
 	navbarTitle: {
 		// 显示模式："text-icon" 显示图标+文本，"logo" 仅显示Logo
 		mode: "text-icon",
-		mode: "text-icon",
 		// 顶栏标题文本
 		text: "Mikus",
 		// 顶栏标题图标路径，默认使用 public/assets/home/home.png
@@ -466,20 +465,6 @@ export const commentConfig: CommentConfig = {
 		lang: SITE_LANG,
 		loading: "lazy",
 	},
-	giscus: {
-		repo: "your-github-username/your-repo-name",
-		repoId: "your-repo-id",
-		category: "Announcements",
-		categoryId: "your-category-id",
-		mapping: "pathname",
-		strict: "0",
-		reactionsEnabled: "1",
-		emitMetadata: "0",
-		inputPosition: "top",
-		theme: "preferred_color_scheme",
-		lang: SITE_LANG,
-		loading: "lazy",
-	},
 };
 
 export const shareConfig: ShareConfig = {
@@ -502,7 +487,7 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	enable: true, // 启用音乐播放器功能
 	showFloatingPlayer: true, // 显示悬浮播放器 UI
 	floatingEntryMode: "fab", // 悬浮入口模式："default" 为独立悬浮播放器，"fab" 为集成到通用 FAB 组
-	mode: "local", // 音乐播放器模式，可选 "local" 或 "meting"
+	mode: "meting", // 音乐播放器模式，可选 "local" 或 "meting"
 	meting_api:
 		"https://meting.mikus.ink/api?server=:server&type=:type&id=:id&auth=:auth&r=:r", // Meting API 地址
 	id: "12990345596", // 歌单ID
@@ -681,11 +666,11 @@ export const sakuraConfig: SakuraConfig = {
 
 // Pio 看板娘配置
 export const pioConfig: import("./types/config").PioConfig = {
-	enable: true, // 启用看板娘
+	enable: true, // 禁用看板娘以提升性能
 	models: ["/pio/models/六初/六初.model3.json"], // 默认模型路径
-	position: "left", // 默认位置在右侧
-	width: 260, // 默认宽度
-	height: 480, // 默认高度
+	position: "left", // 模型位置
+	width: 1, // 默认宽度
+	height: 1, // 默认高度
 	mode: "fixed", // 默认为可拖拽模式
 	hiddenOnMobile: true, // 默认在移动设备上隐藏
 	dialog: {
@@ -699,19 +684,8 @@ export const pioConfig: import("./types/config").PioConfig = {
 		home: "点击这里回到首页！", // 首页提示
 		skin: ["想看看我的新衣服吗？", "新衣服真漂亮~"], // 换装提示
 		close: "QWQ 下次再见吧~", // 关闭提示
+		link: "https://github.com/matsuzaka-yuki/Mizuki", // 关于链接
 	},
-};
-
-// 相关文章配置
-export const relatedPostsConfig: RelatedPostsConfig = {
-	enable: true,
-	maxCount: 5,
-};
-
-// 随机文章配置
-export const randomPostsConfig: RandomPostsConfig = {
-	enable: true,
-	maxCount: 5,
 };
 
 // 相关文章配置

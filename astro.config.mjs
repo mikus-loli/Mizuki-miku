@@ -40,7 +40,7 @@ export default defineConfig({
 
 	integrations: [
 		umami({
-			shareUrl: false,
+			shareUrl: "https://umami.mikus.ink/share/JBtIcsYVGR5pL3i6",
 		}),
 		swup({
 			theme: false,

@@ -36,8 +36,6 @@ export const projectsData: Project[] = [
 		featured: true,
 		tags: ["Blog", "Theme", "Open Source"],
 	},
-<<<<<<< HEAD
-=======
 	{
 		id: "folkpatch",
 		title: "FolkPatch",
@@ -99,7 +97,6 @@ export const projectsData: Project[] = [
 		tags: ["Android", "Tool", "Frontend"],
 		showImage: false,
 	},
->>>>>>> upstream/master
 ];
 
 // Get project statistics
