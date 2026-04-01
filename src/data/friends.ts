@@ -22,11 +22,11 @@ export const friendsData: FriendItem[] = [
 	},
 	{
 		id: 2,
-		title: "Mizuki Docs",
+		title: "超天酱",
 		imgurl: "https://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
-		desc: "Mizuki User Manual",
-		siteurl: "https://docs.mizuki.mysqil.com",
-		tags: ["Docs"],
+		desc: "超绝最可爱天使酱",
+		siteurl: "https://www.pr80.bid",
+		tags: ["Blog"],
 	},
 
 	{
@@ -44,6 +44,15 @@ export const friendsData: FriendItem[] = [
 		imgurl: "https://www.witchcat.cn/api/proxy-image?url=http%3A%2F%2F121.40.94.142%3A9000%2Fwitchcat-files%2Fsite_images%2Fprofile%2F8567d1f6-62a3-412e-b9b1-76d2f9c10c6c.jpg",
 		desc: "可爱的女巫的折耳猫的小站",
 		siteurl: "https://www.witchcat.cn",
+		tags: ["Blog"],
+	},
+
+	{
+		id: 5,
+		title: "昆明湖 blog",
+		imgurl: "https://blog.91vip.ink/_astro/avatar.Bp1MIY3n_113upO.webp",
+		desc: "最喜欢宁宁",
+		siteurl: "https://blog.91vip.ink",
 		tags: ["Blog"],
 	},
 ];
