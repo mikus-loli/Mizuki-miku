@@ -77,6 +77,9 @@ const config = {
 				observer.disconnect();
 				observer = null;
 			}
+			if (observer_theme) {
+				observer_theme.disconnect();
+			}
 			if (window.swup?.hooks) {
 				window.swup.hooks.off("content:replace", initGiscus);
 			}
@@ -88,11 +91,18 @@ const config = {
 				return;
 			}
 
+			if (observer) {
+				observer.disconnect();
+				observer = null;
+			}
+
 			observer = new IntersectionObserver(
 				(entries) => {
 					if (entries[0].isIntersecting) {
-						observer.disconnect();
-						observer = null;
+						if (observer) {
+							observer.disconnect();
+							observer = null;
+						}
 						initGiscus();
 					}
 				},

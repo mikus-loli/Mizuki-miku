@@ -23,7 +23,7 @@ export const friendsData: FriendItem[] = [
 	{
 		id: 2,
 		title: "超天酱",
-		imgurl: "https://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
+		imgurl: "https://www.pr80.bid/ctos/icon/exe.png",
 		desc: "超绝最可爱天使酱",
 		siteurl: "https://www.pr80.bid",
 		tags: ["Blog"],

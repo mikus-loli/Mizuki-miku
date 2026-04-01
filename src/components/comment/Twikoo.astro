@@ -99,11 +99,18 @@ const config = {
 				return;
 			}
 
+			if (observer) {
+				observer.disconnect();
+				observer = null;
+			}
+
 			observer = new IntersectionObserver(
 				(entries) => {
 					if (entries[0].isIntersecting) {
-						observer.disconnect();
-						observer = null;
+						if (observer) {
+							observer.disconnect();
+							observer = null;
+						}
 						initTwikoo();
 					}
 				},
