@@ -50,7 +50,7 @@ export const friendsData: FriendItem[] = [
 	{
 		id: 5,
 		title: "昆明湖 blog",
-		imgurl: "https://blog.91vip.ink/_astro/avatar.Bp1MIY3n_113upO.webp",
+		imgurl: "https://blog.91vip.ink/favicon/avatar.webp",
 		desc: "最喜欢宁宁",
 		siteurl: "https://blog.91vip.ink",
 		tags: ["Blog"],
