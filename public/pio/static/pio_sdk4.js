@@ -21,8 +21,8 @@ If you have trouble setting up this, check following example's sources.
 https://jupiterbjy.github.io/PaulPio_PIXI_Demo/
 
 ---- */
-let app;
-let currentModel = null; // <--- 新增：用于存储当前模型实例
+var app;
+var currentModel = null;
 
 function loadlive2d(canvas_id, json_object_or_url) {
 	// Replaces original l2d method 'loadlive2d' for Pio.
@@ -108,7 +108,7 @@ function loadlive2d(canvas_id, json_object_or_url) {
 // }
 
 // 将此变量保留在全局作用域，但默认值不重要了，会被覆盖
-let pio_alignment = "right";
+var pio_alignment = "right";
 
 function pio_refresh_style() {
 	// Always make sure to call this after container/canvas style changes!
@@ -175,4 +175,3 @@ window.initPioPixi = function (alignmentParam) {
 // 注释掉自动监听
 // let app
 // window.addEventListener("DOMContentLoaded", _pio_initialize_pixi)
-

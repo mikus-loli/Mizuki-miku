@@ -15,7 +15,7 @@ pubDate: 2026-03-24
 # 前言
 Mizuki使用了meting来提供音乐播放的功能, 但是meting默认提供的API有抽风/下线/跑路的风险, 而且最重要的是: 播放不了VIP歌曲，网易云大部分的歌曲都需要VIP
 
-##
+## 解决方法
 1. 获取网易云音乐 Cookie
 登录网易云网页版并点进一首歌 例如https://music.163.com/#/song?id=1842206108,按F12打开网络找到下面的Cookie 如下图
 ![（图片加载失败显示）](cookie.png "获取Cookie")

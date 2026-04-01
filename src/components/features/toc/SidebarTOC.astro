@@ -320,10 +320,12 @@ const { class: className } = Astro.props;
 		}
 
 		disconnectedCallback() {
-			this.sections.forEach((section) =>
-				this.observer.unobserve(section),
-			);
-			this.observer.disconnect();
+			if (this.observer) {
+				this.sections.forEach((section) =>
+					this.observer.unobserve(section),
+				);
+				this.observer.disconnect();
+			}
 			this.tocEl?.removeEventListener("click", this.handleAnchorClick);
 		}
 	}
