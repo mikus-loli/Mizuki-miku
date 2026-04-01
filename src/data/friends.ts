@@ -22,11 +22,11 @@ export const friendsData: FriendItem[] = [
 	},
 	{
 		id: 2,
-		title: "昆明湖 blog",
-		imgurl: "https://blog.91vip.ink/_astro/avatar.Bp1MIY3n_113upO.webp",
-		desc: "最喜欢宁宁",
-		siteurl: "https://blog.91vip.ink",
-		tags: ["Blog"],
+		title: "Mizuki Docs",
+		imgurl: "https://q.qlogo.cn/headimg_dl?dst_uin=3231515355&spec=640&img_type=jpg",
+		desc: "Mizuki User Manual",
+		siteurl: "https://docs.mizuki.mysqil.com",
+		tags: ["Docs"],
 	},
 
 	{
