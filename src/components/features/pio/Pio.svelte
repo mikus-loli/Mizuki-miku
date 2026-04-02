@@ -17,46 +17,56 @@
 
 	const isModel3 = pioOptions.model[0].includes("model3.json");
 
-	let pioInstance: any = null;
-	let pioInitialized = false;
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
 
 	function initPio() {
-		if (
-			typeof window !== "undefined" &&
-			typeof (window as any).Paul_Pio !== "undefined"
-		) {
-			try {
-				if (pioContainer && pioCanvas && !pioInitialized) {
-					if (
-						isModel3 &&
-						typeof (window as any).initPioPixi === "function"
-					) {
-						(window as any).initPioPixi(
-							pioConfig.position || "left",
-						);
-					}
+		if (typeof window === "undefined") return;
 
-					pioInstance = new (window as any).Paul_Pio(pioOptions);
-					pioInitialized = true;
-					console.log(
-						`Pio initialized successfully (${isModel3 ? "SDK4" : "SDK2"})`,
-					);
-				} else if (!pioContainer || !pioCanvas) {
-					console.warn("Pio DOM elements not found, retrying...");
-					setTimeout(initPio, 100);
-				}
-			} catch (e) {
-				console.error("Pio initialization error:", e);
-			}
-		} else {
+		const win = window as any;
+
+		if (win.__pioInstance || win.__pioInitialized) {
+			console.log(
+				"[Pio] Instance already exists, skipping initialization",
+			);
+			return;
+		}
+
+		if (typeof win.Paul_Pio === "undefined") {
+			console.warn("[Pio] Paul_Pio not available yet, retrying...");
 			setTimeout(initPio, 100);
+			return;
+		}
+
+		if (!pioContainer || !pioCanvas) {
+			console.warn("[Pio] DOM elements not found, retrying...");
+			setTimeout(initPio, 100);
+			return;
+		}
+
+		try {
+			if (isModel3 && typeof win.initPioPixi === "function") {
+				win.initPioPixi(pioConfig.position || "left");
+			}
+
+			win.__pioInstance = new win.Paul_Pio(pioOptions);
+			win.__pioInitialized = true;
+			console.log(
+				`[Pio] Initialized successfully (${isModel3 ? "SDK4" : "SDK2"})`,
+			);
+		} catch (e) {
+			console.error("[Pio] Initialization error:", e);
 		}
 	}
 
 	async function loadPioAssets() {
-		if (typeof window === "undefined") {
+		if (typeof window === "undefined") return;
+
+		const win = window as any;
+
+		if (win.__pioScriptsLoaded) {
+			console.log("[Pio] Scripts already loaded, initializing...");
+			setTimeout(initPio, 100);
 			return;
 		}
 
@@ -97,16 +107,15 @@
 				await loadScript("/pio/static/pio.js", "pio-main-script");
 			}
 
+			win.__pioScriptsLoaded = true;
 			setTimeout(initPio, 100);
 		} catch (error) {
-			console.error("Failed to load Pio scripts:", error);
+			console.error("[Pio] Failed to load scripts:", error);
 		}
 	}
 
 	onMount(() => {
-		if (!pioConfig.enable) {
-			return;
-		}
+		if (!pioConfig.enable) return;
 
 		if (
 			pioConfig.hiddenOnMobile &&
@@ -119,7 +128,7 @@
 	});
 
 	onDestroy(() => {
-		console.log("Pio Svelte component destroyed (keeping instance alive)");
+		console.log("[Pio] Component destroyed (keeping instance alive)");
 	});
 </script>
 
@@ -127,6 +136,7 @@
 	<div
 		class={`pio-container ${pioConfig.position || "right"}`}
 		bind:this={pioContainer}
+		data-swup-persist="pio-live2d"
 	>
 		<div class="pio-action"></div>
 		<canvas
@@ -139,5 +149,9 @@
 {/if}
 
 <style>
-	/* Pio 相关样式将通过外部CSS文件加载 */
+	.pio-container {
+		position: fixed !important;
+		bottom: 0 !important;
+		z-index: 52 !important;
+	}
 </style>

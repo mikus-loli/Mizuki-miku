@@ -53,6 +53,7 @@ export default defineConfig({
 			updateHead: process.env.NODE_ENV === "production",
 			updateBodyClass: false,
 			globalInstance: true,
+			persistTags: ".pio-container", // 持久化 Pio 看板娘容器
 			// 滚动相关配置优化
 			resolveUrl: (url) => url,
 			animateHistoryBrowsing: false,
