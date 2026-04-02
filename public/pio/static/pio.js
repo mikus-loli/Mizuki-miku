@@ -118,11 +118,11 @@ var Paul_Pio = function (prop) {
 					? modules.render(
 							prop.content.referer.replace(
 								/%t/,
-								"“" + referrer.hostname + "”",
+								"\u201C" + referrer.hostname + "\u201D",
 							),
 						)
 					: modules.render(
-							"欢迎来自 "" + referrer.hostname + "" 的朋友！",
+							"\u6B22\u8FCE\u6765\u81EA \u201C" + referrer.hostname + "\u201D \u7684\u670B\u53CB\uFF01",
 						);
 			} else if (prop.tips) {
 				var text,
@@ -189,14 +189,12 @@ var Paul_Pio = function (prop) {
 			elements.express.onclick = function () {
 				if (typeof window.pio_change_expression === "function") {
 					window.pio_change_expression();
-					// 这里可以随机一句台词
 					modules.render([" 变个脸给你看 ~", " 哼 ~", " 略略略 ~"]);
 				}
 			};
 			elements.express.onmouseover = function () {
 				modules.render(" 点我换个表情吧！");
 			};
-			// 只有当模型支持表情时才显示？通常都显示吧
 			if (!current.menu.querySelector(".pio-express")) {
 				current.menu.appendChild(elements.express);
 			}
@@ -260,7 +258,7 @@ var Paul_Pio = function (prop) {
 								modules.render(
 									"想阅读 %t 吗？".replace(
 										/%t/,
-										""" + this.innerText + """,
+										"\u201C" + this.innerText + "\u201D",
 									),
 								);
 							};
@@ -269,7 +267,7 @@ var Paul_Pio = function (prop) {
 								modules.render(
 									"想了解一下 %t 吗？".replace(
 										/%t/,
-										""" + this.innerText + """,
+										"\u201C" + this.innerText + "\u201D",
 									),
 								);
 							};
