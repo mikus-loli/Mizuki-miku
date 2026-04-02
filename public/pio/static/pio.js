@@ -11,6 +11,11 @@
 ---- */
 
 var Paul_Pio = function (prop) {
+	if (window.__pioInstance) {
+		console.log("[Pio] Instance already exists, returning existing instance");
+		return window.__pioInstance;
+	}
+
 	var that = this;
 
 	var current = {
@@ -86,9 +91,18 @@ var Paul_Pio = function (prop) {
 		show: modules.create("div", { class: "pio-show" }),
 	};
 
-	var dialog = modules.create("div", { class: "pio-dialog" });
-	current.body.appendChild(dialog);
-	current.body.appendChild(elements.show);
+	var existingDialog = current.body.querySelector(".pio-dialog");
+	var existingShow = current.body.querySelector(".pio-show");
+	
+	var dialog = existingDialog || modules.create("div", { class: "pio-dialog" });
+	if (!existingDialog) {
+		current.body.appendChild(dialog);
+	}
+	if (!existingShow) {
+		current.body.appendChild(elements.show);
+	} else {
+		elements.show = existingShow;
+	}
 
 	/* - 提示操作 */
 	var action = {
@@ -108,7 +122,7 @@ var Paul_Pio = function (prop) {
 							),
 						)
 					: modules.render(
-							"欢迎来自 “" + referrer.hostname + "” 的朋友！",
+							"欢迎来自 "" + referrer.hostname + "" 的朋友！",
 						);
 			} else if (prop.tips) {
 				var text,
@@ -161,7 +175,9 @@ var Paul_Pio = function (prop) {
 			elements.home.onmouseover = function () {
 				modules.render(prop.content.home || "点击这里回到首页！");
 			};
-			current.menu.appendChild(elements.home);
+			if (!current.menu.querySelector(".pio-home")) {
+				current.menu.appendChild(elements.home);
+			}
 
 			// 更换模型
 			elements.skin.onclick = function () {
@@ -181,14 +197,18 @@ var Paul_Pio = function (prop) {
 				modules.render(" 点我换个表情吧！");
 			};
 			// 只有当模型支持表情时才显示？通常都显示吧
-			current.menu.appendChild(elements.express);
+			if (!current.menu.querySelector(".pio-express")) {
+				current.menu.appendChild(elements.express);
+			}
 
 			elements.skin.onmouseover = function () {
 				prop.content.skin && prop.content.skin[0]
 					? modules.render(prop.content.skin[0])
 					: modules.render("想看看我的新衣服吗？");
 			};
-			if (prop.model.length > 1) current.menu.appendChild(elements.skin);
+			if (prop.model.length > 1 && !current.menu.querySelector(".pio-skin")) {
+				current.menu.appendChild(elements.skin);
+			}
 
 			// 关于我
 			elements.info.onclick = function () {
@@ -200,7 +220,9 @@ var Paul_Pio = function (prop) {
 			elements.info.onmouseover = function () {
 				modules.render("想了解更多关于我的信息吗？");
 			};
-			current.menu.appendChild(elements.info);
+			if (!current.menu.querySelector(".pio-info")) {
+				current.menu.appendChild(elements.info);
+			}
 
 			// 夜间模式
 			if (prop.night) {
@@ -210,7 +232,9 @@ var Paul_Pio = function (prop) {
 				elements.night.onmouseover = function () {
 					modules.render("夜间点击这里可以保护眼睛呢");
 				};
-				current.menu.appendChild(elements.night);
+				if (!current.menu.querySelector(".pio-night")) {
+					current.menu.appendChild(elements.night);
+				}
 			}
 
 			// 关闭看板娘
@@ -220,7 +244,9 @@ var Paul_Pio = function (prop) {
 			elements.close.onmouseover = function () {
 				modules.render(prop.content.close || "QWQ 下次再见吧~");
 			};
-			current.menu.appendChild(elements.close);
+			if (!current.menu.querySelector(".pio-close")) {
+				current.menu.appendChild(elements.close);
+			}
 		},
 		custom: function () {
 			prop.content.custom.forEach(function (t) {
@@ -234,7 +260,7 @@ var Paul_Pio = function (prop) {
 								modules.render(
 									"想阅读 %t 吗？".replace(
 										/%t/,
-										"“" + this.innerText + "”",
+										""" + this.innerText + """,
 									),
 								);
 							};
@@ -243,7 +269,7 @@ var Paul_Pio = function (prop) {
 								modules.render(
 									"想了解一下 %t 吗？".replace(
 										/%t/,
-										"“" + this.innerText + "”",
+										""" + this.innerText + """,
 									),
 								);
 							};
@@ -331,6 +357,9 @@ var Paul_Pio = function (prop) {
 		};
 	};
 
+	window.__pioInstance = this;
+	window.__pioInitialized = true;
+
 	localStorage.getItem("posterGirl") == 0 ? this.initHidden() : this.init();
 };
 
@@ -342,4 +371,3 @@ if (window.console && window.console.log) {
 		"margin: 1em 0; padding: 5px 0; background: #efefef;",
 	);
 }
-
