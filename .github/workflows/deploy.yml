@@ -3,6 +3,10 @@ name: Deploy to Pages Branch
 on:
     push:
         branches: [main]
+
+    repository_dispatch: # 👈 添加这个
+        types:
+            - content-updated
     workflow_dispatch:
 
 permissions:
