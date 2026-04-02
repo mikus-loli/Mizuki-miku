@@ -233,3 +233,36 @@ html.is-animating .transition-swup-fade {
     will-change: auto !important;
   }
 }
+
+/* Pio 看板娘容器 - 页面切换时保持稳定 */
+.pio-container {
+  position: fixed !important;
+  bottom: 0 !important;
+  z-index: 52 !important;
+  transform: none !important;
+  transition: none !important;
+  will-change: auto !important;
+  backface-visibility: visible !important;
+}
+
+html.is-changing .pio-container,
+html.is-animating .pio-container,
+html.is-leaving .pio-container,
+html.is-entering .pio-container {
+  position: fixed !important;
+  bottom: 0 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Pio 对话框 - 页面切换时保持稳定 */
+.pio-container .pio-dialog {
+  position: absolute !important;
+  transform: none !important;
+}
+
+html.is-changing .pio-container .pio-dialog,
+html.is-animating .pio-container .pio-dialog,
+html.is-leaving .pio-container .pio-dialog {
+  transform: none !important;
+}

@@ -11,12 +11,14 @@
 ---- */
 
 var Paul_Pio = function (prop) {
+	var that = this;
+
 	if (window.__pioInstance) {
-		console.log("[Pio] Instance already exists, returning existing instance");
+		console.log(
+			"[Pio] Instance already exists, returning existing instance",
+		);
 		return window.__pioInstance;
 	}
-
-	var that = this;
 
 	var current = {
 		idol: 0,
@@ -91,17 +93,14 @@ var Paul_Pio = function (prop) {
 		show: modules.create("div", { class: "pio-show" }),
 	};
 
-	var existingDialog = current.body.querySelector(".pio-dialog");
-	var existingShow = current.body.querySelector(".pio-show");
-	
-	var dialog = existingDialog || modules.create("div", { class: "pio-dialog" });
-	if (!existingDialog) {
+	var dialog =
+		current.body.querySelector(".pio-dialog") ||
+		modules.create("div", { class: "pio-dialog" });
+	if (!current.body.querySelector(".pio-dialog")) {
 		current.body.appendChild(dialog);
 	}
-	if (!existingShow) {
+	if (!current.body.querySelector(".pio-show")) {
 		current.body.appendChild(elements.show);
-	} else {
-		elements.show = existingShow;
 	}
 
 	/* - 提示操作 */
@@ -118,11 +117,11 @@ var Paul_Pio = function (prop) {
 					? modules.render(
 							prop.content.referer.replace(
 								/%t/,
-								"\u201C" + referrer.hostname + "\u201D",
+								"“" + referrer.hostname + "”",
 							),
 						)
 					: modules.render(
-							"\u6B22\u8FCE\u6765\u81EA \u201C" + referrer.hostname + "\u201D \u7684\u670B\u53CB\uFF01",
+							"欢迎来自 “" + referrer.hostname + "” 的朋友！",
 						);
 			} else if (prop.tips) {
 				var text,
@@ -175,9 +174,7 @@ var Paul_Pio = function (prop) {
 			elements.home.onmouseover = function () {
 				modules.render(prop.content.home || "点击这里回到首页！");
 			};
-			if (!current.menu.querySelector(".pio-home")) {
-				current.menu.appendChild(elements.home);
-			}
+			current.menu.appendChild(elements.home);
 
 			// 更换模型
 			elements.skin.onclick = function () {
@@ -189,24 +186,22 @@ var Paul_Pio = function (prop) {
 			elements.express.onclick = function () {
 				if (typeof window.pio_change_expression === "function") {
 					window.pio_change_expression();
+					// 这里可以随机一句台词
 					modules.render([" 变个脸给你看 ~", " 哼 ~", " 略略略 ~"]);
 				}
 			};
 			elements.express.onmouseover = function () {
 				modules.render(" 点我换个表情吧！");
 			};
-			if (!current.menu.querySelector(".pio-express")) {
-				current.menu.appendChild(elements.express);
-			}
+			// 只有当模型支持表情时才显示？通常都显示吧
+			current.menu.appendChild(elements.express);
 
 			elements.skin.onmouseover = function () {
 				prop.content.skin && prop.content.skin[0]
 					? modules.render(prop.content.skin[0])
 					: modules.render("想看看我的新衣服吗？");
 			};
-			if (prop.model.length > 1 && !current.menu.querySelector(".pio-skin")) {
-				current.menu.appendChild(elements.skin);
-			}
+			if (prop.model.length > 1) current.menu.appendChild(elements.skin);
 
 			// 关于我
 			elements.info.onclick = function () {
@@ -218,9 +213,7 @@ var Paul_Pio = function (prop) {
 			elements.info.onmouseover = function () {
 				modules.render("想了解更多关于我的信息吗？");
 			};
-			if (!current.menu.querySelector(".pio-info")) {
-				current.menu.appendChild(elements.info);
-			}
+			current.menu.appendChild(elements.info);
 
 			// 夜间模式
 			if (prop.night) {
@@ -230,9 +223,7 @@ var Paul_Pio = function (prop) {
 				elements.night.onmouseover = function () {
 					modules.render("夜间点击这里可以保护眼睛呢");
 				};
-				if (!current.menu.querySelector(".pio-night")) {
-					current.menu.appendChild(elements.night);
-				}
+				current.menu.appendChild(elements.night);
 			}
 
 			// 关闭看板娘
@@ -242,9 +233,7 @@ var Paul_Pio = function (prop) {
 			elements.close.onmouseover = function () {
 				modules.render(prop.content.close || "QWQ 下次再见吧~");
 			};
-			if (!current.menu.querySelector(".pio-close")) {
-				current.menu.appendChild(elements.close);
-			}
+			current.menu.appendChild(elements.close);
 		},
 		custom: function () {
 			prop.content.custom.forEach(function (t) {
@@ -258,7 +247,7 @@ var Paul_Pio = function (prop) {
 								modules.render(
 									"想阅读 %t 吗？".replace(
 										/%t/,
-										"\u201C" + this.innerText + "\u201D",
+										"“" + this.innerText + "”",
 									),
 								);
 							};
@@ -267,7 +256,7 @@ var Paul_Pio = function (prop) {
 								modules.render(
 									"想了解一下 %t 吗？".replace(
 										/%t/,
-										"\u201C" + this.innerText + "\u201D",
+										"“" + this.innerText + "”",
 									),
 								);
 							};
@@ -355,14 +344,14 @@ var Paul_Pio = function (prop) {
 		};
 	};
 
-	window.__pioInstance = this;
-	window.__pioInitialized = true;
-
 	localStorage.getItem("posterGirl") == 0 ? this.initHidden() : this.init();
+
+	window.__pioInstance = that;
 };
 
 // 请保留版权说明
-if (window.console && window.console.log) {
+if (window.console && window.console.log && !window.__pioCopyrightLogged) {
+	window.__pioCopyrightLogged = true;
 	console.log(
 		"%c Pio %c https://paugram.com ",
 		"color: #fff; margin: 1em 0; padding: 5px 0; background: #673ab7;",
