@@ -50,14 +50,23 @@ function loadlive2d(canvas_id, json_object_or_url) {
 		currentModel = model;
 		app.stage.addChild(model);
 
-		const vertical_factor = canvas.height / model.height;
-		model.scale.set(vertical_factor);
+		var targetSize = window.__pioTargetSize;
+		var scale;
 
-		// match canvas to model width
-		canvas.width = model.width;
+		if (targetSize && targetSize.width && targetSize.height) {
+			var scaleX = targetSize.width / model.width;
+			var scaleY = targetSize.height / model.height;
+			scale = Math.min(scaleX, scaleY);
+			canvas.width = targetSize.width;
+			canvas.height = targetSize.height;
+		} else {
+			scale = canvas.height / model.height;
+			canvas.width = model.width;
+		}
+
+		model.scale.set(scale);
 		pio_refresh_style();
 
-		// check alignment, and align model to corner
 		if (
 			document
 				.getElementsByClassName("pio-container")
@@ -66,7 +75,7 @@ function loadlive2d(canvas_id, json_object_or_url) {
 		) {
 			model.x = 0;
 		} else {
-			model.x = canvas.width - model.width;
+			model.x = canvas.width - model.width * scale;
 		}
 
 		// Hit callback definition
@@ -141,8 +150,7 @@ window.pio_change_expression = function () {
 	}
 };
 
-window.initPioPixi = function (alignmentParam) {
-	// 如果传入了参数，就更新全局变量
+window.initPioPixi = function (alignmentParam, targetWidth, targetHeight) {
 	if (alignmentParam) {
 		pio_alignment = alignmentParam;
 	}
@@ -153,13 +161,20 @@ window.initPioPixi = function (alignmentParam) {
 	}
 
 	if (typeof app !== "undefined" && app !== null) {
-		// 如果 App 已经存在，可能只是需要刷新一下样式位置
 		pio_refresh_style();
 		return;
 	}
 
+	var canvas = document.getElementById("pio");
+
+	if (targetWidth && targetHeight) {
+		canvas.width = targetWidth;
+		canvas.height = targetHeight;
+		window.__pioTargetSize = { width: targetWidth, height: targetHeight };
+	}
+
 	app = new PIXI.Application({
-		view: document.getElementById("pio"),
+		view: canvas,
 		transparent: true,
 		autoStart: true,
 	});

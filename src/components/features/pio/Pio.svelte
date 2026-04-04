@@ -46,7 +46,11 @@
 
 		try {
 			if (isModel3 && typeof win.initPioPixi === "function") {
-				win.initPioPixi(pioConfig.position || "left");
+				win.initPioPixi(
+					pioConfig.position || "left",
+					pioConfig.width,
+					pioConfig.height,
+				);
 			}
 
 			win.__pioInstance = new win.Paul_Pio(pioOptions);
