@@ -53,15 +53,42 @@ function loadlive2d(canvas_id, json_object_or_url) {
 		var targetSize = window.__pioTargetSize;
 		var scale;
 
-		if (targetSize && targetSize.width && targetSize.height) {
+		console.log(
+			"[Pio] Model loaded. targetSize:",
+			targetSize,
+			"model.size:",
+			model.width,
+			"x",
+			model.height,
+		);
+
+		if (
+			targetSize &&
+			typeof targetSize.width === "number" &&
+			typeof targetSize.height === "number"
+		) {
 			var scaleX = targetSize.width / model.width;
 			var scaleY = targetSize.height / model.height;
 			scale = Math.min(scaleX, scaleY);
 			canvas.width = targetSize.width;
 			canvas.height = targetSize.height;
+			console.log(
+				"[Pio] Applied target size:",
+				canvas.width,
+				"x",
+				canvas.height,
+				"scale:",
+				scale,
+			);
 		} else {
 			scale = canvas.height / model.height;
 			canvas.width = model.width;
+			console.log(
+				"[Pio] Using model size (no target):",
+				canvas.width,
+				"x",
+				canvas.height,
+			);
 		}
 
 		model.scale.set(scale);
@@ -151,12 +178,26 @@ window.pio_change_expression = function () {
 };
 
 window.initPioPixi = function (alignmentParam, targetWidth, targetHeight) {
+	console.log(
+		"[Pio] initPioPixi called with:",
+		alignmentParam,
+		targetWidth,
+		targetHeight,
+	);
+
 	if (alignmentParam) {
 		pio_alignment = alignmentParam;
 	}
 
-	if (targetWidth && targetHeight) {
+	if (typeof targetWidth === "number" && typeof targetHeight === "number") {
 		window.__pioTargetSize = { width: targetWidth, height: targetHeight };
+		console.log("[Pio] __pioTargetSize set to:", window.__pioTargetSize);
+	} else {
+		console.warn(
+			"[Pio] Invalid targetWidth or targetHeight:",
+			targetWidth,
+			targetHeight,
+		);
 	}
 
 	if (typeof PIXI === "undefined") {
