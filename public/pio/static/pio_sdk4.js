@@ -25,27 +25,21 @@ var app;
 var currentModel = null;
 
 function loadlive2d(canvas_id, json_object_or_url) {
+	// Replaces original l2d method 'loadlive2d' for Pio.
+	// Heavily relies on pixi_live2d_display.
+
 	console.log("[Pio] Loading new model");
 
 	const canvas = document.getElementById(canvas_id);
 
-	var initialWidth = canvas.width;
-	var initialHeight = canvas.height;
-
-	if (initialWidth > 0 && initialHeight > 0) {
-		if (!window.__pioTargetSize) {
-			window.__pioTargetSize = {
-				width: initialWidth,
-				height: initialHeight,
-			};
-		}
-	}
-
+	// When pio was start minimized on browser refresh or reload,
+	// canvas is set to 0, 0 dimension and need to be changed.
 	if (canvas.width === 0) {
 		canvas.removeAttribute("height");
 		pio_refresh_style();
 	}
 
+	// Try to remove previous model, if any exists.
 	try {
 		app.stage.removeChildAt(0);
 	} catch (error) {}
@@ -126,21 +120,21 @@ function loadlive2d(canvas_id, json_object_or_url) {
 var pio_alignment = "right";
 
 function pio_refresh_style() {
+	// Always make sure to call this after container/canvas style changes!
+	// You can set alignment here, but still you can change it manually.
+
 	let pio_container = document
 		.getElementsByClassName("pio-container")
 		.item(0);
+	// 增加判空，防止报错
 	if (!pio_container) return;
 
+	// 强行重置 class，确保和内部状态一致
 	pio_container.classList.remove("left", "right");
 	pio_container.classList.add(pio_alignment);
 
 	if (app && document.getElementById("pio")) {
-		if (window.__pioTargetSize) {
-			app.renderer.resize(
-				window.__pioTargetSize.width,
-				window.__pioTargetSize.height,
-			);
-		}
+		app.resizeTo = document.getElementById("pio");
 	}
 }
 
@@ -161,34 +155,26 @@ window.initPioPixi = function (alignmentParam, targetWidth, targetHeight) {
 		pio_alignment = alignmentParam;
 	}
 
+	if (targetWidth && targetHeight) {
+		window.__pioTargetSize = { width: targetWidth, height: targetHeight };
+	}
+
 	if (typeof PIXI === "undefined") {
 		console.error("[Pio] PixiJS not loaded!");
 		return;
 	}
 
-	var canvas = document.getElementById("pio");
-
-	if (targetWidth && targetHeight) {
-		window.__pioTargetSize = { width: targetWidth, height: targetHeight };
-	}
-
 	if (typeof app !== "undefined" && app !== null) {
-		if (window.__pioTargetSize && currentModel) {
+		var canvas = document.getElementById("pio");
+		if (canvas && window.__pioTargetSize) {
 			canvas.width = window.__pioTargetSize.width;
 			canvas.height = window.__pioTargetSize.height;
-			var scaleX = window.__pioTargetSize.width / currentModel.width;
-			var scaleY = window.__pioTargetSize.height / currentModel.height;
-			var scale = Math.min(scaleX, scaleY);
-			currentModel.scale.set(scale);
-			if (pio_alignment === "left") {
-				currentModel.x = 0;
-			} else {
-				currentModel.x = canvas.width - currentModel.width * scale;
-			}
 		}
 		pio_refresh_style();
 		return;
 	}
+
+	var canvas = document.getElementById("pio");
 
 	if (window.__pioTargetSize) {
 		canvas.width = window.__pioTargetSize.width;
