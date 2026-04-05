@@ -45,6 +45,15 @@ function loadlive2d(canvas_id, json_object_or_url) {
 		var targetSize = __pioTargetSize;
 		var scale;
 
+		console.log("[Pio Debug] targetSize:", targetSize);
+		console.log("[Pio Debug] model.size:", model.width, "x", model.height);
+		console.log(
+			"[Pio Debug] canvas.size before:",
+			canvas.width,
+			"x",
+			canvas.height,
+		);
+
 		if (
 			targetSize &&
 			typeof targetSize.width === "number" &&
@@ -55,10 +64,19 @@ function loadlive2d(canvas_id, json_object_or_url) {
 			scale = Math.min(scaleX, scaleY);
 			canvas.width = targetSize.width;
 			canvas.height = targetSize.height;
+			console.log("[Pio Debug] Using target size, scale:", scale);
 		} else {
 			scale = canvas.height / model.height;
 			canvas.width = model.width;
+			console.log("[Pio Debug] Using fallback, scale:", scale);
 		}
+
+		console.log(
+			"[Pio Debug] canvas.size after:",
+			canvas.width,
+			"x",
+			canvas.height,
+		);
 
 		model.scale.set(scale);
 
@@ -105,12 +123,26 @@ window.pio_change_expression = function () {
 };
 
 window.initPioPixi = function (alignmentParam, targetWidth, targetHeight) {
+	console.log(
+		"[Pio Debug] initPioPixi called:",
+		alignmentParam,
+		targetWidth,
+		targetHeight,
+	);
+
 	if (alignmentParam) {
 		pio_alignment = alignmentParam;
 	}
 
 	if (typeof targetWidth === "number" && typeof targetHeight === "number") {
 		__pioTargetSize = { width: targetWidth, height: targetHeight };
+		console.log("[Pio Debug] __pioTargetSize set:", __pioTargetSize);
+	} else {
+		console.warn(
+			"[Pio Debug] Invalid dimensions:",
+			targetWidth,
+			targetHeight,
+		);
 	}
 
 	if (typeof PIXI === "undefined") {
@@ -122,20 +154,27 @@ window.initPioPixi = function (alignmentParam, targetWidth, targetHeight) {
 		if (canvas && __pioTargetSize) {
 			canvas.width = __pioTargetSize.width;
 			canvas.height = __pioTargetSize.height;
+			app.renderer.resize(__pioTargetSize.width, __pioTargetSize.height);
 		}
 		pio_refresh_style();
 		return;
 	}
 
 	var canvas = document.getElementById("pio");
+	var appWidth = 280;
+	var appHeight = 250;
 
 	if (__pioTargetSize) {
 		canvas.width = __pioTargetSize.width;
 		canvas.height = __pioTargetSize.height;
+		appWidth = __pioTargetSize.width;
+		appHeight = __pioTargetSize.height;
 	}
 
 	app = new PIXI.Application({
 		view: canvas,
+		width: appWidth,
+		height: appHeight,
 		transparent: true,
 		autoStart: true,
 	});
