@@ -17,8 +17,12 @@
 
 	const isModel3 = pioOptions.model[0].includes("model3.json");
 
+	const canvasWidth = pioConfig.width || 280;
+	const canvasHeight = pioConfig.height || 250;
+
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
+	let isLoaded = false;
 
 	function initPio() {
 		if (typeof window === "undefined") return;
@@ -48,13 +52,14 @@
 			if (isModel3 && typeof win.initPioPixi === "function") {
 				win.initPioPixi(
 					pioConfig.position || "left",
-					pioConfig.width,
-					pioConfig.height,
+					canvasWidth,
+					canvasHeight,
 				);
 			}
 
 			win.__pioInstance = new win.Paul_Pio(pioOptions);
 			win.__pioInitialized = true;
+			isLoaded = true;
 			console.log(
 				`[Pio] Initialized successfully (${isModel3 ? "SDK4" : "SDK2"})`,
 			);
@@ -138,16 +143,21 @@
 
 {#if pioConfig.enable}
 	<div
-		class={`pio-container ${pioConfig.position || "right"}`}
+		class="pio-container"
+		class:left={pioConfig.position === "left"}
+		class:right={pioConfig.position !== "left"}
+		class:loaded={isLoaded}
 		bind:this={pioContainer}
 		data-swup-persist="pio-live2d"
+		style="width: {canvasWidth}px; height: {canvasHeight}px;"
 	>
+		<div class="pio-dialog"></div>
 		<div class="pio-action"></div>
 		<canvas
 			id="pio"
 			bind:this={pioCanvas}
-			width={pioConfig.width || 280}
-			height={pioConfig.height || 250}
+			width={canvasWidth}
+			height={canvasHeight}
 		></canvas>
 	</div>
 {/if}
@@ -157,5 +167,52 @@
 		position: fixed !important;
 		bottom: 0 !important;
 		z-index: 52 !important;
+		overflow: visible;
+		pointer-events: none;
+	}
+
+	.pio-container.left {
+		left: 0;
+	}
+
+	.pio-container.right {
+		right: 0;
+	}
+
+	.pio-container.loaded {
+		pointer-events: auto;
+	}
+
+	.pio-container :global(.pio-action) {
+		position: absolute;
+		top: 3em;
+		pointer-events: auto;
+	}
+
+	.pio-container.left :global(.pio-action) {
+		right: 0;
+	}
+
+	.pio-container.right :global(.pio-action) {
+		left: 0;
+	}
+
+	.pio-container :global(.pio-dialog) {
+		position: absolute;
+		bottom: calc(100% + 0.5em);
+		pointer-events: auto;
+	}
+
+	.pio-container.left :global(.pio-dialog) {
+		left: 1em;
+	}
+
+	.pio-container.right :global(.pio-dialog) {
+		right: 1em;
+	}
+
+	#pio {
+		display: block;
+		pointer-events: auto;
 	}
 </style>
