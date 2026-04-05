@@ -11,6 +11,8 @@
 @import "./gradient-buttons.css";
 /* 导入 Banner 和网格布局样式 */
 @import "./banner.css";
+/* 导入 Twikoo 评论样式 */
+@import "./twikoo.css";
 /* 加密内容样式已移除，现在直接使用非加密文章的样式 */
 
 @plugin "@tailwindcss/typography";

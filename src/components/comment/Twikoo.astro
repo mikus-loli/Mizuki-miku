@@ -21,9 +21,12 @@ const config = {
 		const TWIKOO_CONTAINER_ID = "twikoo-container";
 		const TWIKOO_SCRIPT_URL = "/assets/js/twikoo.all.min.js";
 		const ROOT_MARGIN = "200px";
+		const MAX_RETRY = 3;
+		const RETRY_DELAY = 1000;
 
 		let observer = null;
-		let twikooLoaded = false;
+		let twikooScriptLoaded = false;
+		let twikooInitialized = false;
 
 		function getCurrentPath() {
 			const pathname = window.location.pathname;
@@ -40,23 +43,44 @@ const config = {
 			};
 		}
 
-		async function loadTwikooScript() {
-			if (
-				twikooLoaded ||
-				document.getElementById("twikoo-script-loaded")
-			) {
-				return;
+		async function loadTwikooScript(retryCount = 0) {
+			if (twikooScriptLoaded) {
+				return true;
 			}
-			return new Promise((resolve, reject) => {
+
+			const existingScript = document.getElementById(
+				"twikoo-script-loaded",
+			);
+			if (existingScript) {
+				twikooScriptLoaded = true;
+				return true;
+			}
+
+			return new Promise((resolve) => {
 				const script = document.createElement("script");
 				script.id = "twikoo-script-loaded";
 				script.src = TWIKOO_SCRIPT_URL;
 				script.async = true;
+
 				script.onload = () => {
-					twikooLoaded = true;
-					resolve();
+					twikooScriptLoaded = true;
+					resolve(true);
 				};
-				script.onerror = reject;
+
+				script.onerror = () => {
+					if (retryCount < MAX_RETRY) {
+						console.warn(
+							`[Twikoo] 脚本加载失败，重试 ${retryCount + 1}/${MAX_RETRY}`,
+						);
+						setTimeout(() => {
+							resolve(loadTwikooScript(retryCount + 1));
+						}, RETRY_DELAY);
+					} else {
+						console.error("[Twikoo] 脚本加载失败，已达最大重试次数");
+						resolve(false);
+					}
+				};
+
 				document.head.appendChild(script);
 			});
 		}
@@ -68,16 +92,22 @@ const config = {
 			}
 
 			try {
-				await loadTwikooScript();
+				const loaded = await loadTwikooScript();
+				if (!loaded) {
+					return;
+				}
 
 				if (typeof twikoo === "undefined") {
-					console.warn("[Twikoo] 脚本加载失败");
+					console.warn("[Twikoo] twikoo 对象未定义");
 					return;
 				}
 
 				commentEl.innerHTML = "";
+				twikooInitialized = false;
+
 				const dynamicConfig = createTwikooConfig();
 				await twikoo.init(dynamicConfig);
+				twikooInitialized = true;
 			} catch (error) {
 				console.error("[Twikoo] 初始化失败:", error);
 			}
@@ -87,9 +117,6 @@ const config = {
 			if (observer) {
 				observer.disconnect();
 				observer = null;
-			}
-			if (window.swup?.hooks) {
-				window.swup.hooks.off("content:replace", initTwikoo);
 			}
 		}
 
@@ -123,6 +150,7 @@ const config = {
 		function setupSwupHooks() {
 			if (window.swup?.hooks) {
 				window.swup.hooks.on("content:replace", () => {
+					twikooInitialized = false;
 					setTimeout(setupLazyLoad, 200);
 				});
 			} else {
@@ -131,6 +159,7 @@ const config = {
 					() => {
 						if (window.swup?.hooks) {
 							window.swup.hooks.on("content:replace", () => {
+								twikooInitialized = false;
 								setTimeout(setupLazyLoad, 200);
 							});
 						}
