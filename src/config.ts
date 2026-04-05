@@ -691,13 +691,13 @@ export const pioConfig: import("./types/config").PioConfig = {
 // 相关文章配置
 export const relatedPostsConfig: RelatedPostsConfig = {
 	enable: true,
-	maxCount: 5,
+	maxCount: 4,
 };
 
 // 随机文章配置
 export const randomPostsConfig: RandomPostsConfig = {
 	enable: true,
-	maxCount: 5,
+	maxCount: 4,
 };
 
 // 导出所有配置的统一接口
