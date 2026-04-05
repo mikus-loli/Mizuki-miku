@@ -25,21 +25,27 @@ var app;
 var currentModel = null;
 
 function loadlive2d(canvas_id, json_object_or_url) {
-	// Replaces original l2d method 'loadlive2d' for Pio.
-	// Heavily relies on pixi_live2d_display.
-
 	console.log("[Pio] Loading new model");
 
 	const canvas = document.getElementById(canvas_id);
 
-	// When pio was start minimized on browser refresh or reload,
-	// canvas is set to 0, 0 dimension and need to be changed.
+	var initialWidth = canvas.width;
+	var initialHeight = canvas.height;
+
+	if (initialWidth > 0 && initialHeight > 0) {
+		if (!window.__pioTargetSize) {
+			window.__pioTargetSize = {
+				width: initialWidth,
+				height: initialHeight,
+			};
+		}
+	}
+
 	if (canvas.width === 0) {
 		canvas.removeAttribute("height");
 		pio_refresh_style();
 	}
 
-	// Try to remove previous model, if any exists.
 	try {
 		app.stage.removeChildAt(0);
 	} catch (error) {}
