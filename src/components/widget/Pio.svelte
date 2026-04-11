@@ -65,34 +65,25 @@
 
 		try {
 			if (isModel3) {
-				// === SDK 4 加载流程 ( 严格顺序 ) ===
-
-				// 1. 加载 Live2D Cubism Core ( 必须第一个 )
-				await loadScript(
-					"https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js",
-					"cubism-core",
-				);
-
-				// 2. 加载 PixiJS ( 必须第二个 )
-				await loadScript(
-					"https://cdn.jsdelivr.net/npm/pixi.js@5.3.6/dist/pixi.min.js",
-					"pixi-js",
-				);
-
-				// 3. 加载 Pixi-Live2D-Display ( 必须等 Pixi 加载完 )
-				// 注意：这里使用了 cubism4.min.js 而不是 index.min.js，避免报 SDK2 错误
-				await loadScript(
-					"https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/cubism4.min.js",
-					"pixi-live2d-display",
-				);
-
-				// 4. 加载本地适配器
-				await loadScript("/pio/static/pio_sdk4.js", "pio-sdk4-adapter");
-
-				// 5. 加载 UI 逻辑
+				await Promise.all([
+					loadScript(
+						"https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js",
+						"cubism-core",
+					),
+					loadScript(
+						"https://cdn.jsdelivr.net/npm/pixi.js@5.3.6/dist/pixi.min.js",
+						"pixi-js",
+					),
+				]);
+				await Promise.all([
+					loadScript(
+						"https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/cubism4.min.js",
+						"pixi-live2d-display",
+					),
+					loadScript("/pio/static/pio_sdk4.js", "pio-sdk4-adapter"),
+				]);
 				await loadScript("/pio/static/pio.js", "pio-main");
 			} else {
-				// === SDK 2 加载流程 ===
 				await loadScript("/pio/static/l2d.js", "l2d-lib");
 				await loadScript("/pio/static/pio.js", "pio-main");
 			}

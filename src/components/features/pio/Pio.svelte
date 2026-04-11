@@ -97,19 +97,23 @@
 
 		try {
 			if (isModel3) {
-				await loadScript(
-					"https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js",
-					"cubism-core",
-				);
-				await loadScript(
-					"https://cdn.jsdelivr.net/npm/pixi.js@5.3.6/dist/pixi.min.js",
-					"pixi-js",
-				);
-				await loadScript(
-					"https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/cubism4.min.js",
-					"pixi-live2d-display",
-				);
-				await loadScript("/pio/static/pio_sdk4.js", "pio-sdk4-adapter");
+				await Promise.all([
+					loadScript(
+						"https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js",
+						"cubism-core",
+					),
+					loadScript(
+						"https://cdn.jsdelivr.net/npm/pixi.js@5.3.6/dist/pixi.min.js",
+						"pixi-js",
+					),
+				]);
+				await Promise.all([
+					loadScript(
+						"https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/cubism4.min.js",
+						"pixi-live2d-display",
+					),
+					loadScript("/pio/static/pio_sdk4.js", "pio-sdk4-adapter"),
+				]);
 				await loadScript("/pio/static/pio.js", "pio-main-script");
 			} else {
 				await loadScript("/pio/static/l2d.js", "pio-l2d-script");
