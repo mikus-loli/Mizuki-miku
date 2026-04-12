@@ -25,7 +25,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: "20"
+                  node-version: "22"
 
             - name: Setup pnpm
               uses: pnpm/action-setup@v4
@@ -37,6 +37,10 @@ jobs:
 
             - name: Build site
               run: pnpm run build
+              env:
+                  ENABLE_CONTENT_SYNC: true
+                  CONTENT_REPO_URL: https://github.com/mikus-loli/Mizuki-Content.git
+                  USE_SUBMODULE: true
 
             - name: Deploy to pages branch
               uses: JamesIves/github-pages-deploy-action@v4
