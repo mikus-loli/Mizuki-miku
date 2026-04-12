@@ -100,7 +100,7 @@ class IconLoader {
 
 			const script = document.createElement("script");
 			script.src =
-				"https://code.iconify.design/iconify-icon/3-latest/iconify-icon.min.js";
+				"/cdn/iconify/iconify-icon.min.js";
 			script.async = true;
 			script.defer = true;
 

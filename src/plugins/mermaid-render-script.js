@@ -697,8 +697,7 @@
 
 		return new Promise((resolve, reject) => {
 			const script = document.createElement("script");
-			script.src =
-				"https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+			script.src = "/cdn/mermaid/mermaid.min.js";
 
 			script.onload = () => {
 				console.log("Mermaid library loaded successfully");
@@ -707,29 +706,19 @@
 
 			script.onerror = (error) => {
 				console.error("Failed to load Mermaid library:", error);
-				// 尝试备用 CDN
-				const fallbackScript = document.createElement("script");
-				fallbackScript.src =
-					"https://unpkg.com/mermaid@11/dist/mermaid.min.js";
-
-				fallbackScript.onload = () => {
-					console.log("Mermaid library loaded from fallback CDN");
-					resolve();
-				};
-
-				fallbackScript.onerror = () => {
-					reject(
-						new Error(
-							"Failed to load Mermaid from both primary and fallback CDNs",
-						),
-					);
-				};
-
-				document.head.appendChild(fallbackScript);
+				reject(new Error("Failed to load Mermaid library"));
 			};
 
 			document.head.appendChild(script);
 		});
+	}
+
+	// 检查页面中是否有 Mermaid 图表
+	function hasMermaidDiagrams() {
+		return (
+			document.querySelectorAll(".mermaid, pre code.language-mermaid")
+				.length > 0
+		);
 	}
 
 	// 主初始化函数
@@ -742,21 +731,36 @@
 			// 初始化主题状态
 			initializeThemeState();
 
-			// 加载并初始化 Mermaid
-			await loadMermaid();
-			await initializeMermaid();
-
 			// 将 renderMermaidDiagrams 暴露到全局作用域，以便在解密后调用
 			window.renderMermaidDiagrams = renderMermaidDiagrams;
+
+			// 只有在有 Mermaid 图表时才加载库
+			if (!hasMermaidDiagrams()) {
+				console.log("No Mermaid diagrams found, skipping library load");
+				return;
+			}
+
+			// 延迟加载 Mermaid，避免阻塞 LCP
+			await loadMermaid();
+			await initializeMermaid();
 		} catch (error) {
 			console.error("Failed to initialize Mermaid system:", error);
 		}
 	}
 
+	// 延迟初始化，避免阻塞 LCP
+	function deferredInitialize() {
+		if ("requestIdleCallback" in window) {
+			requestIdleCallback(() => initialize(), { timeout: 3000 });
+		} else {
+			setTimeout(initialize, 2000);
+		}
+	}
+
 	// 启动初始化
 	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", initialize);
+		document.addEventListener("DOMContentLoaded", deferredInitialize);
 	} else {
-		initialize();
+		deferredInitialize();
 	}
 })();

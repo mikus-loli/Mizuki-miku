@@ -99,17 +99,14 @@
 			if (isModel3) {
 				await Promise.all([
 					loadScript(
-						"https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js",
+						"/cdn/live2d/live2dcubismcore.min.js",
 						"cubism-core",
 					),
-					loadScript(
-						"https://cdn.jsdelivr.net/npm/pixi.js@5.3.6/dist/pixi.min.js",
-						"pixi-js",
-					),
+					loadScript("/cdn/live2d/pixi.min.js", "pixi-js"),
 				]);
 				await Promise.all([
 					loadScript(
-						"https://cdn.jsdelivr.net/npm/pixi-live2d-display/dist/cubism4.min.js",
+						"/cdn/live2d/cubism4.min.js",
 						"pixi-live2d-display",
 					),
 					loadScript("/pio/static/pio_sdk4.js", "pio-sdk4-adapter"),
