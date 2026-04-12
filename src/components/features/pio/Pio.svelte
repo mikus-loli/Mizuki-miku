@@ -23,6 +23,7 @@
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
 	let isLoaded = false;
+	let shouldRender = true;
 
 	function initPio() {
 		if (typeof window === "undefined") return;
@@ -137,6 +138,14 @@
 			return;
 		}
 
+		const win = window as any;
+
+		if (win.__pioInitialized) {
+			console.log("[Pio] Already initialized, skipping render");
+			shouldRender = false;
+			return;
+		}
+
 		loadPioAssets();
 	});
 
@@ -145,7 +154,7 @@
 	});
 </script>
 
-{#if pioConfig.enable}
+{#if pioConfig.enable && shouldRender}
 	<div
 		class="pio-container"
 		class:left={pioConfig.position === "left"}
