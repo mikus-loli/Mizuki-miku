@@ -240,7 +240,6 @@ export const map_song_list = (song_list) =&amp;gt; {
 &lt;li&gt;获取QQ音乐 Cookie&lt;/li&gt;
 &lt;li&gt;配置Meting-API QQ音乐Cookie&lt;/li&gt;
 &lt;li&gt;重启Meting-API&lt;/li&gt;
-&lt;li&gt;测试播放VIP歌曲&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;:::caution[注意]&lt;/p&gt;
 &lt;ol&gt;

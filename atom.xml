@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-12T18:28:20.511Z</updated>
+  <updated>2026-04-12T18:56:23.536Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Meting-API QQ及网易云VIP歌曲播放限制解决指南</title>
@@ -256,7 +256,6 @@ export const map_song_list = (song_list) =&gt; {
 <li>获取QQ音乐 Cookie</li>
 <li>配置Meting-API QQ音乐Cookie</li>
 <li>重启Meting-API</li>
-<li>测试播放VIP歌曲</li>
 </ol>
 <p>:::caution[注意]</p>
 <ol>
