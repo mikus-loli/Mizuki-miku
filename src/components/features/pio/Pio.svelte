@@ -23,7 +23,6 @@
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
 	let isLoaded = false;
-	let shouldRender = true;
 
 	function initPio() {
 		if (typeof window === "undefined") return;
@@ -103,10 +102,7 @@
 						"/cdn/live2d/live2dcubismcore.min.js",
 						"cubism-core",
 					),
-					loadScript(
-						"/cdn/live2d/pixi.min.js",
-						"pixi-js",
-					),
+					loadScript("/cdn/live2d/pixi.min.js", "pixi-js"),
 				]);
 				await Promise.all([
 					loadScript(
@@ -138,23 +134,45 @@
 			return;
 		}
 
-		const win = window as any;
-
-		if (win.__pioInitialized) {
-			console.log("[Pio] Already initialized, skipping render");
-			shouldRender = false;
-			return;
-		}
-
 		loadPioAssets();
+		setupSwupHooks();
 	});
 
 	onDestroy(() => {
 		console.log("[Pio] Component destroyed (keeping instance alive)");
 	});
+
+	function setupSwupHooks() {
+		if (typeof window === "undefined") return;
+
+		const hideDialog = () => {
+			const win = window as any;
+			if (win.__pioInstance?.modules?.hideDialog) {
+				win.__pioInstance.modules.hideDialog();
+			} else {
+				const dialog = pioContainer?.querySelector(".pio-dialog");
+				if (dialog) {
+					dialog.classList.remove("active");
+				}
+			}
+		};
+
+		const setup = () => {
+			if (!(window as any).swup?.hooks) return false;
+			(window as any).swup.hooks.on("visit:start", hideDialog);
+			(window as any).swup.hooks.on("animation:out:start", hideDialog);
+			return true;
+		};
+
+		if (!setup()) {
+			document.addEventListener("swup:enable", () => setup(), {
+				once: true,
+			});
+		}
+	}
 </script>
 
-{#if pioConfig.enable && shouldRender}
+{#if pioConfig.enable}
 	<div
 		class="pio-container"
 		class:left={pioConfig.position === "left"}

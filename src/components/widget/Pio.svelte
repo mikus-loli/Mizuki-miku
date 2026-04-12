@@ -70,10 +70,7 @@
 						"/cdn/live2d/live2dcubismcore.min.js",
 						"cubism-core",
 					),
-					loadScript(
-						"/cdn/live2d/pixi.min.js",
-						"pixi-js",
-					),
+					loadScript("/cdn/live2d/pixi.min.js", "pixi-js"),
 				]);
 				await Promise.all([
 					loadScript(
