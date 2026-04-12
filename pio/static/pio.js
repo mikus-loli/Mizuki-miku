@@ -20,11 +20,18 @@ var Paul_Pio = function (prop) {
 		return window.__pioInstance;
 	}
 
+	// 使用 getter 动态查找 DOM 元素，避免页面切换后引用失效
 	var current = {
 		idol: 0,
-		menu: document.querySelector(".pio-container .pio-action"),
-		canvas: document.getElementById("pio"),
-		body: document.querySelector(".pio-container"),
+		get menu() {
+			return document.querySelector(".pio-container .pio-action");
+		},
+		get canvas() {
+			return document.getElementById("pio");
+		},
+		get body() {
+			return document.querySelector(".pio-container");
+		},
 		root: document.location.protocol + "//" + document.location.host + "/",
 	};
 
