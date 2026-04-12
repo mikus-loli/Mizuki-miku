@@ -715,10 +715,7 @@
 
 	// 检查页面中是否有 Mermaid 图表
 	function hasMermaidDiagrams() {
-		return (
-			document.querySelectorAll(".mermaid, pre code.language-mermaid")
-				.length > 0
-		);
+		return document.querySelectorAll(".mermaid, pre code.language-mermaid").length > 0;
 	}
 
 	// 主初始化函数
