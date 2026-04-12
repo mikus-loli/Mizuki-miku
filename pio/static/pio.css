@@ -104,7 +104,6 @@
 }
 
 .pio-container .pio-dialog {
-  top: -2em;
   opacity: 0;
   z-index: -1;
   font-size: 0.8em;
@@ -123,13 +122,6 @@
 .pio-container .pio-dialog.active {
   opacity: 1;
   visibility: visible;
-}
-
-.pio-container.left .pio-dialog {
-  left: 1em;
-}
-.pio-container.right .pio-dialog {
-  right: 1em;
 }
 
 #pio {

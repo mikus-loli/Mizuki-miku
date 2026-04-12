@@ -5,15 +5,15 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-02T11:06:23.917Z</updated>
+  <updated>2026-04-12T16:54:06.494Z</updated>
   <language>zh_CN</language>
   <entry>
-    <title>Meting-API 网易云VIP歌曲播放限制解决指南</title>
+    <title>Meting-API QQ及网易云VIP歌曲播放限制解决指南</title>
     <link href="https://mikus.ink/posts/meting-api-vip/" rel="alternate" type="text/html"/>
     <id>https://mikus.ink/posts/meting-api-vip/</id>
     <published>2026-03-24T00:00:00.000Z</published>
     <updated>2026-03-24T00:00:00.000Z</updated>
-    <summary>Meteting-API 服务并添加网易云音乐 解决 VIP 歌曲访问限制问题</summary>
+    <summary>Meteting-API 服务并添加QQ音乐、网易云音乐 解决 VIP 歌曲访问限制问题</summary>
     <content type="html"><![CDATA[<h1>前言</h1>
 <p>Mizuki使用了meting来提供音乐播放的功能, 但是meting默认提供的API有抽风/下线/跑路的风险, 而且最重要的是: 播放不了VIP歌曲，网易云大部分的歌曲都需要VIP</p>
 <h2>网易云解决方法</h2>
@@ -25,7 +25,8 @@
 </li>
 <li>
 <p>配置Meting-API Cookie
-打开Meting-API/src/providers/netease/util.js 替换以下内容</p>
+打开Meting-API/src/providers/netease/util.js 替换以下内容
+:spoiler[</p>
 </li>
 </ol>
 <pre><code>import encrypt from './crypto.js'
@@ -248,10 +249,26 @@ export const map_song_list = (song_list) =&gt; {
     })
 }
 </code></pre>
+<p>]
+3. 重启Meting-API</p>
+<h3>QQ音乐解决方法</h3>
 <ol>
-<li>重启Meting-API</li>
+<li>
+<p>获取QQ音乐 Cookie</p>
+</li>
+<li>
+<p>获取QQ音乐Cookie</p>
+</li>
+<li>
+<p>配置Meting-API使用QQ音乐Cookie</p>
+</li>
+<li>
+<p>重启Meting-API</p>
+</li>
+<li>
+<p>测试播放VIP歌曲</p>
+</li>
 </ol>
-<h3>QQ音乐</h3>
 <p>:::caution[注意]</p>
 <ol>
 <li>仅用于个人学习和研究使用，禁止违法用途</li>
@@ -262,7 +279,7 @@ export const map_song_list = (song_list) =&gt; {
     <author>
       <name>mikus</name>
     </author>
-    <category term="Meting-API"></category>
+    <category term="API"></category>
   </entry>
   <entry>
     <title>Umami Docker 部署</title>
