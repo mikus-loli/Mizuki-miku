@@ -10,7 +10,7 @@
 &lt;li&gt;
 &lt;p&gt;配置Meting-API 网易云Cookie
 打开Meting-API/src/providers/netease/util.js 替换以下内容
-:spoiler[&lt;/p&gt;
+:spoiler&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;pre&gt;&lt;code&gt;import encrypt from &apos;./crypto.js&apos;
@@ -233,8 +233,9 @@ export const map_song_list = (song_list) =&amp;gt; {
     })
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;]
-3. 重启Meting-API&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;重启Meting-API&lt;/li&gt;
+&lt;/ol&gt;
 &lt;h3&gt;QQ音乐解决方法&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;获取QQ音乐 Cookie&lt;/li&gt;

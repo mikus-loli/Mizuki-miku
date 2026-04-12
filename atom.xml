@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-12T17:13:46.387Z</updated>
+  <updated>2026-04-12T17:17:57.016Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Meting-API QQ及网易云VIP歌曲播放限制解决指南</title>
@@ -26,7 +26,7 @@
 <li>
 <p>配置Meting-API 网易云Cookie
 打开Meting-API/src/providers/netease/util.js 替换以下内容
-:spoiler[</p>
+:spoiler</p>
 </li>
 </ol>
 <pre><code>import encrypt from './crypto.js'
@@ -249,8 +249,9 @@ export const map_song_list = (song_list) =&gt; {
     })
 }
 </code></pre>
-<p>]
-3. 重启Meting-API</p>
+<ol>
+<li>重启Meting-API</li>
+</ol>
 <h3>QQ音乐解决方法</h3>
 <ol>
 <li>获取QQ音乐 Cookie</li>
