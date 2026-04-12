@@ -49,19 +49,25 @@ var Paul_Pio = function (prop) {
 		},
 		// 创建对话框方法
 		render: function (text) {
-			if (text.constructor === Array) {
-				dialog.innerText = modules.rand(text);
-			} else if (text.constructor === String) {
-				dialog.innerText = text;
-			} else {
-				dialog.innerText = "输入内容出现问题了 X_X";
+			var dialogEl = current.body.querySelector(".pio-dialog");
+			if (!dialogEl) {
+				dialogEl = modules.create("div", { class: "pio-dialog" });
+				current.body.appendChild(dialogEl);
 			}
 
-			dialog.classList.add("active");
+			if (text.constructor === Array) {
+				dialogEl.innerText = modules.rand(text);
+			} else if (text.constructor === String) {
+				dialogEl.innerText = text;
+			} else {
+				dialogEl.innerText = "输入内容出现问题了 X_X";
+			}
+
+			dialogEl.classList.add("active");
 
 			clearTimeout(this.t);
 			this.t = setTimeout(function () {
-				dialog.classList.remove("active");
+				dialogEl.classList.remove("active");
 			}, 3000);
 		},
 		// 移除方法
@@ -93,11 +99,11 @@ var Paul_Pio = function (prop) {
 		show: modules.create("div", { class: "pio-show" }),
 	};
 
-	var dialog =
-		current.body.querySelector(".pio-dialog") ||
-		modules.create("div", { class: "pio-dialog" });
+	// 确保 .pio-dialog 和 .pio-show 元素存在
 	if (!current.body.querySelector(".pio-dialog")) {
-		current.body.appendChild(dialog);
+		current.body.appendChild(
+			modules.create("div", { class: "pio-dialog" }),
+		);
 	}
 	if (!current.body.querySelector(".pio-show")) {
 		current.body.appendChild(elements.show);
@@ -335,7 +341,10 @@ var Paul_Pio = function (prop) {
 	// 隐藏状态
 	this.initHidden = function () {
 		current.body.classList.add("hidden");
-		dialog.classList.remove("active");
+		var dialogEl = current.body.querySelector(".pio-dialog");
+		if (dialogEl) {
+			dialogEl.classList.remove("active");
+		}
 
 		elements.show.onclick = function () {
 			current.body.classList.remove("hidden");
