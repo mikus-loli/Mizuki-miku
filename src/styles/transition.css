@@ -263,6 +263,22 @@ html.is-entering .pio-container {
 
 html.is-changing .pio-container .pio-dialog,
 html.is-animating .pio-container .pio-dialog,
-html.is-leaving .pio-container .pio-dialog {
+html.is-leaving .pio-container .pio-dialog,
+html.is-entering .pio-container .pio-dialog {
   transform: none !important;
+  transition: none !important;
+}
+
+/* Pio 操作按钮 - 页面切换时保持稳定 */
+.pio-container .pio-action {
+  position: absolute !important;
+  transform: none !important;
+}
+
+html.is-changing .pio-container .pio-action,
+html.is-animating .pio-container .pio-action,
+html.is-leaving .pio-container .pio-action,
+html.is-entering .pio-container .pio-action {
+  transform: none !important;
+  transition: none !important;
 }
