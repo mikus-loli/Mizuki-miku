@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>Meting-API QQ及网易云VIP歌曲播放限制解决指南</title><link>https://mikus.ink/posts/meting-api-vip/</link><guid isPermaLink="true">https://mikus.ink/posts/meting-api-vip/</guid><description>Meteting-API 服务并添加QQ音乐、网易云音乐 解决 VIP 歌曲访问限制问题</description><pubDate>Tue, 24 Mar 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;前言&lt;/h1&gt;
 &lt;p&gt;Mizuki使用了meting来提供音乐播放的功能, 但是meting默认提供的API有抽风/下线/跑路的风险, 而且最重要的是: 播放不了VIP歌曲，网易云大部分的歌曲都需要VIP&lt;/p&gt;
 &lt;h2&gt;网易云解决方法&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;获取网易云音乐 Cookie
-登录网易云网页版并点进一首歌 例如https://music.163.com/#/song?id=1842206108,按F12打开网络找到下面的Cookie 如下图
+&lt;h4&gt;1. 获取网易云音乐 Cookie&lt;/h4&gt;
+&lt;p&gt;登录网易云网页版并点进一首歌 例如 https://music.163.com/#/song?id=1842206108 按F12打开网络找到下面的Cookie 如下图
 &lt;img src=&quot;cookie.png&quot; alt=&quot;（图片加载失败显示）&quot; title=&quot;获取Cookie&quot; /&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;配置Meting-API 网易云Cookie
-打开Meting-API/src/providers/netease/util.js 替换以下内容&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
+&lt;h4&gt;2. 配置Meting-API 网易云Cookie&lt;/h4&gt;
+&lt;p&gt;打开Meting-API/src/providers/netease/util.js 替换以下内容&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;import encrypt from &apos;./crypto.js&apos;
 import { net_ease_anonymous_token } from &apos;./config.js&apos;
 import { customAlphabet } from &apos;nanoid/non-secure&apos;
@@ -232,15 +226,160 @@ export const map_song_list = (song_list) =&amp;gt; {
     })
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;ol&gt;
-&lt;li&gt;重启Meting-API&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3&gt;QQ音乐解决方法&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;获取QQ音乐 Cookie&lt;/li&gt;
-&lt;li&gt;配置Meting-API QQ音乐Cookie&lt;/li&gt;
-&lt;li&gt;重启Meting-API&lt;/li&gt;
-&lt;/ol&gt;
+&lt;h4&gt;3. 重启Meting-API&lt;/h4&gt;
+&lt;h2&gt;QQ音乐解决方法&lt;/h2&gt;
+&lt;h4&gt;1. 获取QQ音乐 Cookie&lt;/h4&gt;
+&lt;p&gt;:::caution[注意]
+QQ音乐cookie会过期，可能几天就掉一次
+:::
+登录QQ音乐网页版并点进一首歌 例如 https://y.qq.com/n/ryqq_v2/songDetail/003YLYN946q2ts 点击播放 按F12打开网络找到下面的Cookie 如下图
+&lt;img src=&quot;cookie-qq.png&quot; alt=&quot;（图片加载失败显示）&quot; title=&quot;获取Cookie&quot; /&gt;&lt;/p&gt;
+&lt;h4&gt;2. 配置Meting-API QQ音乐Cookie&lt;/h4&gt;
+&lt;p&gt;打开Meting-API /src/providers/tencent/song.js 替换以下内容&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import { changeUrlQuery } from &quot;./util.js&quot;
+import config from &quot;../../config.js&quot;
+
+export const get_song_url = async (id, cookie = &apos;&apos;) =&amp;gt; {
+
+    id = id.split(&apos;,&apos;)
+    let uin = &apos;&apos;
+    let qqmusic_key = &apos;&apos;
+    const typeObj = {
+        s: &apos;M500&apos;,
+        e: &apos;.mp3&apos;,
+    }
+
+    const file = id.map(e =&amp;gt; `${typeObj.s}${e}${e}${typeObj.e}`)
+    const guid = (Math.random() * 10000000).toFixed(0);
+
+    let purl = &apos;&apos;;
+
+    let data = {
+        req_0: {
+            module: &apos;vkey.GetVkeyServer&apos;,
+            method: &apos;CgiGetVkey&apos;,
+            param: {
+                // filename: file,
+                guid: guid,
+                songmid: id,
+                songtype: [0],
+                uin: uin,
+                loginflag: 1,
+                platform: &apos;20&apos;,
+            },
+        },
+        comm: {
+            uin: uin,
+            format: &apos;json&apos;,
+            ct: 19,
+            cv: 0,
+            authst: qqmusic_key,
+        },
+    }
+
+    let params = {
+        &apos;-&apos;: &apos;getplaysongvkey&apos;,
+        g_tk: 5381,
+        loginUin: uin,
+        hostUin: 0,
+        format: &apos;json&apos;,
+        inCharset: &apos;utf8&apos;,
+        outCharset: &apos;utf-8¬ice=0&apos;,
+        platform: &apos;yqq.json&apos;,
+        needNewCode: 0,
+        data: JSON.stringify(data),
+    }
+
+
+    if (config.OVERSEAS || id.length &amp;gt; 1) {
+        params.format = &apos;jsonp&apos;
+        const callback_function_name = &apos;callback&apos;
+        const callback_name = &quot;callback&quot;
+        const parse_function = &quot;qq_get_url_from_json&quot;
+        const url = changeUrlQuery(params, &apos;https://u.y.qq.com/cgi-bin/musicu.fcg&apos;)
+        return &quot;@&quot; + parse_function + &apos;@&apos; + callback_name + &apos;@&apos; + callback_function_name + &apos;@&apos; + url
+    }
+
+
+    const url = changeUrlQuery(params, &apos;https://u.y.qq.com/cgi-bin/musicu.fcg&apos;)
+
+    let result = await fetch(url, {
+headers: {
+‘User-Agent’: ‘Mozilla/5.0 (Windows NT 10.0; Win64; x64)’,
+Cookie: 这里填入你的QQ音乐cookie,
+},
+});
+
+    result = await result.json()
+    // console.log(result)
+    if (result.req_0 &amp;amp;&amp;amp; result.req_0.data &amp;amp;&amp;amp; result.req_0.data.midurlinfo) {
+        purl = result.req_0.data.midurlinfo[0].purl;
+    }
+
+    const domain =
+        result.req_0.data.sip.find(i =&amp;gt; !i.startsWith(&apos;http://ws&apos;)) ||
+        result.req_0.data.sip[0];
+
+    const res = `${domain}${purl}`.replace(&apos;http://&apos;, &apos;https://&apos;)
+    // console.log(res);
+    return res;
+
+}
+
+export const get_song_info = async (id, cookie = &apos;&apos;) =&amp;gt; {
+    const data = {
+        data: JSON.stringify({
+            songinfo: {
+                method: &apos;get_song_detail_yqq&apos;,
+                module: &apos;music.pf_song_detail_svr&apos;,
+                param: {
+                    song_mid: id,
+                },
+            },
+        }),
+    };
+
+    const url = changeUrlQuery(data, &apos;http://u.y.qq.com/cgi-bin/musicu.fcg&apos;);
+
+    let result = await fetch(url, {
+    headers: {
+   ‘User-Agent’: ‘Mozilla/5.0 (Windows NT 10.0; Win64; x64)’,
+    Cookie: 这里填入你的QQ音乐cookie,
+    },
+    });
+
+    result = await result.json()
+
+    result = result.songinfo.data
+
+    let song_info = {
+        author: result.track_info.singer.reduce((i, v) =&amp;gt; ((i ? i + &quot; / &quot; : i) + v.name), &apos;&apos;),
+        title: result.track_info.name,
+        pic: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${result.track_info.album.mid}.jpg`,
+        url: config.OVERSEAS ? await get_song_url(id) : id,
+        lrc: id,
+        songmid: id,
+    }
+    // console.log(song_info)
+    return [song_info]
+}
+
+export const get_pic = async (id, cookie = &apos;&apos;) =&amp;gt; {
+    const info = await get_song_info(id, cookie)
+    return info[0].pic
+}
+
+// const res = await get_song_url(&apos;002Rnpvi058Qdm&apos;);
+// console.log(res)
+
+// const res = await get_song_url(&apos;002Rnpvi058Qdm,000i26Sh1ZyiNU&apos;);
+// console.log(res)
+
+// const res = await get_song_info(&apos;002Rnpvi058Qdm&apos;);
+// console.log(res)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4&gt;3. 重启Meting-API&lt;/h4&gt;
 &lt;p&gt;:::caution[注意]&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;仅用于个人学习和研究使用，禁止违法用途&lt;/li&gt;
