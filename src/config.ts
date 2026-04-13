@@ -143,7 +143,7 @@ export const siteConfig: SiteConfig = {
 
 		carousel: {
 			enable: true, // 为 true 时：为多张图片启用轮播。为 false 时：从数组中随机显示一张图片
-			interval: 3, // 轮播间隔时间（秒）
+			interval: 2.5, // 轮播间隔时间（秒）
 		},
 
 		waves: {
@@ -154,8 +154,8 @@ export const siteConfig: SiteConfig = {
 
 		// PicFlow API支持(智能图片API)
 		imageApi: {
-			enable: false, // 启用图片API
-			url: "https://picflow-api.mikus.ink/api_v2.php?format=text&count=6&img_format=webp&redirect=true", // API地址，返回每行一个图片链接的文本
+			enable: true, // 启用图片API
+			url: "https://picflow-api.mikus.ink/api_v2.php?format=text&count=4&img_format=avif", // API地址，返回每行一个图片链接的文本
 		},
 		// 这里需要使用PicFlow API的Text返回类型,所以我们需要format=text参数
 		// 项目地址:https://github.com/matsuzaka-yuki/PicFlow-API
