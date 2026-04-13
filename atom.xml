@@ -5,15 +5,15 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-13T12:29:14.669Z</updated>
+  <updated>2026-04-13T13:05:19.528Z</updated>
   <language>zh_CN</language>
   <entry>
-    <title>Meting-API QQ及网易云VIP歌曲播放限制解决指南</title>
+    <title>Meting-API 网易云音乐VIP播放限制解决指南</title>
     <link href="https://mikus.ink/posts/meting-api-vip/" rel="alternate" type="text/html"/>
     <id>https://mikus.ink/posts/meting-api-vip/</id>
     <published>2026-03-24T00:00:00.000Z</published>
     <updated>2026-03-24T00:00:00.000Z</updated>
-    <summary>Meteting-API 服务并添加QQ音乐、网易云音乐 解决 VIP 歌曲访问限制问题</summary>
+    <summary>Meteting-API 服务并添加网易云音乐 解决 VIP 歌曲访问限制问题</summary>
     <content type="html"><![CDATA[<h1>前言</h1>
 <p>Mizuki使用了meting来提供音乐播放的功能, 但是meting默认提供的API有抽风/下线/跑路的风险, 而且最重要的是: 播放不了VIP歌曲，网易云大部分的歌曲都需要VIP</p>
 <h2>网易云解决方法</h2>
@@ -241,159 +241,6 @@ export const map_song_list = (song_list) =&gt; {
         }
     })
 }
-</code></pre>
-<h4>3. 重启Meting-API</h4>
-<h2>QQ音乐解决方法</h2>
-<h4>1. 获取QQ音乐 Cookie</h4>
-<p>:::caution[注意]
-QQ音乐cookie会过期，可能几天就掉一次
-:::
-登录QQ音乐网页版并点进一首歌 例如 https://y.qq.com/n/ryqq_v2/songDetail/003YLYN946q2ts 点击播放 按F12打开网络找到下面的Cookie 如下图
-<img src="cookie-qq.png" alt="（图片加载失败显示）" title="获取Cookie" /></p>
-<h4>2. 配置Meting-API QQ音乐Cookie</h4>
-<p>打开Meting-API /src/providers/tencent/song.js 替换以下内容</p>
-<pre><code>import { changeUrlQuery } from "./util.js"
-import config from "../../config.js"
-
-export const get_song_url = async (id, cookie = '') =&gt; {
-
-    id = id.split(',')
-    let uin = ''
-    let qqmusic_key = ''
-    const typeObj = {
-        s: 'M500',
-        e: '.mp3',
-    }
-
-    const file = id.map(e =&gt; `${typeObj.s}${e}${e}${typeObj.e}`)
-    const guid = (Math.random() * 10000000).toFixed(0);
-
-    let purl = '';
-
-    let data = {
-        req_0: {
-            module: 'vkey.GetVkeyServer',
-            method: 'CgiGetVkey',
-            param: {
-                // filename: file,
-                guid: guid,
-                songmid: id,
-                songtype: [0],
-                uin: uin,
-                loginflag: 1,
-                platform: '20',
-            },
-        },
-        comm: {
-            uin: uin,
-            format: 'json',
-            ct: 19,
-            cv: 0,
-            authst: qqmusic_key,
-        },
-    }
-
-    let params = {
-        '-': 'getplaysongvkey',
-        g_tk: 5381,
-        loginUin: uin,
-        hostUin: 0,
-        format: 'json',
-        inCharset: 'utf8',
-        outCharset: 'utf-8¬ice=0',
-        platform: 'yqq.json',
-        needNewCode: 0,
-        data: JSON.stringify(data),
-    }
-
-
-    if (config.OVERSEAS || id.length &gt; 1) {
-        params.format = 'jsonp'
-        const callback_function_name = 'callback'
-        const callback_name = "callback"
-        const parse_function = "qq_get_url_from_json"
-        const url = changeUrlQuery(params, 'https://u.y.qq.com/cgi-bin/musicu.fcg')
-        return "@" + parse_function + '@' + callback_name + '@' + callback_function_name + '@' + url
-    }
-
-
-    const url = changeUrlQuery(params, 'https://u.y.qq.com/cgi-bin/musicu.fcg')
-
-    let result = await fetch(url, {
-headers: {
-‘User-Agent’: ‘Mozilla/5.0 (Windows NT 10.0; Win64; x64)’,
-Cookie: 这里填入你的QQ音乐cookie,
-},
-});
-
-    result = await result.json()
-    // console.log(result)
-    if (result.req_0 &amp;&amp; result.req_0.data &amp;&amp; result.req_0.data.midurlinfo) {
-        purl = result.req_0.data.midurlinfo[0].purl;
-    }
-
-    const domain =
-        result.req_0.data.sip.find(i =&gt; !i.startsWith('http://ws')) ||
-        result.req_0.data.sip[0];
-
-    const res = `${domain}${purl}`.replace('http://', 'https://')
-    // console.log(res);
-    return res;
-
-}
-
-export const get_song_info = async (id, cookie = '') =&gt; {
-    const data = {
-        data: JSON.stringify({
-            songinfo: {
-                method: 'get_song_detail_yqq',
-                module: 'music.pf_song_detail_svr',
-                param: {
-                    song_mid: id,
-                },
-            },
-        }),
-    };
-
-    const url = changeUrlQuery(data, 'http://u.y.qq.com/cgi-bin/musicu.fcg');
-
-    let result = await fetch(url, {
-    headers: {
-   ‘User-Agent’: ‘Mozilla/5.0 (Windows NT 10.0; Win64; x64)’,
-    Cookie: 这里填入你的QQ音乐cookie,
-    },
-    });
-
-    result = await result.json()
-
-    result = result.songinfo.data
-
-    let song_info = {
-        author: result.track_info.singer.reduce((i, v) =&gt; ((i ? i + " / " : i) + v.name), ''),
-        title: result.track_info.name,
-        pic: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${result.track_info.album.mid}.jpg`,
-        url: config.OVERSEAS ? await get_song_url(id) : id,
-        lrc: id,
-        songmid: id,
-    }
-    // console.log(song_info)
-    return [song_info]
-}
-
-export const get_pic = async (id, cookie = '') =&gt; {
-    const info = await get_song_info(id, cookie)
-    return info[0].pic
-}
-
-// const res = await get_song_url('002Rnpvi058Qdm');
-// console.log(res)
-
-// const res = await get_song_url('002Rnpvi058Qdm,000i26Sh1ZyiNU');
-// console.log(res)
-
-// const res = await get_song_info('002Rnpvi058Qdm');
-// console.log(res)
-
 </code></pre>
 <h4>3. 重启Meting-API</h4>
 <p>:::caution[注意]</p>
