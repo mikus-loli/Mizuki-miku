@@ -23,6 +23,7 @@ https://jupiterbjy.github.io/PaulPio_PIXI_Demo/
 ---- */
 var app;
 var currentModel = null;
+var pio_has_expression = false;
 
 function loadlive2d(canvas_id, json_object_or_url) {
 	// Replaces original l2d method 'loadlive2d' for Pio.
@@ -49,6 +50,14 @@ function loadlive2d(canvas_id, json_object_or_url) {
 	model.once("load", () => {
 		currentModel = model;
 		app.stage.addChild(model);
+
+		// 检查模型是否有表情
+		pio_has_expression = pio_check_model_expressions(model);
+
+		// 更新表情按钮显示状态
+		if (typeof window.pio_update_expression_button === "function") {
+			window.pio_update_expression_button();
+		}
 
 		var targetSize = window.__pioTargetSize;
 		var scale;
@@ -198,3 +207,45 @@ window.initPioPixi = function (alignmentParam, targetWidth, targetHeight) {
 // 注释掉自动监听
 // let app
 // window.addEventListener("DOMContentLoaded", _pio_initialize_pixi)
+
+// 检查模型是否有表情
+function pio_check_model_expressions(model) {
+	if (!model) return false;
+
+	// 检查 pixi-live2d-display 的表情定义
+	// 方式1: 检查 internalModel.settings.expressions (Cubism 4)
+	if (model.internalModel && model.internalModel.settings) {
+		var settings = model.internalModel.settings;
+		if (settings.expressions && settings.expressions.length > 0) {
+			console.log(
+				"[Pio] Model has expressions:",
+				settings.expressions.length,
+			);
+			return true;
+		}
+	}
+
+	// 方式2: 检查 motionManager.definitions.expression
+	if (model.internalModel && model.internalModel.motionManager) {
+		var motionManager = model.internalModel.motionManager;
+		if (
+			motionManager.definitions &&
+			motionManager.definitions.expression &&
+			motionManager.definitions.expression.length > 0
+		) {
+			console.log(
+				"[Pio] Model has expression motions:",
+				motionManager.definitions.expression.length,
+			);
+			return true;
+		}
+	}
+
+	console.log("[Pio] Model has no expressions");
+	return false;
+}
+
+// 获取模型是否有表情
+window.pio_get_has_expression = function () {
+	return pio_has_expression;
+};
