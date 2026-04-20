@@ -238,8 +238,8 @@ if (siteConfig.font) {
 		<!-- Music Player - 核心始终加载（当enable=true），UI通过showFloatingPlayer控制 -->
 		<MusicPlayer client:idle />
 
-		<!-- Pio 看板娘组件 - 使用 client:load 确保在页面切换时保持状态 -->
-		{pioConfig.enable && <Pio client:load />}
+		<!-- Pio 看板娘组件 - 使用 client:idle 确保在浏览器空闲时加载，同时保证组件一定被水合 -->
+		{pioConfig.enable && <Pio client:idle />}
 
 		<!-- increase the page height during page transition to prevent the scrolling animation from jumping -->
 		<div id="page-height-extend" class="hidden h-[300vh]"></div>

@@ -1,6 +1,7 @@
 import type { SakuraConfig } from "../types/config";
 
-// 樱花对象类
+const SAKURA_DRAW_SIZE = 40;
+
 class Sakura {
 	x: number;
 	y: number;
@@ -52,8 +53,7 @@ class Sakura {
 		cxt.translate(this.x, this.y);
 		cxt.rotate(this.r);
 		cxt.globalAlpha = this.a;
-		// 使用 transform 替代直接 drawImage 以支持 GPU 加速
-		cxt.drawImage(this.img, 0, 0, 40 * this.s, 40 * this.s);
+		cxt.drawImage(this.img, 0, 0, SAKURA_DRAW_SIZE * this.s, SAKURA_DRAW_SIZE * this.s);
 		cxt.restore();
 	}
 
@@ -63,7 +63,6 @@ class Sakura {
 		this.r = this.fn.r(this.r);
 		this.a = this.fn.a(this.a);
 
-		// 如果樱花越界或完全透明，重新调整位置
 		if (
 			this.x > window.innerWidth ||
 			this.x < 0 ||
@@ -71,12 +70,9 @@ class Sakura {
 			this.y < 0 ||
 			this.a <= 0
 		) {
-			// 如果樱花不做限制
 			if (this.limitArray[this.idx] === -1) {
 				this.resetPosition();
-			}
-			// 否则樱花有限制
-			else {
+			} else {
 				if (this.limitArray[this.idx] > 0) {
 					this.resetPosition();
 					this.limitArray[this.idx]--;
@@ -86,7 +82,6 @@ class Sakura {
 	}
 
 	private resetPosition() {
-		this.r = getRandom("fnr", this.config);
 		if (Math.random() > 0.4) {
 			this.x = getRandom("x", this.config);
 			this.y = 0;
@@ -103,7 +98,6 @@ class Sakura {
 	}
 }
 
-// 樱花列表类
 class SakuraList {
 	list: Sakura[];
 
@@ -136,9 +130,14 @@ class SakuraList {
 	}
 }
 
-// 获取随机值的函数
-function getRandom(option: string, config: SakuraConfig): any {
-	let ret: any;
+type RandomOption = "x" | "y" | "s" | "r" | "a" | "fnx" | "fny" | "fnr" | "fna";
+type NumericOption = "x" | "y" | "s" | "r" | "a";
+type FnOption = "fnx" | "fny" | "fnr" | "fna";
+
+function getRandom(option: NumericOption, config: SakuraConfig): number;
+function getRandom(option: FnOption, config: SakuraConfig): ((...args: number[]) => number);
+function getRandom(option: RandomOption, config: SakuraConfig): number | ((...args: number[]) => number) {
+	let ret: number | ((...args: number[]) => number);
 	let random: number;
 
 	switch (option) {
@@ -185,7 +184,6 @@ function getRandom(option: string, config: SakuraConfig): any {
 	return ret;
 }
 
-// 樱花管理器类
 export class SakuraManager {
 	private config: SakuraConfig;
 	private canvas: HTMLCanvasElement | null = null;
@@ -196,23 +194,22 @@ export class SakuraManager {
 	private isRunning = false;
 	private resizeTimeout: number | null = null;
 	private boundResizeHandler: () => void;
+	private boundVisibilityHandler: () => void;
 
 	constructor(config: SakuraConfig) {
 		this.config = config;
 		this.boundResizeHandler = this.handleResize.bind(this);
+		this.boundVisibilityHandler = this.handleVisibilityChange.bind(this);
 	}
 
-	// 初始化樱花特效
 	async init(): Promise<void> {
 		if (!this.config.enable || this.isRunning) {
 			return;
 		}
 
-		// 创建图片对象
 		this.img = new Image();
-		this.img.src = "/sakura.png"; // 使用樱花图片
+		this.img.src = "/sakura.png";
 
-		// 等待图片加载完成
 		await new Promise<void>((resolve, reject) => {
 			if (this.img) {
 				this.img.onload = () => resolve();
@@ -225,9 +222,31 @@ export class SakuraManager {
 		this.createSakuraList();
 		this.startAnimation();
 		this.isRunning = true;
+
+		document.addEventListener("visibilitychange", this.boundVisibilityHandler);
 	}
 
-	// 创建画布
+	private handleVisibilityChange(): void {
+		if (document.hidden) {
+			this.pauseAnimation();
+		} else {
+			this.resumeAnimation();
+		}
+	}
+
+	private pauseAnimation(): void {
+		if (this.animationId !== null) {
+			cancelAnimationFrame(this.animationId);
+			this.animationId = null;
+		}
+	}
+
+	private resumeAnimation(): void {
+		if (this.isRunning && this.animationId === null) {
+			this.startAnimation();
+		}
+	}
+
 	private createCanvas(): void {
 		this.canvas = document.createElement("canvas");
 		this.canvas.height = window.innerHeight;
@@ -240,13 +259,11 @@ export class SakuraManager {
 		document.body.appendChild(this.canvas);
 		this.ctx = this.canvas.getContext("2d");
 
-		// 使用被动事件监听器提升滚动性能
 		window.addEventListener("resize", this.boundResizeHandler, {
 			passive: true,
 		});
 	}
 
-	// 创建樱花列表
 	private createSakuraList(): void {
 		if (!this.img || !this.ctx) {
 			return;
@@ -291,7 +308,6 @@ export class SakuraManager {
 		}
 	}
 
-	// 开始动画
 	private startAnimation(): void {
 		if (!this.ctx || !this.canvas || !this.sakuraList) {
 			return;
@@ -311,7 +327,6 @@ export class SakuraManager {
 		this.animationId = requestAnimationFrame(animate);
 	}
 
-	// 处理窗口大小变化 - 带防抖
 	private handleResize(): void {
 		if (this.resizeTimeout) {
 			cancelAnimationFrame(this.resizeTimeout);
@@ -324,12 +339,8 @@ export class SakuraManager {
 		});
 	}
 
-	// 停止樱花特效
 	stop(): void {
-		if (this.animationId) {
-			cancelAnimationFrame(this.animationId);
-			this.animationId = null;
-		}
+		this.pauseAnimation();
 
 		if (this.resizeTimeout) {
 			cancelAnimationFrame(this.resizeTimeout);
@@ -342,10 +353,10 @@ export class SakuraManager {
 		}
 
 		window.removeEventListener("resize", this.boundResizeHandler);
+		document.removeEventListener("visibilitychange", this.boundVisibilityHandler);
 		this.isRunning = false;
 	}
 
-	// 切换樱花特效
 	toggle(): void {
 		if (this.isRunning) {
 			this.stop();
@@ -354,7 +365,6 @@ export class SakuraManager {
 		}
 	}
 
-	// 更新配置
 	updateConfig(newConfig: SakuraConfig): void {
 		const wasRunning = this.isRunning;
 		if (wasRunning) {
@@ -366,16 +376,13 @@ export class SakuraManager {
 		}
 	}
 
-	// 获取运行状态
 	getIsRunning(): boolean {
 		return this.isRunning;
 	}
 }
 
-// 创建全局樱花管理器实例
 let globalSakuraManager: SakuraManager | null = null;
 
-// 初始化樱花特效
 export function initSakura(config: SakuraConfig): void {
 	if (globalSakuraManager) {
 		globalSakuraManager.updateConfig(config);
@@ -387,14 +394,12 @@ export function initSakura(config: SakuraConfig): void {
 	}
 }
 
-// 切换樱花特效
 export function toggleSakura(): void {
 	if (globalSakuraManager) {
 		globalSakuraManager.toggle();
 	}
 }
 
-// 停止樱花特效
 export function stopSakura(): void {
 	if (globalSakuraManager) {
 		globalSakuraManager.stop();
@@ -402,7 +407,6 @@ export function stopSakura(): void {
 	}
 }
 
-// 获取樱花特效运行状态
 export function getSakuraStatus(): boolean {
 	return globalSakuraManager ? globalSakuraManager.getIsRunning() : false;
 }

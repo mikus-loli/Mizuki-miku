@@ -7,21 +7,18 @@
 	export let categories: string[];
 	export let sortedPosts: Post[] = [];
 
-	const params = new URLSearchParams(window.location.search);
-	tags = params.has("tag") ? params.getAll("tag") : [];
-	categories = params.has("category") ? params.getAll("category") : [];
-	const uncategorized = params.get("uncategorized");
+	let uncategorized: string | null = null;
 
 	interface Post {
 		id: string;
-		url?: string; // 预计算的文章 URL
+		url?: string;
 		data: {
 			title: string;
 			tags: string[];
 			category?: string;
 			published: Date;
 			alias?: string;
-			permalink?: string; // 自定义固定链接
+			permalink?: string;
 		};
 	}
 
@@ -43,6 +40,11 @@
 	}
 
 	onMount(async () => {
+		const params = new URLSearchParams(window.location.search);
+		tags = params.has("tag") ? params.getAll("tag") : [];
+		categories = params.has("category") ? params.getAll("category") : [];
+		uncategorized = params.get("uncategorized");
+
 		let filteredPosts: Post[] = sortedPosts;
 
 		if (tags.length > 0) {
@@ -65,7 +67,6 @@
 			filteredPosts = filteredPosts.filter((post) => !post.data.category);
 		}
 
-		// 按发布时间倒序排序，确保不受置顶影响
 		filteredPosts = filteredPosts
 			.slice()
 			.sort(

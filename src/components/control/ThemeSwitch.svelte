@@ -2,7 +2,7 @@
 	import { DARK_MODE, DEFAULT_THEME, LIGHT_MODE } from "@constants/constants";
 	import Icon from "@iconify/svelte";
 	import { getStoredTheme, setTheme } from "@utils/setting-utils";
-	import { onMount } from "svelte";
+	import { onDestroy,onMount } from "svelte";
 
 	import type { LIGHT_DARK_MODE } from "@/types/config.ts";
 
@@ -10,12 +10,66 @@
 	let mode: LIGHT_DARK_MODE = $state(DEFAULT_THEME);
 	let isChanging = false;
 
+	let cleanupFns: (() => void)[] = [];
+
 	onMount(() => {
 		mode = getStoredTheme();
+
+		const handleContentReplace = () => {
+			requestAnimationFrame(() => {
+				const newMode = getStoredTheme();
+				if (mode !== newMode) {
+					mode = newMode;
+				}
+			});
+		};
+
+		const swup = (window as any).swup;
+		if (swup?.hooks) {
+			swup.hooks.on("content:replace", handleContentReplace);
+			cleanupFns.push(() => {
+				if ((window as any).swup?.hooks) {
+					(window as any).swup.hooks.off("content:replace", handleContentReplace);
+				}
+			});
+		} else {
+			const onSwupEnable = () => {
+				const swup = (window as any).swup;
+				if (swup?.hooks) {
+					swup.hooks.on("content:replace", handleContentReplace);
+					cleanupFns.push(() => {
+						if ((window as any).swup?.hooks) {
+							(window as any).swup.hooks.off("content:replace", handleContentReplace);
+						}
+					});
+				}
+			};
+			document.addEventListener("swup:enable", onSwupEnable);
+			cleanupFns.push(() => {
+				document.removeEventListener("swup:enable", onSwupEnable);
+			});
+		}
+
+		const onDOMContentLoaded = () => {
+			requestAnimationFrame(() => {
+				const newMode = getStoredTheme();
+				if (mode !== newMode) {
+					mode = newMode;
+				}
+			});
+		};
+		document.addEventListener("DOMContentLoaded", onDOMContentLoaded);
+		cleanupFns.push(() => {
+			document.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
+		});
+	});
+
+	onDestroy(() => {
+		cleanupFns.forEach((fn) => fn());
+		cleanupFns = [];
 	});
 
 	function switchScheme(newMode: LIGHT_DARK_MODE) {
-		// 防止连续快速点击
 		if (isChanging) {
 			return;
 		}
@@ -24,7 +78,6 @@
 		mode = newMode;
 		setTheme(newMode);
 
-		// 50ms 后重置状态，防止过快切换
 		setTimeout(() => {
 			isChanging = false;
 		}, 50);
@@ -42,47 +95,6 @@
 			}
 		}
 		switchScheme(seq[(i + 1) % seq.length]);
-	}
-
-	// 添加 Swup 钩子监听，确保在页面切换后同步主题状态
-	if (typeof window !== "undefined") {
-		// 监听 Swup 的内容替换事件
-		const handleContentReplace = () => {
-			// 使用 requestAnimationFrame 确保在下一帧更新状态，避免渲染冲突
-			requestAnimationFrame(() => {
-				const newMode = getStoredTheme();
-				if (mode !== newMode) {
-					mode = newMode;
-				}
-			});
-		};
-
-		// 检查 Swup 是否已经加载
-		if ((window as any).swup && (window as any).swup.hooks) {
-			(window as any).swup.hooks.on(
-				"content:replace",
-				handleContentReplace,
-			);
-		} else {
-			document.addEventListener("swup:enable", () => {
-				if ((window as any).swup && (window as any).swup.hooks) {
-					(window as any).swup.hooks.on(
-						"content:replace",
-						handleContentReplace,
-					);
-				}
-			});
-		}
-
-		// 页面加载完成后也同步一次状态
-		document.addEventListener("DOMContentLoaded", () => {
-			requestAnimationFrame(() => {
-				const newMode = getStoredTheme();
-				if (mode !== newMode) {
-					mode = newMode;
-				}
-			});
-		});
 	}
 </script>
 
@@ -116,7 +128,6 @@
 </button>
 
 <style>
-	/* 确保主题切换按钮的背景色即时更新 */
 	.theme-switch-btn::before {
 		transition:
 			transform 75ms ease-out,

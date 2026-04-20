@@ -2,12 +2,23 @@ import Key from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 
 import {
+	DEFAULT_METING_API,
+	DEFAULT_METING_ID,
+	DEFAULT_METING_SERVER,
+	DEFAULT_METING_TYPE,
 	DEFAULT_SONG,
+	ERROR_DISPLAY_DURATION,
+	FETCH_TIMEOUT_MS,
 	LOCAL_PLAYLIST,
 	SKIP_ERROR_DELAY,
 	STORAGE_KEY_VOLUME,
+	TIMEUPDATE_THROTTLE_MS,
 } from "@/components/widgets/music-player/constants";
-import type { RepeatMode, Song } from "@/components/widgets/music-player/types";
+import type {
+	MetingSong,
+	RepeatMode,
+	Song,
+} from "@/components/widgets/music-player/types";
 import { musicPlayerConfig } from "@/config";
 
 export interface MusicPlayerState {
@@ -44,12 +55,32 @@ function getAssetPath(path: string): string {
 	return `/${path}`;
 }
 
+function safeLocalStorageSetItem(key: string, value: string): void {
+	try {
+		localStorage.setItem(key, value);
+	} catch {
+		console.warn(
+			"localStorage.setItem failed — possibly in private browsing mode",
+		);
+	}
+}
+
+function safeLocalStorageGetItem(key: string): string | null {
+	try {
+		return localStorage.getItem(key);
+	} catch {
+		return null;
+	}
+}
+
 class MusicPlayerStore {
 	private audio: HTMLAudioElement | null = null;
 	private state: MusicPlayerState;
 	private isInitialized = false;
 	private unregisterInteraction: (() => void) | undefined;
 	private listeners = new Set<(state: MusicPlayerState) => void>();
+	private lastTimeupdateBroadcast = 0;
+	private timeupdateRafId: number | null = null;
 
 	constructor() {
 		this.state = this.createInitialState();
@@ -82,7 +113,7 @@ class MusicPlayerStore {
 		return {
 			...this.state,
 			currentSong: { ...this.state.currentSong },
-			playlist: this.state.playlist.map((song) => ({ ...song })),
+			playlist: this.state.playlist,
 		};
 	}
 
@@ -113,6 +144,7 @@ class MusicPlayerStore {
 		}
 
 		this.audio = new Audio();
+		this.audio.preload = "metadata";
 		this.setupAudioListeners();
 		this.loadVolumeFromStorage();
 		this.registerInteractionHandler();
@@ -138,9 +170,19 @@ class MusicPlayerStore {
 		});
 
 		this.audio.addEventListener("timeupdate", () => {
-			if (this.audio) {
-				this.state.currentTime = this.audio.currentTime;
+			if (!this.audio) {
+				return;
+			}
+			this.state.currentTime = this.audio.currentTime;
+			const now = performance.now();
+			if (now - this.lastTimeupdateBroadcast >= TIMEUPDATE_THROTTLE_MS) {
+				this.lastTimeupdateBroadcast = now;
 				this.broadcastState();
+			} else if (!this.timeupdateRafId) {
+				this.timeupdateRafId = requestAnimationFrame(() => {
+					this.timeupdateRafId = null;
+					this.broadcastState();
+				});
 			}
 		});
 
@@ -166,7 +208,9 @@ class MusicPlayerStore {
 		if (this.state.isRepeating === 1) {
 			if (this.audio) {
 				this.audio.currentTime = 0;
-				this.audio.play().catch(() => {});
+				this.audio.play().catch((err) => {
+					console.warn("Audio replay failed:", err);
+				});
 			}
 		} else {
 			this.next(true);
@@ -198,7 +242,8 @@ class MusicPlayerStore {
 		if (this.state.willAutoPlay || this.state.isPlaying) {
 			const playPromise = this.audio?.play();
 			if (playPromise !== undefined) {
-				playPromise.catch(() => {
+				playPromise.catch((err) => {
+					console.warn("Autoplay blocked:", err);
 					this.state.autoplayFailed = true;
 					this.state.isPlaying = false;
 				});
@@ -208,17 +253,15 @@ class MusicPlayerStore {
 	}
 
 	private loadVolumeFromStorage(): void {
-		if (typeof localStorage !== "undefined") {
-			const savedVolume = localStorage.getItem(STORAGE_KEY_VOLUME);
-			if (savedVolume) {
-				const volume = parseFloat(savedVolume);
-				if (!isNaN(volume) && volume >= 0 && volume <= 1) {
-					this.state.volume = volume;
-					this.state.isMuted = volume === 0;
-					if (this.audio) {
-						this.audio.volume = volume;
-						this.audio.muted = this.state.isMuted;
-					}
+		const savedVolume = safeLocalStorageGetItem(STORAGE_KEY_VOLUME);
+		if (savedVolume) {
+			const volume = parseFloat(savedVolume);
+			if (!isNaN(volume) && volume >= 0 && volume <= 1) {
+				this.state.volume = volume;
+				this.state.isMuted = volume === 0;
+				if (this.audio) {
+					this.audio.volume = volume;
+					this.audio.muted = this.state.isMuted;
 				}
 			}
 		}
@@ -233,7 +276,9 @@ class MusicPlayerStore {
 						.then(() => {
 							this.state.autoplayFailed = false;
 						})
-						.catch(() => {});
+						.catch((err) => {
+							console.warn("Interaction play failed:", err);
+						});
 				}
 			}
 		};
@@ -247,12 +292,10 @@ class MusicPlayerStore {
 
 	private async loadPlaylist(): Promise<void> {
 		const mode = musicPlayerConfig.mode ?? "meting";
-		const meting_api =
-			musicPlayerConfig.meting_api ??
-			"https://www.bilibili.uno/api?server=:server&type=:type&id=:id&auth=:auth&r=:r";
-		const meting_id = musicPlayerConfig.id ?? "14164869977";
-		const meting_server = musicPlayerConfig.server ?? "netease";
-		const meting_type = musicPlayerConfig.type ?? "playlist";
+		const meting_api = musicPlayerConfig.meting_api ?? DEFAULT_METING_API;
+		const meting_id = musicPlayerConfig.id ?? DEFAULT_METING_ID;
+		const meting_server = musicPlayerConfig.server ?? DEFAULT_METING_SERVER;
+		const meting_type = musicPlayerConfig.type ?? DEFAULT_METING_TYPE;
 
 		if (mode === "meting") {
 			await this.fetchMetingPlaylist(
@@ -287,11 +330,18 @@ class MusicPlayerStore {
 			.replace(":r", Date.now().toString());
 
 		try {
-			const res = await fetch(apiUrl);
+			const controller = new AbortController();
+			const timeoutId = setTimeout(
+				() => controller.abort(),
+				FETCH_TIMEOUT_MS,
+			);
+			const res = await fetch(apiUrl, { signal: controller.signal });
+			clearTimeout(timeoutId);
+
 			if (!res.ok) {
-				throw new Error("meting api error");
+				throw new Error(`Meting API error: ${res.status}`);
 			}
-			const list: any[] = await res.json();
+			const list: MetingSong[] = await res.json();
 			this.state.playlist = list.map((song) =>
 				this.convertMetingSong(song),
 			);
@@ -301,13 +351,14 @@ class MusicPlayerStore {
 				this.loadSong(this.state.playlist[0], false);
 			}
 		} catch (e) {
+			console.warn("Failed to fetch Meting playlist:", e);
 			this.showError(i18n(Key.musicPlayerErrorPlaylist));
 			this.state.isLoading = false;
 		}
 		this.broadcastState();
 	}
 
-	private convertMetingSong(song: any): Song {
+	private convertMetingSong(song: MetingSong): Song {
 		const title = song.name ?? song.title ?? i18n(Key.unknownSong);
 		const artist = song.artist ?? song.author ?? i18n(Key.unknownArtist);
 		let dur = song.duration ?? 0;
@@ -372,7 +423,7 @@ class MusicPlayerStore {
 		setTimeout(() => {
 			this.state.showError = false;
 			this.broadcastState();
-		}, 3000);
+		}, ERROR_DISPLAY_DURATION);
 		this.broadcastState();
 	}
 
@@ -388,7 +439,9 @@ class MusicPlayerStore {
 		if (this.state.isPlaying) {
 			this.audio.pause();
 		} else {
-			this.audio.play().catch(() => {});
+			this.audio.play().catch((err) => {
+				console.warn("Toggle play failed:", err);
+			});
 		}
 	}
 
@@ -396,7 +449,9 @@ class MusicPlayerStore {
 		if (!this.audio || !this.state.currentSong.url) {
 			return;
 		}
-		this.audio.play().catch(() => {});
+		this.audio.play().catch((err) => {
+			console.warn("Play failed:", err);
+		});
 	}
 
 	pause(): void {
@@ -471,9 +526,7 @@ class MusicPlayerStore {
 			this.audio.volume = clampedVolume;
 			this.audio.muted = this.state.isMuted;
 		}
-		if (typeof localStorage !== "undefined") {
-			localStorage.setItem(STORAGE_KEY_VOLUME, String(clampedVolume));
-		}
+		safeLocalStorageSetItem(STORAGE_KEY_VOLUME, String(clampedVolume));
 		this.broadcastState();
 	}
 
@@ -522,8 +575,6 @@ class MusicPlayerStore {
 
 	toggleExpanded(): void {
 		this.state.isExpanded = !this.state.isExpanded;
-		// 保持与原先 usePlayerState.toggleExpandedUI 一致的联动行为：
-		// 展开时强制取消隐藏，并关闭播放列表，避免状态组合异常
 		if (this.state.isExpanded) {
 			this.state.showPlaylist = false;
 			this.state.isHidden = false;
@@ -533,8 +584,6 @@ class MusicPlayerStore {
 
 	toggleHidden(): void {
 		this.state.isHidden = !this.state.isHidden;
-		// 保持与原先 usePlayerState.toggleHiddenUI 一致的联动行为：
-		// 隐藏时收起播放器并关闭播放列表，防止展开 UI 悬挂在小球旁边
 		if (this.state.isHidden) {
 			this.state.isExpanded = false;
 			this.state.showPlaylist = false;
@@ -576,6 +625,10 @@ class MusicPlayerStore {
 	destroy(): void {
 		if (this.unregisterInteraction) {
 			this.unregisterInteraction();
+		}
+		if (this.timeupdateRafId !== null) {
+			cancelAnimationFrame(this.timeupdateRafId);
+			this.timeupdateRafId = null;
 		}
 		if (this.audio) {
 			this.audio.pause();

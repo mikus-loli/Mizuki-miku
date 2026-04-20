@@ -24,7 +24,7 @@ export const LOCAL_PLAYLIST: Song[] = [
 	{
 		id: 3,
 		title: "眩耀夜行",
-		artist: "ス리즈ブーケ",
+		artist: "スリズブーケ",
 		cover: "assets/music/cover/xryx.webp",
 		url: "assets/music/url/xryx.mp3",
 		duration: 180,
@@ -56,3 +56,5 @@ export const DEFAULT_METING_TYPE = "playlist";
 
 export const ERROR_DISPLAY_DURATION = 3000;
 export const SKIP_ERROR_DELAY = 1000;
+export const TIMEUPDATE_THROTTLE_MS = 250;
+export const FETCH_TIMEOUT_MS = 10000;

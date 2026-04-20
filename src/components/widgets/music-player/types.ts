@@ -31,3 +31,14 @@ export interface PlayerState {
 	autoplayFailed: boolean;
 	willAutoPlay: boolean;
 }
+
+export interface MetingSong {
+	id?: number | string;
+	name?: string;
+	title?: string;
+	artist?: string;
+	author?: string;
+	pic?: string;
+	url?: string;
+	duration?: number | string;
+}

@@ -28,10 +28,13 @@
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
 	let isLoaded = false;
-	let isVisible = false; // 当前是否可见
-	let shouldRender = false; // 是否应该渲染（用于延迟加载）
+	let isVisible = false;
+	let shouldRender = false;
 	let resizeObserver: ResizeObserver | null = null;
 	let mediaQuery: MediaQueryList | null = null;
+	let initRetryCount = 0;
+	const MAX_INIT_RETRIES = 30;
+	let swupCleanupFns: (() => void)[] = [];
 
 	// 检查分辨率是否满足显示条件
 	function checkResolution(): boolean {
@@ -95,12 +98,22 @@
 		}
 
 		if (typeof win.Paul_Pio === "undefined") {
+			if (initRetryCount >= MAX_INIT_RETRIES) {
+				console.error("[Pio] Paul_Pio not available after maximum retries, giving up");
+				return;
+			}
+			initRetryCount++;
 			console.warn("[Pio] Paul_Pio not available yet, retrying...");
 			setTimeout(initPio, 100);
 			return;
 		}
 
 		if (!pioContainer || !pioCanvas) {
+			if (initRetryCount >= MAX_INIT_RETRIES) {
+				console.error("[Pio] DOM elements not found after maximum retries, giving up");
+				return;
+			}
+			initRetryCount++;
 			console.warn("[Pio] DOM elements not found, retrying...");
 			setTimeout(initPio, 100);
 			return;
@@ -227,6 +240,8 @@
 	onDestroy(() => {
 		console.log("[Pio] Component destroyed (keeping instance alive)");
 		cleanupResizeListener();
+		swupCleanupFns.forEach((fn) => fn());
+		swupCleanupFns = [];
 	});
 
 	function setupSwupHooks() {
@@ -245,15 +260,28 @@
 		};
 
 		const setup = () => {
-			if (!(window as any).swup?.hooks) return false;
-			(window as any).swup.hooks.on("visit:start", hideDialog);
-			(window as any).swup.hooks.on("animation:out:start", hideDialog);
+			const swup = (window as any).swup;
+			if (!swup?.hooks) return false;
+			swup.hooks.on("visit:start", hideDialog);
+			swup.hooks.on("animation:out:start", hideDialog);
+			swupCleanupFns.push(() => {
+				if ((window as any).swup?.hooks) {
+					(window as any).swup.hooks.off("visit:start", hideDialog);
+					(window as any).swup.hooks.off("animation:out:start", hideDialog);
+				}
+			});
 			return true;
 		};
 
 		if (!setup()) {
-			document.addEventListener("swup:enable", () => setup(), {
-				once: true,
+			const onSwupEnable = () => {
+				if (setup()) {
+					document.removeEventListener("swup:enable", onSwupEnable);
+				}
+			};
+			document.addEventListener("swup:enable", onSwupEnable);
+			swupCleanupFns.push(() => {
+				document.removeEventListener("swup:enable", onSwupEnable);
 			});
 		}
 	}

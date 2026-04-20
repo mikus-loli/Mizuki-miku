@@ -134,12 +134,18 @@ export const getFeaturedProjects = () => {
 };
 
 // Get all tech stacks
+let cachedTechStack: string[] | null = null;
+
 export const getAllTechStack = () => {
+	if (cachedTechStack) {
+		return cachedTechStack;
+	}
 	const techSet = new Set<string>();
 	projectsData.forEach((project) => {
 		project.techStack.forEach((tech) => {
 			techSet.add(tech);
 		});
 	});
-	return Array.from(techSet).sort();
+	cachedTechStack = Array.from(techSet).sort();
+	return cachedTechStack;
 };

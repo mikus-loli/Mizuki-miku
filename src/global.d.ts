@@ -58,7 +58,6 @@ declare global {
 		initSemifullScrollDetection?: () => void;
 		iconifyLoaded?: boolean;
 
-		// CardTOC manager
 		CardTOC?: {
 			manager: {
 				init?: () => void;
@@ -66,21 +65,26 @@ declare global {
 			} | null;
 		};
 
-		// TOC internal navigation flag
 		tocInternalNavigation?: boolean;
 		__iconifyLoader?: {
-			load: () => Promise<void>;
-			addToPreloadQueue: (icons: string[]) => void;
+			load: (options?: { timeout?: number; retryCount?: number }) => Promise<void>;
+			addToPreloadQueue: (icons: string | string[]) => void;
 			onLoad: (callback: () => void) => void;
 			isLoaded: boolean;
+			isLoading: boolean;
 		};
+		__iconifyLoaderInitialized?: boolean;
+		__pioInstance?: unknown;
+		__wallpaper_cleanup?: (() => void) | null;
+		loadIconify?: () => Promise<void>;
+		preloadIcons?: (icons: string[]) => void;
+		onIconifyReady?: (callback: () => void) => void;
 		siteConfig: SiteConfigWindow;
 		hljs?: {
 			highlightElement: (block: HTMLElement) => void;
 		};
 		renderMermaidDiagrams?: () => void;
 
-		// Sidebar manager window properties
 		__mizukiSidebarResizeHandler?: () => void;
 		__mizukiSidebarSwupHooked?: boolean;
 		__mizukiSidebarManagerInitialized?: boolean;

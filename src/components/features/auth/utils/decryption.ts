@@ -1,10 +1,3 @@
-/**
- * Decryption utilities for password-protected content
- *
- * Note: These functions are designed to run in the browser where CryptoJS
- * is available as a global variable after loading /assets/js/crypto-js.min.js
- */
-
 import type { DecryptResult } from "../types/auth";
 
 declare const CryptoJS: {

@@ -5,8 +5,12 @@ export interface PioConfig {
 	position?: "left" | "right";
 	width?: number;
 	height?: number;
-	dialog?: Record<string, string>;
+	dialog?: Record<string, unknown>;
 	models?: string[];
+	minResolution?: {
+		width?: number;
+		height?: number;
+	};
 }
 
 export interface PioProps {

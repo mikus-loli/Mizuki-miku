@@ -16,7 +16,10 @@ const getImageSources = async () => {
 	// API 图片逻辑
 	if (siteConfig.banner.imageApi?.enable && siteConfig.banner.imageApi?.url) {
 		try {
-			const response = await fetch(siteConfig.banner.imageApi.url);
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 5000);
+			const response = await fetch(siteConfig.banner.imageApi.url, { signal: controller.signal });
+			clearTimeout(timeoutId);
 			const text = await response.text();
 			const apiImages = text.split("\n").filter((line) => line.trim());
 			if (apiImages.length > 0) {
