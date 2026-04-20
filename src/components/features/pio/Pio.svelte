@@ -20,9 +20,67 @@
 	const canvasWidth = pioConfig.width || 280;
 	const canvasHeight = pioConfig.height || 250;
 
+	// 分辨率阈值配置
+	const minResolution = pioConfig.minResolution ?? { width: 1280 };
+	const minWidth = minResolution.width ?? 1280;
+	const minHeight = minResolution.height;
+
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
 	let isLoaded = false;
+	let isVisible = false; // 当前是否可见
+	let shouldRender = false; // 是否应该渲染（用于延迟加载）
+	let resizeObserver: ResizeObserver | null = null;
+	let mediaQuery: MediaQueryList | null = null;
+
+	// 检查分辨率是否满足显示条件
+	function checkResolution(): boolean {
+		const width = window.innerWidth;
+		const height = window.innerHeight;
+
+		const widthOk = width >= minWidth;
+		const heightOk = minHeight === undefined || height >= minHeight;
+
+		return widthOk && heightOk;
+	}
+
+	// 更新可见状态
+	function updateVisibility() {
+		const wasVisible = isVisible;
+		isVisible = checkResolution();
+
+		if (isVisible && !wasVisible) {
+			// 从隐藏变为显示
+			console.log("[Pio] Resolution meets threshold, showing Live2D");
+			if (!isLoaded) {
+				shouldRender = true;
+				loadPioAssets();
+			} else {
+				showPio();
+			}
+		} else if (!isVisible && wasVisible) {
+			// 从显示变为隐藏
+			console.log("[Pio] Resolution below threshold, hiding Live2D");
+			hidePio();
+		}
+	}
+
+	function showPio() {
+		if (pioContainer) {
+			pioContainer.classList.remove("hidden");
+		}
+	}
+
+	function hidePio() {
+		if (pioContainer) {
+			pioContainer.classList.add("hidden");
+		}
+		// 同时隐藏对话栏
+		const win = window as any;
+		if (win.__pioInstance?.modules?.hideDialog) {
+			win.__pioInstance.modules.hideDialog();
+		}
+	}
 
 	function initPio() {
 		if (typeof window === "undefined") return;
@@ -124,22 +182,51 @@
 		}
 	}
 
+	function setupResizeListener() {
+		// 使用 matchMedia 监听宽度变化（性能更好）
+		mediaQuery = window.matchMedia(`(min-width: ${minWidth}px)`);
+		mediaQuery.addEventListener("change", updateVisibility);
+
+		// 如果配置了高度阈值，使用 resize 事件监听
+		if (minHeight !== undefined) {
+			window.addEventListener("resize", updateVisibility);
+		}
+	}
+
+	function cleanupResizeListener() {
+		if (mediaQuery) {
+			mediaQuery.removeEventListener("change", updateVisibility);
+		}
+		if (minHeight !== undefined) {
+			window.removeEventListener("resize", updateVisibility);
+		}
+	}
+
 	onMount(() => {
 		if (!pioConfig.enable) return;
 
-		if (
-			pioConfig.hiddenOnMobile &&
-			window.matchMedia("(max-width: 1280px)").matches
-		) {
+		// 初始检查分辨率
+		isVisible = checkResolution();
+
+		if (!isVisible) {
+			console.log(
+				`[Pio] Resolution below threshold (${window.innerWidth}x${window.innerHeight} < ${minWidth}x${minHeight ?? "any"}), Live2D hidden`,
+			);
 			return;
 		}
 
+		// 分辨率满足条件，加载 Live2D
+		shouldRender = true;
 		loadPioAssets();
 		setupSwupHooks();
+
+		// 设置分辨率监听
+		setupResizeListener();
 	});
 
 	onDestroy(() => {
 		console.log("[Pio] Component destroyed (keeping instance alive)");
+		cleanupResizeListener();
 	});
 
 	function setupSwupHooks() {
@@ -178,18 +265,21 @@
 		class:left={pioConfig.position === "left"}
 		class:right={pioConfig.position !== "left"}
 		class:loaded={isLoaded}
+		class:hidden={!isVisible}
 		bind:this={pioContainer}
 		data-swup-persist="pio-live2d"
 		style="width: {canvasWidth}px; height: {canvasHeight}px;"
 	>
-		<div class="pio-dialog"></div>
-		<div class="pio-action"></div>
-		<canvas
-			id="pio"
-			bind:this={pioCanvas}
-			width={canvasWidth}
-			height={canvasHeight}
-		></canvas>
+		{#if shouldRender}
+			<div class="pio-dialog"></div>
+			<div class="pio-action"></div>
+			<canvas
+				id="pio"
+				bind:this={pioCanvas}
+				width={canvasWidth}
+				height={canvasHeight}
+			></canvas>
+		{/if}
 	</div>
 {/if}
 
@@ -212,6 +302,10 @@
 
 	.pio-container.loaded {
 		pointer-events: auto;
+	}
+
+	.pio-container.hidden {
+		display: none !important;
 	}
 
 	.pio-container :global(.pio-action) {

@@ -467,7 +467,11 @@ export interface PioConfig {
 	width?: number; // 看板娘宽度
 	height?: number; // 看板娘高度
 	mode?: "static" | "fixed" | "draggable"; // 展现模式
-	hiddenOnMobile?: boolean; // 是否在移动设备上隐藏
+	hiddenOnMobile?: boolean; // 是否在移动设备上隐藏（已废弃，使用 minResolution 替代）
+	minResolution?: {
+		width?: number; // 最小屏幕宽度阈值（像素），低于此值时隐藏，默认 1280
+		height?: number; // 最小屏幕高度阈值（像素），低于此值时隐藏，可选
+	};
 	dialog?: {
 		welcome?: string | string[]; // 欢迎词
 		touch?: string | string[]; // 触摸提示

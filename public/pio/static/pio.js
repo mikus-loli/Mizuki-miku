@@ -198,8 +198,17 @@ var Paul_Pio = function (prop) {
 			elements.express.onmouseover = function () {
 				modules.render(" 点我换个表情吧！");
 			};
-			// 只有当模型支持表情时才显示？通常都显示吧
+			// 表情按钮初始隐藏，等模型加载后根据是否有表情来显示
+			elements.express.style.display = "none";
 			current.menu.appendChild(elements.express);
+
+			// 更新表情按钮显示状态
+			window.pio_update_expression_button = function () {
+				var hasExpression =
+					typeof window.pio_get_has_expression === "function" &&
+					window.pio_get_has_expression();
+				elements.express.style.display = hasExpression ? "" : "none";
+			};
 
 			elements.skin.onmouseover = function () {
 				prop.content.skin && prop.content.skin[0]

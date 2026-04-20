@@ -672,7 +672,11 @@ export const pioConfig: import("./types/config").PioConfig = {
 	width: 280, // 默认宽度
 	height: 420, // 默认高度
 	mode: "fixed", // 默认为可拖拽模式
-	hiddenOnMobile: true, // 默认在移动设备上隐藏
+	hiddenOnMobile: true, // 已废弃，使用 minResolution 替代
+	minResolution: {
+		width: 1280, // 最小屏幕宽度阈值，低于此值时隐藏
+		height: undefined, // 最小屏幕高度阈值，可选
+	},
 	dialog: {
 		welcome: "欢迎来到 Mikus 的网站！",
 		touch: [
