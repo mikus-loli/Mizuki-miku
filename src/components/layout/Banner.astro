@@ -226,7 +226,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 		</style>`} />
 	)}
 
-	<!-- 轮播脚本：随机起始 + 帧收集 + Ken Burns + Crossfade + 触摸/鼠标事件 -->
+	<!-- 轮播脚本：预创建帧元素 + Ken Burns + Crossfade + 触摸/鼠标事件 -->
 	{isCarouselEnabled && (
 		<script is:inline data-swup-ignore-script>
 			(function initBannerCarousel() {
@@ -240,29 +240,11 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 
 				if (mobileCount <= 1 && desktopCount <= 1) return;
 
-				// 清理上一次 Swup 导航遗留的监听器和定时器
 				if (window.__bannerCarouselCleanup) {
 					window.__bannerCarouselCleanup();
 					window.__bannerCarouselCleanup = null;
 				}
 
-				// 保存初始帧 HTML，供帧收集使用
-				if (typeof window.__bannerInitialFrameHtml === 'undefined') {
-					window.__bannerInitialFrameHtml = {};
-				}
-
-				function rememberInitialFrame(slotClass) {
-					var slot = container.querySelector('.' + slotClass);
-					if (!slot) return;
-					if (!window.__bannerInitialFrameHtml[slotClass]) {
-						window.__bannerInitialFrameHtml[slotClass] = slot.innerHTML;
-					}
-				}
-
-				rememberInitialFrame('banner-image-slot-mobile');
-				rememberInitialFrame('banner-image-slot-desktop');
-
-				// 随机起始索引（Swup 导航间保留，F5 刷新重置）
 				if (typeof window.__bannerRandomIndex === 'undefined') {
 					window.__bannerRandomIndex = {
 						mobile: mobileCount > 1 ? Math.floor(Math.random() * mobileCount) : 0,
@@ -270,127 +252,112 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					};
 				}
 
-				// 从 template 替换默认图片
-				function applyRandom(slotClass, tplClass, randomIndex) {
-					if (randomIndex === 0) return;
-					var slot = container.querySelector('.' + slotClass);
-					var templates = container.querySelectorAll('.' + tplClass);
-					if (!slot || !templates.length) return;
-					var tpl = templates[randomIndex - 1];
-					if (!tpl) return;
-					slot.innerHTML = '';
-					slot.appendChild(tpl.content.cloneNode(true));
-				}
-
-				applyRandom('banner-image-slot-mobile', 'banner-tpl-mobile', window.__bannerRandomIndex.mobile);
-				applyRandom('banner-image-slot-desktop', 'banner-tpl-desktop', window.__bannerRandomIndex.desktop);
-
-				// 收集所有帧 HTML 字符串（仅首次）
-				if (!window.__bannerCarouselFrames) window.__bannerCarouselFrames = {};
-
-				function collectFrames(slotClass, tplClass) {
-					if (window.__bannerCarouselFrames[slotClass]) return;
-					var frames = [];
-					var initialFrame = window.__bannerInitialFrameHtml && window.__bannerInitialFrameHtml[slotClass];
-					var slot = container.querySelector('.' + slotClass);
-					if (initialFrame) {
-						frames.push(initialFrame);
-					} else if (slot) {
-						frames.push(slot.innerHTML);
-					}
-					var tpls = container.querySelectorAll('.' + tplClass);
-					for (var i = 0; i < tpls.length; i++) {
-						frames.push(tpls[i].innerHTML);
-					}
-					window.__bannerCarouselFrames[slotClass] = frames;
-				}
-
-				collectFrames('banner-image-slot-mobile', 'banner-tpl-mobile');
-				collectFrames('banner-image-slot-desktop', 'banner-tpl-desktop');
-
 				if (typeof window.__bannerCarouselIndex === 'undefined') {
 					window.__bannerCarouselIndex = {
-						mobile: window.__bannerRandomIndex ? window.__bannerRandomIndex.mobile : 0,
-						desktop: window.__bannerRandomIndex ? window.__bannerRandomIndex.desktop : 0
+						mobile: window.__bannerRandomIndex.mobile,
+						desktop: window.__bannerRandomIndex.desktop
 					};
 				}
 
-				// 断点检测（md = 768px）
-				function isSlotHiddenByBreakpoint(slot) {
-					var cl = slot.classList;
+				var frameElements = { mobile: [], desktop: [] };
+
+				function buildFrameElements(slotClass, tplClass, type) {
+					if (frameElements[type].length > 0) return;
+
+					var initialSlot = container.querySelector('.' + slotClass);
+					if (!initialSlot) return;
+
+					var baseClass = initialSlot.className.replace(/\bbanner-kb\b/g, '').trim();
+					var templates = container.querySelectorAll('.' + tplClass);
+					var allFrameHtml = [];
+
+					allFrameHtml.push(initialSlot.innerHTML);
+					for (var i = 0; i < templates.length; i++) {
+						allFrameHtml.push(templates[i].innerHTML);
+					}
+
+					initialSlot.parentNode.removeChild(initialSlot);
+					for (var t = 0; t < templates.length; t++) {
+						templates[t].parentNode.removeChild(templates[t]);
+					}
+
+					for (var f = 0; f < allFrameHtml.length; f++) {
+						var el = document.createElement('div');
+						el.className = baseClass;
+						el.innerHTML = allFrameHtml[f];
+						el.style.opacity = '0';
+						el.style.pointerEvents = 'none';
+						container.appendChild(el);
+						frameElements[type].push(el);
+					}
+
+					var startIdx = window.__bannerCarouselIndex[type];
+					frameElements[type][startIdx].style.opacity = '1';
+					frameElements[type][startIdx].style.pointerEvents = '';
+				}
+
+				buildFrameElements('banner-image-slot-mobile', 'banner-tpl-mobile', 'mobile');
+				buildFrameElements('banner-image-slot-desktop', 'banner-tpl-desktop', 'desktop');
+
+				function isSlotHiddenByBreakpoint(el) {
+					var cl = el.classList;
 					var isMd = window.matchMedia('(min-width: 768px)').matches;
 					if (cl.contains('md:hidden') && isMd) return true;
 					if (cl.contains('hidden') && !cl.contains('md:hidden') && !isMd) return true;
 					return false;
 				}
 
-				// 给首张图启动 Ken Burns
-				function applyInitialKB(slotClass) {
-					var slot = container.querySelector('.' + slotClass);
-					if (!slot || isSlotHiddenByBreakpoint(slot)) return;
-					slot.classList.remove('banner-kb');
-					void slot.offsetWidth;
-					slot.classList.add('banner-kb');
+				function applyKB(el) {
+					if (!el || isSlotHiddenByBreakpoint(el)) return;
+					el.classList.remove('banner-kb');
+					void el.offsetWidth;
+					el.classList.add('banner-kb');
 				}
 
-				// Crossfade 防重入锁（每种 slot 类型独立）
 				var isCrossfading = { mobile: false, desktop: false };
 
-				// 清理 orphaned 中间层（快速滑动时可能残留）
-				function cleanupOrphanedLayers(slotClass, currentSlot) {
-					var allSlots = container.querySelectorAll('.' + slotClass);
-					for (var i = 0; i < allSlots.length; i++) {
-						if (allSlots[i] !== currentSlot && allSlots[i].parentNode) {
-							allSlots[i].parentNode.removeChild(allSlots[i]);
-						}
-					}
-				}
-
-				// Crossfade：创建新层叠在旧层上方，淡入后移除旧层
 				function crossfadeToIndex(slotClass, totalCount, type, targetIndex) {
 					if (totalCount <= 1) return;
 					if (isCrossfading[type]) return;
 
-					var frames = window.__bannerCarouselFrames[slotClass];
+					var frames = frameElements[type];
 					if (!frames || frames.length === 0) return;
 
-					var oldSlot = container.querySelector('.' + slotClass);
-					if (!oldSlot) return;
-					if (isSlotHiddenByBreakpoint(oldSlot)) return;
+					var currentIndex = window.__bannerCarouselIndex[type];
+					if (currentIndex === targetIndex) return;
+
+					var oldEl = frames[currentIndex];
+					var newEl = frames[targetIndex];
+					if (!oldEl || !newEl) return;
+					if (isSlotHiddenByBreakpoint(oldEl)) return;
 
 					isCrossfading[type] = true;
 					window.__bannerCarouselIndex[type] = targetIndex;
 
-					// 清理快速交互可能残留的中间层
-					cleanupOrphanedLayers(slotClass, oldSlot);
+					newEl.style.transition = 'opacity ' + FADE_MS + 'ms ease-in-out';
+					newEl.style.opacity = '0';
+					newEl.style.pointerEvents = 'none';
 
-					var newSlot = document.createElement('div');
-					var baseClass = oldSlot.className.replace(/\bbanner-kb\b/g, '').trim();
-					newSlot.className = baseClass;
-					newSlot.style.opacity = '0';
-					newSlot.style.transition = 'opacity ' + FADE_MS + 'ms ease-in-out';
-					newSlot.innerHTML = frames[targetIndex];
-					oldSlot.parentNode.insertBefore(newSlot, oldSlot.nextSibling);
-
-					// 双 rAF：确保 opacity:0 已绘制，然后同时触发淡入 + Ken Burns
 					requestAnimationFrame(function() {
 						requestAnimationFrame(function() {
-							newSlot.style.opacity = '1';
-							newSlot.classList.add('banner-kb');
+							newEl.style.opacity = '1';
+							newEl.style.pointerEvents = '';
+							newEl.classList.add('banner-kb');
 						});
 					});
 
-					// 淡入完成后：移除旧层，清理 transition，释放锁
 					setTimeout(function() {
-						if (oldSlot.parentNode) oldSlot.parentNode.removeChild(oldSlot);
-						newSlot.style.transition = '';
+						oldEl.style.transition = '';
+						oldEl.style.opacity = '0';
+						oldEl.style.pointerEvents = 'none';
+						oldEl.classList.remove('banner-kb');
+						newEl.style.transition = '';
 						isCrossfading[type] = false;
 					}, FADE_MS + 50);
 				}
 
-				// 自动轮播用的 crossfade（前进到下一张）
 				function crossfade(slotClass, totalCount, type) {
-					var frames = window.__bannerCarouselFrames[slotClass];
+					var frames = frameElements[type];
 					if (!frames || frames.length === 0) return;
 					var currentIndex = window.__bannerCarouselIndex[type];
 					var nextIndex = (currentIndex + 1) % frames.length;
@@ -400,7 +367,6 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 				var timerId = null;
 				var isPaused = false;
 
-				// 触摸手势状态
 				var touchStartX = 0;
 				var touchStartY = 0;
 				var isSwiping = false;
@@ -409,8 +375,10 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					stopCarousel();
 					if (isPaused) return;
 
-					applyInitialKB('banner-image-slot-mobile');
-					applyInitialKB('banner-image-slot-desktop');
+					var mobileIdx = window.__bannerCarouselIndex.mobile;
+					var desktopIdx = window.__bannerCarouselIndex.desktop;
+					if (frameElements.mobile[mobileIdx]) applyKB(frameElements.mobile[mobileIdx]);
+					if (frameElements.desktop[desktopIdx]) applyKB(frameElements.desktop[desktopIdx]);
 
 					timerId = setInterval(function() {
 						if (!isPaused) {
@@ -424,7 +392,6 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					if (timerId !== null) { clearInterval(timerId); timerId = null; }
 				}
 
-				// 页面可见性：后台标签页暂停轮播
 				var visibilityHandler = function() {
 					if (document.hidden) {
 						stopCarousel();
@@ -434,7 +401,6 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 				};
 				document.addEventListener('visibilitychange', visibilityHandler);
 
-				// 事件处理函数引用（用于清理）
 				var onTouchStart = function(e) {
 					touchStartX = e.touches[0].clientX;
 					touchStartY = e.touches[0].clientY;
@@ -463,9 +429,6 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					var endX = e.changedTouches[0].clientX;
 					var diffX = touchStartX - endX;
 					var isMobile = window.innerWidth < 768;
-					var slotClass = isMobile
-						? 'banner-image-slot-mobile'
-						: 'banner-image-slot-desktop';
 					var type = isMobile ? 'mobile' : 'desktop';
 					var count = isMobile ? mobileCount : desktopCount;
 					var current = window.__bannerCarouselIndex[type];
@@ -473,10 +436,10 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					if (Math.abs(diffX) > 50) {
 						if (diffX > 0) {
 							var next = (current + 1) % count;
-							crossfadeToIndex(slotClass, count, type, next);
+							crossfadeToIndex('', count, type, next);
 						} else {
 							var prev = (current - 1 + count) % count;
-							crossfadeToIndex(slotClass, count, type, prev);
+							crossfadeToIndex('', count, type, prev);
 						}
 					}
 
@@ -497,20 +460,17 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					startCarousel();
 				};
 
-				// 移动端触摸事件
 				if ('ontouchstart' in window) {
 					container.addEventListener('touchstart', onTouchStart, { passive: true });
 					container.addEventListener('touchmove', onTouchMove, { passive: false });
 					container.addEventListener('touchend', onTouchEnd, { passive: true });
 				}
 
-				// 鼠标悬停暂停（桌面端）
 				container.addEventListener('mouseenter', onMouseEnter);
 				container.addEventListener('mouseleave', onMouseLeave);
 
 				startCarousel();
 
-				// 注册清理函数，供下次 Swup 导航或销毁时调用
 				window.__bannerCarouselCleanup = function() {
 					stopCarousel();
 					document.removeEventListener('visibilitychange', visibilityHandler);
