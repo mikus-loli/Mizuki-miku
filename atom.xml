@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-21T04:46:51.442Z</updated>
+  <updated>2026-04-21T04:50:41.062Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Komari Mikus 主题</title>
@@ -14,9 +14,9 @@
     <published>2026-04-21T00:00:00.000Z</published>
     <updated>2026-04-21T00:00:00.000Z</updated>
     <summary>一个现代化、优雅的 Komari 监控主题</summary>
-    <content type="html"><![CDATA[<h1>项目地址</h1>
+    <content type="html"><![CDATA[<h2>项目地址</h2>
 <p>::github{repo="mikus-loli/komari-mikus"}</p>
-<h1>特性</h1>
+<h2>特性</h2>
 <ul>
 <li>🎨 <strong>双主题支持</strong> - 浅色/深色主题无缝切换，支持跟随系统</li>
 <li>📊 <strong>双视图模式</strong> - 网格视图和表格视图自由切换</li>
@@ -25,13 +25,13 @@
 <li>📱 <strong>响应式设计</strong> - 完美适配各种设备</li>
 <li>🏳️ <strong>国旗图标</strong> - 支持全球国家和地区旗帜显示</li>
 </ul>
-<h1>安装</h1>
+<h2>安装</h2>
 <ol>
 <li>从 <a href="https://github.com/mikus-loli/komari-mikus/releases">Releases</a> 页面下载最新版本的 ZIP 文件</li>
 <li>上传到 Komari 主题</li>
 <li>在 Komari 配置中选择 Mikus 主题</li>
 </ol>
-<h1>项目结构</h1>
+<h2>项目结构</h2>
 <pre><code>komari-mikus/
 ├── .github/
 │   └── workflows/
@@ -46,7 +46,7 @@
 ├── komari-theme.json        # 主题配置
 └── README.md
 </code></pre>
-<h1>预览</h1>
+<h2>预览</h2>
 <p><img src="%E5%8A%A0%E8%BD%BD.png" alt="（图片加载失败显示）" title="Komari Mikus 主题预览" />
 <img src="%E4%B8%BB%E9%A1%B5.png" alt="（图片加载失败显示）" title="Komari Mikus 主题预览" />
 <img src="%E8%AF%A6%E6%83%85.png" alt="（图片加载失败显示）" title="Komari Mikus 主题预览" />
