@@ -13,7 +13,11 @@ const config = {
 ---
 
 <div id="twikoo-container" class="twikoo-container">
-	<div id="tcomment"></div>
+	<div id="tcomment" class="twikoo-loading">
+		<div class="twikoo-loading-content">
+			<p>评论加载中...</p>
+		</div>
+	</div>
 </div>
 
 <script is:inline define:vars={{ config }}>
@@ -41,6 +45,33 @@ const config = {
 				path: getCurrentPath(),
 				el: "#tcomment",
 			};
+		}
+
+		function showError(message) {
+			const commentEl = document.getElementById("tcomment");
+			if (commentEl) {
+				commentEl.innerHTML = `
+					<div class="twikoo-error">
+						<p class="text-red-500">${message}</p>
+						<button id="twikoo-retry" class="mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80 transition-colors">
+							重试
+						</button>
+					</div>
+				`;
+				
+				// 添加重试按钮事件
+				const retryBtn = document.getElementById("twikoo-retry");
+				if (retryBtn) {
+					retryBtn.addEventListener("click", () => {
+						commentEl.innerHTML = `
+							<div class="twikoo-loading-content">
+								<p>评论加载中...</p>
+							</div>
+						`;
+						initTwikoo();
+					});
+				}
+			}
 		}
 
 		async function loadTwikooScript(retryCount = 0) {
@@ -77,6 +108,7 @@ const config = {
 						}, RETRY_DELAY);
 					} else {
 						console.error("[Twikoo] 脚本加载失败，已达最大重试次数");
+						showError("评论脚本加载失败，请稍后重试");
 						resolve(false);
 					}
 				};
@@ -99,6 +131,7 @@ const config = {
 
 				if (typeof twikoo === "undefined") {
 					console.warn("[Twikoo] twikoo 对象未定义");
+					showError("评论系统初始化失败，请稍后重试");
 					return;
 				}
 
@@ -110,6 +143,7 @@ const config = {
 				twikooInitialized = true;
 			} catch (error) {
 				console.error("[Twikoo] 初始化失败:", error);
+				showError("评论系统初始化失败，请稍后重试");
 			}
 		}
 
@@ -190,5 +224,51 @@ const config = {
 <style>
 	.twikoo-container {
 		min-height: 200px;
+	}
+
+	.twikoo-loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 200px;
+		width: 100%;
+	}
+
+	.twikoo-loading-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+		border-radius: var(--radius-large);
+		background: var(--card-bg);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	}
+
+	.twikoo-error {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+		border-radius: var(--radius-large);
+		background: var(--card-bg);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		text-align: center;
+	}
+
+	#twikoo-retry {
+		margin-top: 1rem;
+		padding: 0.5rem 1rem;
+		border-radius: var(--radius-medium);
+		background: var(--primary);
+		color: white;
+		border: none;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	#twikoo-retry:hover {
+		background: var(--primary)/80;
 	}
 </style>
