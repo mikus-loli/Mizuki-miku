@@ -96,11 +96,10 @@ const renderGroups = [
 	data-fullscreen-wallpaper
 >
 	<script is:inline>
-	// 立即执行脚本：防止闪烁
 	(function() {
 		const mode = localStorage.getItem('wallpaperMode') || 'banner';
 		if (mode !== 'fullscreen') {
-			document.currentScript.parentElement.style.display = 'none';
+			document.currentScript.parentElement.remove();
 		}
 	})();
 	</script>
@@ -116,8 +115,7 @@ const renderGroups = [
 						data-carousel-item={index}
 						style={`transform: translateZ(0); backface-visibility: hidden; will-change: opacity; ${blurAmount > 0 ? `filter: blur(${blurAmount}px);` : ''}; opacity: ${index === 0 ? 1 : 0};`}
 						decoding="async"
-						loading={index === 0 ? "eager" : "lazy"}
-						fetchpriority={index === 0 ? "high" : undefined}
+						loading="lazy"
 					/>
 				))}
 			</div>
@@ -157,8 +155,7 @@ const renderGroups = [
 								class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${positionClass}"
 								style="transform: translateZ(0); backface-visibility: hidden; will-change: opacity; ${blurAmount > 0 ? `filter: blur(${blurAmount}px);` : ''} opacity: 1;"
 								decoding="async"
-								loading="eager"
-								fetchpriority="high"
+								loading="lazy"
 							/>
 						`;
 						container.appendChild(desktopDiv);
@@ -175,8 +172,7 @@ const renderGroups = [
 								class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${positionClass}"
 								style="transform: translateZ(0); backface-visibility: hidden; will-change: opacity; ${blurAmount > 0 ? `filter: blur(${blurAmount}px);` : ''} opacity: 1;"
 								decoding="async"
-								loading="eager"
-								fetchpriority="high"
+								loading="lazy"
 							/>
 						`;
 						container.appendChild(mobileDiv);

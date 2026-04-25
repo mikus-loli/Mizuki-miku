@@ -23,6 +23,9 @@
 
 	function getAssetPath(path: string): string {
 		if (path.startsWith("http://") || path.startsWith("https://")) {
+			if (path.includes("126.net")) {
+				return path + "?param=64y64";
+			}
 			return path;
 		}
 		if (path.startsWith("/")) {

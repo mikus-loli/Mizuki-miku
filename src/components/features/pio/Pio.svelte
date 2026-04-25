@@ -26,7 +26,7 @@
 	const minHeight = minResolution.height;
 
 	// 延迟加载配置：确保页面完全渲染后再加载 PixiJS
-	const LAZY_LOAD_DELAY = 3000; // 3秒延迟，确保 LCP 完成
+	const LAZY_LOAD_DELAY = 8000;
 
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
@@ -214,12 +214,29 @@
 			loadPioAssets();
 		};
 
-		// 优先使用 requestIdleCallback，确保在浏览器空闲时加载
 		if ("requestIdleCallback" in window) {
 			requestIdleCallback(doLoad, { timeout: LAZY_LOAD_DELAY });
 		} else {
 			lazyLoadTimeout = setTimeout(doLoad, LAZY_LOAD_DELAY);
 		}
+
+		const interactionEvents = [
+			"mousemove",
+			"touchstart",
+			"scroll",
+			"keydown",
+		];
+		const onInteraction = () => {
+			interactionEvents.forEach((e) =>
+				document.removeEventListener(e, onInteraction),
+			);
+			if (!isLoaded && isVisible) {
+				setTimeout(doLoad, 1000);
+			}
+		};
+		interactionEvents.forEach((e) =>
+			document.addEventListener(e, onInteraction, { passive: true }),
+		);
 	}
 
 	function setupResizeListener() {

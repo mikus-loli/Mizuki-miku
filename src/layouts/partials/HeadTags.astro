@@ -7,7 +7,7 @@
  */
 
 import { profileConfig, siteConfig } from "@/config";
-import path from "node:path";
+import { getImage } from "astro:assets";
 
 import {
 	DARK_MODE,
@@ -58,6 +58,7 @@ const getLcpPreloadImages = async (): Promise<{
 
 	const resolveImageSrc = async (
 		imagePath: string,
+		width: number,
 	): Promise<string | undefined> => {
 		if (
 			imagePath.startsWith("/") ||
@@ -68,39 +69,48 @@ const getLcpPreloadImages = async (): Promise<{
 			return imagePath;
 		}
 
-		const files = import.meta.glob<{ src: string }>(
-			"../../assets/**/*.webp",
-			{ import: "default" },
-		);
-		const normalizedPath = path
-			.normalize(path.join("../../", imagePath))
-			.replace(/\\/g, "/");
-		const file = files[normalizedPath];
-		if (file) {
-			const img = await file();
-			return img.src;
+		try {
+			const allImages = import.meta.glob<{ default: ImageMetadata }>(
+				"../../assets/**/*.webp",
+				{ eager: true },
+			);
+			const normalizedPath = imagePath.replace(/\\/g, "/");
+			const matchedKey = Object.keys(allImages).find((key) =>
+				key.endsWith(normalizedPath),
+			);
+			if (!matchedKey) return undefined;
+
+			const imageMeta = allImages[matchedKey].default;
+			const optimized = await getImage({
+				src: imageMeta,
+				width,
+				format: "webp",
+			});
+			return optimized.src;
+		} catch {
+			return undefined;
 		}
-		return undefined;
 	};
 
 	if (typeof src === "string") {
-		result.desktop = await resolveImageSrc(src);
+		result.desktop = await resolveImageSrc(src, 2560);
 	} else if (Array.isArray(src)) {
-		if (src.length > 0) result.desktop = await resolveImageSrc(src[0]);
+		if (src.length > 0)
+			result.desktop = await resolveImageSrc(src[0], 2560);
 	} else if (src && typeof src === "object") {
 		const desktopSrc = src.desktop;
 		const mobileSrc = src.mobile;
 
 		if (typeof desktopSrc === "string") {
-			result.desktop = await resolveImageSrc(desktopSrc);
+			result.desktop = await resolveImageSrc(desktopSrc, 2560);
 		} else if (Array.isArray(desktopSrc) && desktopSrc.length > 0) {
-			result.desktop = await resolveImageSrc(desktopSrc[0]);
+			result.desktop = await resolveImageSrc(desktopSrc[0], 2560);
 		}
 
 		if (typeof mobileSrc === "string") {
-			result.mobile = await resolveImageSrc(mobileSrc);
+			result.mobile = await resolveImageSrc(mobileSrc, 1024);
 		} else if (Array.isArray(mobileSrc) && mobileSrc.length > 0) {
-			result.mobile = await resolveImageSrc(mobileSrc[0]);
+			result.mobile = await resolveImageSrc(mobileSrc[0], 1024);
 		}
 	}
 
@@ -150,6 +160,7 @@ const lcpImages = await getLcpPreloadImages();
 		<link
 			rel="preload"
 			as="image"
+			type="image/webp"
 			href={lcpImages.mobile}
 			media="(max-width: 767px)"
 			fetchpriority="high"
@@ -161,6 +172,7 @@ const lcpImages = await getLcpPreloadImages();
 		<link
 			rel="preload"
 			as="image"
+			type="image/webp"
 			href={lcpImages.desktop}
 			media="(min-width: 768px)"
 			fetchpriority="high"
