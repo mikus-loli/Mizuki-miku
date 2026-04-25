@@ -408,7 +408,7 @@ docker-compose up -d
 &lt;li&gt;&lt;a href=&quot;https://docs.docker.com/&quot;&gt;Docker 官方文档&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;希望能帮助您成功部署 Umami！如果您有任何问题或建议，欢迎在评论区留言。&lt;/p&gt;
-</content:encoded></item><item><title>Mikutap Docker版部署指南</title><link>https://mikus.ink/posts/mikutap/</link><guid isPermaLink="true">https://mikus.ink/posts/mikutap/</guid><description>Mikutap Docker镜像</description><pubDate>Wed, 21 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;项目地址&lt;/h1&gt;
+</content:encoded></item><item><title>Mikutap Docker版部署指南</title><link>https://mikus.ink/posts/mikutap/</link><guid isPermaLink="true">https://mikus.ink/posts/mikutap/</guid><description>Mikutap 部署指南</description><pubDate>Wed, 21 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;项目地址&lt;/h1&gt;
 &lt;p&gt;::github{repo=&quot;AkariRin/mikutap&quot;}&lt;/p&gt;
 &lt;h1&gt;介绍&lt;/h1&gt;
 &lt;p&gt;Mikutap 是由日本知名 Vocaloid 音乐人&lt;em&gt;daniwell&lt;/em&gt;开发的一款极简交互式声音艺术装置，灵感来源于 Patatap，核心特点是无需任何音乐基础，通过简单的点击操作就能生成初音未来风格的电音旋律，配合绚丽的粒子动画，带来极致的解压体验。它没有复杂的规则，没有失败惩罚，只有纯粹的创作乐趣和感官享受。 miku厨狂喜&lt;/p&gt;
