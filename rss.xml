@@ -35,7 +35,7 @@
 &lt;img src=&quot;%E4%B8%BB%E9%A1%B5.png&quot; alt=&quot;（图片加载失败显示）&quot; title=&quot;Komari Mikus 主题预览&quot; /&gt;
 &lt;img src=&quot;%E8%AF%A6%E6%83%85.png&quot; alt=&quot;（图片加载失败显示）&quot; title=&quot;Komari Mikus 主题预览&quot; /&gt;
 &lt;img src=&quot;%E5%BB%B6%E8%BF%9F.png&quot; alt=&quot;（图片加载失败显示）&quot; title=&quot;Komari Mikus 主题预览&quot; /&gt;&lt;/p&gt;
-</content:encoded></item><item><title>Meting-API 网易云音乐VIP播放限制解决指南</title><link>https://mikus.ink/posts/meting-api-vip/</link><guid isPermaLink="true">https://mikus.ink/posts/meting-api-vip/</guid><description>Meteting-API 服务并添加网易云音乐 解决 VIP 歌曲访问限制问题</description><pubDate>Tue, 24 Mar 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;前言&lt;/h1&gt;
+</content:encoded></item><item><title>Meting-API 解决网易云音乐VIP播放限制</title><link>https://mikus.ink/posts/meting-api-vip/</link><guid isPermaLink="true">https://mikus.ink/posts/meting-api-vip/</guid><description>Meteting-API 服务并添加网易云音乐 解决 VIP 歌曲访问限制问题</description><pubDate>Tue, 24 Mar 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;前言&lt;/h1&gt;
 &lt;p&gt;Mizuki使用了meting来提供音乐播放的功能, 但是meting默认提供的API有抽风/下线/跑路的风险, 而且最重要的是: 播放不了VIP歌曲，网易云大部分的歌曲都需要VIP&lt;/p&gt;
 &lt;h2&gt;网易云解决方法&lt;/h2&gt;
 &lt;h4&gt;1. 获取网易云音乐 Cookie&lt;/h4&gt;
