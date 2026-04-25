@@ -7,6 +7,7 @@
  */
 
 import { profileConfig, siteConfig } from "@/config";
+import path from "node:path";
 
 import {
 	DARK_MODE,
@@ -46,37 +47,67 @@ const favicons: Favicon[] =
 	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
 
 // 获取 LCP 预加载图片 URL
-const getLcpPreloadImages = (): { desktop?: string; mobile?: string } => {
+const getLcpPreloadImages = async (): Promise<{
+	desktop?: string;
+	mobile?: string;
+}> => {
 	const src = siteConfig.banner.src;
 	if (!src) return {};
 
 	const result: { desktop?: string; mobile?: string } = {};
 
+	const resolveImageSrc = async (
+		imagePath: string,
+	): Promise<string | undefined> => {
+		if (
+			imagePath.startsWith("/") ||
+			imagePath.startsWith("http") ||
+			imagePath.startsWith("https") ||
+			imagePath.startsWith("data:")
+		) {
+			return imagePath;
+		}
+
+		const files = import.meta.glob<{ src: string }>(
+			"../../assets/**/*.webp",
+			{ import: "default" },
+		);
+		const normalizedPath = path
+			.normalize(path.join("../../", imagePath))
+			.replace(/\\/g, "/");
+		const file = files[normalizedPath];
+		if (file) {
+			const img = await file();
+			return img.src;
+		}
+		return undefined;
+	};
+
 	if (typeof src === "string") {
-		result.desktop = src;
+		result.desktop = await resolveImageSrc(src);
 	} else if (Array.isArray(src)) {
-		result.desktop = src[0];
+		if (src.length > 0) result.desktop = await resolveImageSrc(src[0]);
 	} else if (src && typeof src === "object") {
 		const desktopSrc = src.desktop;
 		const mobileSrc = src.mobile;
 
 		if (typeof desktopSrc === "string") {
-			result.desktop = desktopSrc;
+			result.desktop = await resolveImageSrc(desktopSrc);
 		} else if (Array.isArray(desktopSrc) && desktopSrc.length > 0) {
-			result.desktop = desktopSrc[0];
+			result.desktop = await resolveImageSrc(desktopSrc[0]);
 		}
 
 		if (typeof mobileSrc === "string") {
-			result.mobile = mobileSrc;
+			result.mobile = await resolveImageSrc(mobileSrc);
 		} else if (Array.isArray(mobileSrc) && mobileSrc.length > 0) {
-			result.mobile = mobileSrc[0];
+			result.mobile = await resolveImageSrc(mobileSrc[0]);
 		}
 	}
 
 	return result;
 };
 
-const lcpImages = getLcpPreloadImages();
+const lcpImages = await getLcpPreloadImages();
 ---
 
 <!-- SEO Meta Tags -->

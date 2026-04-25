@@ -8,6 +8,7 @@
 import TypewriterText from "@components/atoms/typewriter-text/TypewriterText.astro";
 import Image from "@components/atoms/Image/Image.astro";
 import { Icon } from "astro-icon/components";
+import path from "node:path";
 import { siteConfig } from "../../config";
 import { BANNER_HEIGHT_EXTEND } from "../../constants/constants";
 
@@ -51,6 +52,41 @@ const mobileImages = normalizeToArray(bannerImages.mobile).filter(Boolean);
 const isCarouselEnabled =
 	siteConfig.banner.carousel?.enable &&
 	(desktopImages.length > 1 || mobileImages.length > 1);
+
+const resolveLocalImageSrc = async (imagePath: string): Promise<string> => {
+	if (
+		imagePath.startsWith("/") ||
+		imagePath.startsWith("http") ||
+		imagePath.startsWith("https") ||
+		imagePath.startsWith("data:")
+	) {
+		return imagePath;
+	}
+	const files = import.meta.glob<{ src: string }>(
+		"../../assets/**/*.webp",
+		{ import: "default" },
+	);
+	const normalizedPath = path
+		.normalize(path.join("../../", imagePath))
+		.replace(/\\/g, "/");
+	const file = files[normalizedPath];
+	if (file) {
+		const img = await file();
+		return img.src;
+	}
+	return imagePath;
+};
+
+const resolveImageUrls = async (images: string[]): Promise<string[]> => {
+	return Promise.all(images.map(resolveLocalImageSrc));
+};
+
+const resolvedDesktopImages = !isCarouselEnabled
+	? await resolveImageUrls(desktopImages)
+	: desktopImages;
+const resolvedMobileImages = !isCarouselEnabled
+	? await resolveImageUrls(mobileImages)
+	: mobileImages;
 
 // 轮播间隔最小 1.5 秒，防止 setInterval 卡顿
 const carouselIntervalMs = Math.max(
@@ -148,8 +184,8 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 			<script
 				is:inline
 				define:vars={{
-					desktopImages: bannerImages.desktop,
-					mobileImages: bannerImages.mobile,
+					desktopImages: resolvedDesktopImages,
+					mobileImages: resolvedMobileImages,
 					position: siteConfig.banner.position,
 				}}
 			>
@@ -243,17 +279,10 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					window.__bannerCarouselCleanup = null;
 				}
 
-				if (typeof window.__bannerRandomIndex === 'undefined') {
-					window.__bannerRandomIndex = {
-						mobile: mobileCount > 1 ? Math.floor(Math.random() * mobileCount) : 0,
-						desktop: desktopCount > 1 ? Math.floor(Math.random() * desktopCount) : 0
-					};
-				}
-
 				if (typeof window.__bannerCarouselIndex === 'undefined') {
 					window.__bannerCarouselIndex = {
-						mobile: window.__bannerRandomIndex.mobile,
-						desktop: window.__bannerRandomIndex.desktop
+						mobile: 0,
+						desktop: 0
 					};
 				}
 
