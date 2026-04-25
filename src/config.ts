@@ -34,7 +34,7 @@ export const siteConfig: SiteConfig = {
 	lang: SITE_LANG,
 
 	themeColor: {
-		hue: 345, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
+		hue: 220, // 主题色的默认色相，范围从 0 到 360。例如：红色：0，青色：200，蓝绿色：250，粉色：345
 		fixed: true, // 对访问者隐藏主题色选择器
 	},
 
@@ -124,18 +124,20 @@ export const siteConfig: SiteConfig = {
 		// 支持单张图片或图片数组，当数组长度 > 1 时自动启用轮播
 		src: {
 			desktop: [
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=1",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=2",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=3",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pc&img_format=webp&return=redirect&t=4",
+				"/assets/desktop-banner/1.webp",
+				"/assets/desktop-banner/2.webp",
+				"/assets/desktop-banner/3.webp",
+				"/assets/desktop-banner/4.webp",
+				"/assets/desktop-banner/5.webp",
+				"/assets/desktop-banner/6.webp",
 			], // 桌面横幅图片
 			mobile: [
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=1",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=2",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=3",
-				"https://picflow-api.mikus.ink/api_v2.php?type=pe&img_format=webp&return=redirect&t=4",
+				"/assets/mobile-banner/1.webp",
+				"/assets/mobile-banner/2.webp",
+				"/assets/mobile-banner/3.webp",
+				"/assets/mobile-banner/4.webp",
+				"/assets/mobile-banner/5.webp",
+				"/assets/mobile-banner/6.webp",
 			], // 移动横幅图片
 		}, // 使用本地横幅图片
 
@@ -143,7 +145,7 @@ export const siteConfig: SiteConfig = {
 
 		carousel: {
 			enable: true, // 为 true 时：为多张图片启用轮播。为 false 时：从数组中随机显示一张图片
-			interval: 2.5, // 轮播间隔时间（秒）
+			interval: 1.5, // 轮播间隔时间（秒）
 		},
 
 		waves: {
@@ -204,10 +206,10 @@ export const siteConfig: SiteConfig = {
 		},
 	},
 	toc: {
-		enable: true, // 总开关，启用目录功能
+		enable: false, // 总开关，启用目录功能
 		mobileTop: true, // 手机端顶部 TOC 按钮
 		desktopSidebar: true, // 电脑端右侧边栏 TOC
-		floating: true, // 悬浮 TOC 按钮
+		floating: false, // 悬浮 TOC 按钮
 		depth: 2, // 目录深度，1-6，1 表示只显示 h1 标题，2 表示显示 h1 和 h2 标题，依此类推
 		useJapaneseBadge: true, // 使用日语假名标记（あいうえお...）代替数字，开启后会将 1、2、3... 改为 あ、い、う...
 	},
@@ -486,7 +488,7 @@ export const announcementConfig: AnnouncementConfig = {
 export const musicPlayerConfig: MusicPlayerConfig = {
 	enable: true, // 启用音乐播放器功能
 	showFloatingPlayer: true, // 显示悬浮播放器 UI
-	floatingEntryMode: "fab", // 悬浮入口模式："default" 为独立悬浮播放器，"fab" 为集成到通用 FAB 组
+	floatingEntryMode: "default", // 悬浮入口模式："default" 为独立悬浮播放器，"fab" 为集成到通用 FAB 组
 	mode: "meting", // 音乐播放器模式，可选 "local" 或 "meting"
 	meting_api:
 		"https://meting.mikus.ink/api?server=:server&type=:type&id=:id&auth=:auth&r=:r", // Meting API 地址
