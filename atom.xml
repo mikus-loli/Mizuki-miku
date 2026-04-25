@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-25T18:42:05.912Z</updated>
+  <updated>2026-04-25T18:50:09.192Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Komari Mikus 主题</title>
@@ -462,7 +462,7 @@ docker-compose up -d
     <id>https://mikus.ink/posts/mikutap/</id>
     <published>2026-01-21T00:00:00.000Z</published>
     <updated>2026-01-21T00:00:00.000Z</updated>
-    <summary>Mikutap Docker镜像，无需部署，直接使用即可</summary>
+    <summary>Mikutap Docker镜像</summary>
     <content type="html"><![CDATA[<h1>项目地址</h1>
 <p>::github{repo="AkariRin/mikutap"}</p>
 <h1>介绍</h1>
