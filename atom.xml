@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-25T20:23:54.422Z</updated>
+  <updated>2026-04-25T21:14:37.594Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Komari Mikus 主题</title>
@@ -27,7 +27,7 @@
 </ul>
 <h2>安装</h2>
 <ol>
-<li>从 <a href="https://github.com/mikus-loli/komari-mikus/releases">Releases</a> 页面下载最新版本的 ZIP 文件 即可</li>
+<li>从 <a href="https://github.com/mikus-loli/komari-mikus/releases">Releases</a> 页面下载最新版本的 ZIP 文件</li>
 <li>上传到 Komari 主题</li>
 <li>在 Komari 配置中选择 komari-mikus 主题</li>
 </ol>
