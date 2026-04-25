@@ -25,6 +25,9 @@
 	const minWidth = minResolution.width ?? 1280;
 	const minHeight = minResolution.height;
 
+	// 延迟加载配置：确保页面完全渲染后再加载 PixiJS
+	const LAZY_LOAD_DELAY = 3000; // 3秒延迟，确保 LCP 完成
+
 	let pioContainer: HTMLDivElement | null = null;
 	let pioCanvas: HTMLCanvasElement | null = null;
 	let isLoaded = false;
@@ -35,6 +38,7 @@
 	let initRetryCount = 0;
 	const MAX_INIT_RETRIES = 30;
 	let swupCleanupFns: (() => void)[] = [];
+	let lazyLoadTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	// 检查分辨率是否满足显示条件
 	function checkResolution(): boolean {
@@ -57,7 +61,7 @@
 			console.log("[Pio] Resolution meets threshold, showing Live2D");
 			if (!isLoaded) {
 				shouldRender = true;
-				loadPioAssets();
+				scheduleLazyLoad();
 			} else {
 				showPio();
 			}
@@ -99,7 +103,9 @@
 
 		if (typeof win.Paul_Pio === "undefined") {
 			if (initRetryCount >= MAX_INIT_RETRIES) {
-				console.error("[Pio] Paul_Pio not available after maximum retries, giving up");
+				console.error(
+					"[Pio] Paul_Pio not available after maximum retries, giving up",
+				);
 				return;
 			}
 			initRetryCount++;
@@ -110,7 +116,9 @@
 
 		if (!pioContainer || !pioCanvas) {
 			if (initRetryCount >= MAX_INIT_RETRIES) {
-				console.error("[Pio] DOM elements not found after maximum retries, giving up");
+				console.error(
+					"[Pio] DOM elements not found after maximum retries, giving up",
+				);
 				return;
 			}
 			initRetryCount++;
@@ -160,6 +168,7 @@
 				script.id = id;
 				script.src = src;
 				script.async = true;
+				script.defer = true;
 				script.onload = () => resolve();
 				script.onerror = reject;
 				document.head.appendChild(script);
@@ -167,6 +176,8 @@
 		};
 
 		try {
+			console.log("[Pio] Starting lazy load after delay...");
+
 			if (isModel3) {
 				await Promise.all([
 					loadScript(
@@ -189,9 +200,25 @@
 			}
 
 			win.__pioScriptsLoaded = true;
+			console.log("[Pio] Scripts loaded successfully");
 			setTimeout(initPio, 100);
 		} catch (error) {
 			console.error("[Pio] Failed to load scripts:", error);
+		}
+	}
+
+	// 延迟加载入口：使用 requestIdleCallback 或 setTimeout
+	function scheduleLazyLoad() {
+		const doLoad = () => {
+			if (!isVisible || isLoaded) return;
+			loadPioAssets();
+		};
+
+		// 优先使用 requestIdleCallback，确保在浏览器空闲时加载
+		if ("requestIdleCallback" in window) {
+			requestIdleCallback(doLoad, { timeout: LAZY_LOAD_DELAY });
+		} else {
+			lazyLoadTimeout = setTimeout(doLoad, LAZY_LOAD_DELAY);
 		}
 	}
 
@@ -228,9 +255,9 @@
 			return;
 		}
 
-		// 分辨率满足条件，加载 Live2D
+		// 分辨率满足条件，延迟加载 Live2D（确保 LCP 完成）
 		shouldRender = true;
-		loadPioAssets();
+		scheduleLazyLoad();
 		setupSwupHooks();
 
 		// 设置分辨率监听
@@ -242,6 +269,9 @@
 		cleanupResizeListener();
 		swupCleanupFns.forEach((fn) => fn());
 		swupCleanupFns = [];
+		if (lazyLoadTimeout) {
+			clearTimeout(lazyLoadTimeout);
+		}
 	});
 
 	function setupSwupHooks() {
@@ -267,7 +297,10 @@
 			swupCleanupFns.push(() => {
 				if ((window as any).swup?.hooks) {
 					(window as any).swup.hooks.off("visit:start", hideDialog);
-					(window as any).swup.hooks.off("animation:out:start", hideDialog);
+					(window as any).swup.hooks.off(
+						"animation:out:start",
+						hideDialog,
+					);
 				}
 			});
 			return true;

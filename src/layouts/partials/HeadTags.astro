@@ -44,6 +44,39 @@ const keywords = siteConfig.keywords;
 // Favicons
 const favicons: Favicon[] =
 	siteConfig.favicon.length > 0 ? siteConfig.favicon : defaultFavicons;
+
+// 获取 LCP 预加载图片 URL
+const getLcpPreloadImages = (): { desktop?: string; mobile?: string } => {
+	const src = siteConfig.banner.src;
+	if (!src) return {};
+
+	const result: { desktop?: string; mobile?: string } = {};
+
+	if (typeof src === "string") {
+		result.desktop = src;
+	} else if (Array.isArray(src)) {
+		result.desktop = src[0];
+	} else if (src && typeof src === "object") {
+		const desktopSrc = src.desktop;
+		const mobileSrc = src.mobile;
+
+		if (typeof desktopSrc === "string") {
+			result.desktop = desktopSrc;
+		} else if (Array.isArray(desktopSrc) && desktopSrc.length > 0) {
+			result.desktop = desktopSrc[0];
+		}
+
+		if (typeof mobileSrc === "string") {
+			result.mobile = mobileSrc;
+		} else if (Array.isArray(mobileSrc) && mobileSrc.length > 0) {
+			result.mobile = mobileSrc[0];
+		}
+	}
+
+	return result;
+};
+
+const lcpImages = getLcpPreloadImages();
 ---
 
 <!-- SEO Meta Tags -->
@@ -79,6 +112,30 @@ const favicons: Favicon[] =
 <!-- Viewport and Generator -->
 <meta name="viewport" content="width=device-width" />
 <meta name="generator" content={Astro.generator} />
+
+<!-- Preload LCP Images for faster rendering -->
+{
+	lcpImages.mobile && (
+		<link
+			rel="preload"
+			as="image"
+			href={lcpImages.mobile}
+			media="(max-width: 767px)"
+			fetchpriority="high"
+		/>
+	)
+}
+{
+	lcpImages.desktop && (
+		<link
+			rel="preload"
+			as="image"
+			href={lcpImages.desktop}
+			media="(min-width: 768px)"
+			fetchpriority="high"
+		/>
+	)
+}
 
 <!-- Favicons -->
 {
