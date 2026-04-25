@@ -24,6 +24,9 @@
 
 	function getAssetPath(path: string): string {
 		if (path.startsWith("http://") || path.startsWith("https://")) {
+			if (path.includes("126.net")) {
+				return path + "?param=128y128";
+			}
 			return path;
 		}
 		if (path.startsWith("/")) {
@@ -95,8 +98,7 @@
 		<img
 			src={getAssetPath(cover)}
 			alt={i18n(Key.musicPlayerCover)}
-			loading="eager"
-			fetchpriority="high"
+			loading="lazy"
 			class="w-full h-full object-cover transition-transform duration-300"
 			class:spinning={isPlaying && !isLoading}
 			class:animate-pulse={isLoading}
@@ -124,8 +126,7 @@
 		<img
 			src={getAssetPath(cover)}
 			alt={i18n(Key.musicPlayerCover)}
-			loading="eager"
-			fetchpriority="high"
+			loading="lazy"
 			class="w-full h-full object-cover transition-transform duration-300"
 			class:spinning={isPlaying && !isLoading}
 			class:animate-pulse={isLoading}

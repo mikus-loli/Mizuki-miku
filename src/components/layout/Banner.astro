@@ -107,8 +107,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 						position={siteConfig.banner.position}
 						widths={[640, 1024, 1536]}
 						sizes="100vw"
-						loading="eager"
-						fetchpriority="high"
+						loading="lazy"
 					/>
 				</template>
 			))}
@@ -138,8 +137,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 						position={siteConfig.banner.position}
 						widths={[1024, 1536, 2048, 2560]}
 						sizes="100vw"
-						loading="eager"
-						fetchpriority="high"
+						loading="lazy"
 					/>
 				</template>
 			))}
