@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-04-21T19:05:20.920Z</updated>
+  <updated>2026-04-25T05:46:16.442Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Komari Mikus 主题</title>
@@ -1050,26 +1050,69 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
     <updated>2026-01-15T00:00:00.000Z</updated>
     <summary>mikus自建的Meting API</summary>
     <content type="html"><![CDATA[<h1>Meting API</h1>
-<p>Meting API地址:https://meting.mikus.ink</p>
-<h1>接口用法</h1>
+<p>Meting API地址: https://meting.mikus.ink</p>
 <h2>API 参数</h2>
 <h3>服务器地址 (server)</h3>
 <p>支持的音乐源服务器：</p>
 <ul>
-<li>netease - 网易云音乐</li>
-<li>tencent - QQ音乐</li>
-<li>kugou - 酷狗音乐</li>
-<li>xiami - 虾米音乐</li>
-<li>baidu - 百度音乐</li>
+<li><code>netease</code> - 网易云音乐</li>
+<li><code>tencent</code> - QQ音乐</li>
 </ul>
 <h3>获取类型 (type)</h3>
-<p>支持的数据获取类型：</p>
-<ul>
-<li>playlist - 歌单</li>
-<li>song - 单曲</li>
-<li>album - 专辑</li>
-<li>artist - 艺术家</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>网易云</th>
+<th>QQ音乐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>song</td>
+<td>单曲信息</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>playlist</td>
+<td>歌单</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>artist</td>
+<td>歌手歌曲</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>search</td>
+<td>搜索</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>url</td>
+<td>播放链接</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>lrc</td>
+<td>歌词</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>pic</td>
+<td>封面图片</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
 <h3>资源ID (id)</h3>
 <p>对应获取类型的唯一标识符：</p>
 <ul>
@@ -1084,32 +1127,38 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
 </code></pre>
 <p>其中：</p>
 <ul>
-<li>api_base_url - API 基础URL</li>
-<li>server - 音乐源服务器</li>
-<li>type - 获取类型</li>
-<li>id - 资源ID</li>
-<li>auth - 认证参数（通常为空）</li>
-<li>r - 随机数（用于防止缓存，通常是时间戳）</li>
+<li><code>api_base_url</code> - API 基础URL</li>
+<li><code>server</code> - 音乐源服务器</li>
+<li><code>type</code> - 获取类型</li>
+<li><code>id</code> - 资源ID</li>
+<li><code>auth</code> - 认证参数（通常为空）</li>
+<li><code>r</code> - 随机数（用于防止缓存，通常是时间戳）</li>
 </ul>
-<h2>举个栗子</h2>
-<p>假设我们要获取网易云音乐的歌单ID为12990345596的歌单信息。
-我们可以使用以下URL：</p>
-<pre><code>https://meting.mikus.ink/api?server=netease&amp;type=playlist&amp;id=12990345596&amp;auth=&amp;r=1674633600000
-</code></pre>
-<p>其中：</p>
+<h2>响应格式</h2>
 <ul>
-<li>server=netease 表示使用网易云音乐服务器</li>
-<li>type=playlist 表示获取歌单信息</li>
-<li>id=12990345596 表示歌单ID为12990345596</li>
-<li>auth= 表示认证参数为空 （可选 ）</li>
-<li>r=1674633600000 表示随机数为1674633600000（16位时间戳）(可选,不加好像也行QAQ)</li>
+<li><code>type=url</code>：以 <code>@</code> 开头返回纯文本，否则 302 重定向到音频 URL</li>
+<li><code>type=pic</code>：302 重定向到图片 URL</li>
+<li><code>type=lrc</code>：返回纯文本歌词（含翻译合并）</li>
+<li>其他类型：返回 JSON 数组</li>
 </ul>
+<h2>使用示例</h2>
+<h3>获取歌单信息</h3>
+<pre><code>https://meting.mikus.ink/api?server=netease&amp;type=playlist&amp;id=7326220404
+</code></pre>
+<h3>获取单曲信息</h3>
+<pre><code>https://meting.mikus.ink/api?server=tencent&amp;type=song&amp;id=004Yi5BD3ksoAN
+</code></pre>
+<h3>获取播放链接</h3>
+<pre><code>https://meting.mikus.ink/api?server=netease&amp;type=url&amp;id=22704470
+</code></pre>
+<h3>获取歌词</h3>
+<pre><code>https://meting.mikus.ink/api?server=tencent&amp;type=lrc&amp;id=004Yi5BD3ksoAN
+</code></pre>
 <p>:::caution[注意]</p>
 <ol>
 <li>仅用于个人学习和研究使用，禁止违法用途</li>
 <li>请勿滥用，否则可能会被限制访问或封禁 IP</li>
-<li>若有疑问或建议，可通过博客评论区或邮箱联系博主
-:::</li>
+<li>若有疑问或建议，可通过博客评论区或邮箱联系博主</li>
 </ol>
 ]]></content>
     <author>
