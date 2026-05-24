@@ -87,8 +87,8 @@ importers:
         specifier: ^7.0.2
         version: 7.1.0
       oddmisc:
-        specifier: ^1.1.4
-        version: 1.1.5
+        specifier: ^1.2.5
+        version: 1.2.5
       overlayscrollbars:
         specifier: ^2.14.0
         version: 2.14.0
@@ -4964,8 +4964,8 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  oddmisc@1.1.5:
-    resolution: {integrity: sha512-RXYv9mjAFNdew3Kkj6jfCJoroJBc+CZq4r6eroJFZjW9ctXa0BRNSrdukGBFNjDJ0aLY8ze4B6iA62H+aG/4EA==}
+  oddmisc@1.2.5:
+    resolution: {integrity: sha512-FbTIyYm825JWArqiEvZrtWjJe1rCi6Pk4Bxjt6gScsE6TlvhMaQ2L0VWtRzZLuWo/JCcehmirClaxUgTE2Rssg==}
 
   ofetch@1.5.1:
     resolution: {integrity: sha512-2W4oUZlVaqAPAil6FUg/difl6YhqhUR7x2eZY4bQCko22UXg3hptq9KLQdqFClV+Wu85UX7hNtdGTngi/1BxcA==}
@@ -6327,8 +6327,8 @@ packages:
   third-party-web@0.26.7:
     resolution: {integrity: sha512-buUzX4sXC4efFX6xg2bw6/eZsCUh8qQwSavC4D9HpONMFlRbcHhD8Je5qwYdCpViR6q0qla2wPP+t91a2vgolg==}
 
-  third-party-web@0.29.0:
-    resolution: {integrity: sha512-nBDSJw5B7Sl1YfsATG2XkW5qgUPODbJhXw++BKygi9w6O/NKS98/uY/nR/DxDq2axEjL6halHW1v+jhm/j1DBQ==}
+  third-party-web@0.29.2:
+    resolution: {integrity: sha512-fegtha91tq2DHphyoiBXVHjVi2YG9zFaRnboT9C28tO1en9Y3wJsfspuy40F+u5wl3hHVbw7cnd1b67kEGHb8g==}
 
   through2-filter@3.0.0:
     resolution: {integrity: sha512-jaRjI2WxN3W1V8/FMZ9HKIBXixtiqs3SQSX4/YGIiP3gL6djW48VoZq9tDqeCWs3MT8YY5wb/zli8VW8snY1CA==}
@@ -8489,7 +8489,7 @@ snapshots:
   '@paulirish/trace_engine@0.0.53':
     dependencies:
       legacy-javascript: 0.0.1
-      third-party-web: 0.29.0
+      third-party-web: 0.29.2
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -12737,7 +12737,7 @@ snapshots:
 
   obug@2.1.1: {}
 
-  oddmisc@1.1.5: {}
+  oddmisc@1.2.5: {}
 
   ofetch@1.5.1:
     dependencies:
@@ -14421,7 +14421,7 @@ snapshots:
 
   third-party-web@0.26.7: {}
 
-  third-party-web@0.29.0: {}
+  third-party-web@0.29.2: {}
 
   through2-filter@3.0.0:
     dependencies:
