@@ -1,6 +1,16 @@
 User-agent: *
 Disallow: /
 Allow: /$
+Allow: /about/
+Allow: /albums/
+Allow: /anime/
+Allow: /archive/
+Allow: /devices/
+Allow: /diary/
+Allow: /friends/
 Allow: /posts/
+Allow: /projects/
+Allow: /skills/
+Allow: /timeline/
 
 Sitemap: https://mikus.ink/sitemap-index.xml

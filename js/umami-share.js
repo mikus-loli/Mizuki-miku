@@ -1,3 +1,8 @@
+/**
+ * 安全警告：此脚本暴露 API Key 在客户端。
+ * 仅应在受信任的环境中使用，且 API Key 应具有最小权限（只读）。
+ * 生产环境中建议通过服务端代理 API 请求，避免在客户端暴露凭证。
+ */
 ((global) => {
 	const cacheKey = "umami-share-cache";
 	const cacheTTL = 60000; // 1min

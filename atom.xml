@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>mikus</title>
-  <subtitle>Ciallo～(∠・ω< )⌒☆</subtitle>
+  <subtitle>Ciallo～(∠・ω&lt; )⌒☆</subtitle>
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-05-24T11:53:37.363Z</updated>
+  <updated>2026-05-26T06:26:54.647Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Komari Mikus 主题</title>
@@ -24,7 +24,6 @@
 <li>📡 <strong>WebSocket 实时监控</strong> - 实时数据更新</li>
 <li>📱 <strong>响应式设计</strong> - 完美适配各种设备</li>
 <li>🏳️ <strong>国旗图标</strong> - 支持全球国家和地区旗帜显示</li>
-<li>🏳️ <strong>系统图标</strong> -  支持大部分系统图标显示</li>
 </ul>
 <h2>安装</h2>
 <ol>
