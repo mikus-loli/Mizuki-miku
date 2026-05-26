@@ -79,23 +79,32 @@ export function observeCLS(callback: MetricCallback): () => void {
 		}
 	}, 1000);
 
-	// 最终上报
+	// 最终上报：保存引用以便清理
+	let snoopObserver: PerformanceObserver | null = null;
 	const snoopOnPreviousEntries = () => {
 		clsEntries = [];
-		new PerformanceObserver((list) => {
+		if (snoopObserver) {
+			snoopObserver.disconnect();
+		}
+		snoopObserver = new PerformanceObserver((list) => {
 			for (const entry of list.getEntries()) {
 				const layoutShift = entry as LayoutShift;
 				if (!layoutShift.hadRecentInput) {
 					clsEntries.push(layoutShift);
 				}
 			}
-		}).observe({ type: "layout-shift", buffered: true });
+		});
+		snoopObserver.observe({ type: "layout-shift", buffered: true });
 	};
 
 	// 返回清理函数
 	return () => {
 		clearInterval(intervalId);
 		observer.disconnect();
+		if (snoopObserver) {
+			snoopObserver.disconnect();
+			snoopObserver = null;
+		}
 		snoopOnPreviousEntries();
 	};
 }

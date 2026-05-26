@@ -24,7 +24,13 @@ export function getTranslation(lang: string): Translation {
 	return map[lang.toLowerCase()] || defaultTranslation;
 }
 
-export function i18n(key: I18nKey): string {
+export function i18n(key: I18nKey, params?: Record<string, string | number>): string {
 	const lang = siteConfig.lang || "en";
-	return getTranslation(lang)[key];
+	let text = getTranslation(lang)[key];
+	if (params) {
+		for (const [k, v] of Object.entries(params)) {
+			text = text.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
+		}
+	}
+	return text;
 }

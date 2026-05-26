@@ -99,7 +99,7 @@ const stats = [
 		icon: "material-symbols:calendar-clock-outline",
 		label: i18n(I18nKey.siteStatsRunningDays),
 		value: 0, // 将由客户端更新
-		suffix: i18n(I18nKey.siteStatsDays).replace("{days}", ""),
+		suffix: i18n(I18nKey.siteStatsDays, { days: "" }),
 		dynamic: true,
 		id: "running-days",
 	},
@@ -107,7 +107,7 @@ const stats = [
 		icon: "material-symbols:ecg-heart-outline",
 		label: i18n(I18nKey.siteStatsLastUpdate),
 		value: 0, // 将由客户端更新
-		suffix: i18n(I18nKey.siteStatsDaysAgo).replace("{days}", ""),
+		suffix: i18n(I18nKey.siteStatsDaysAgo, { days: "" }),
 		dynamic: true,
 		id: "last-update",
 	},

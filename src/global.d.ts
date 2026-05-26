@@ -72,6 +72,7 @@ declare global {
 			onLoad: (callback: () => void) => void;
 			isLoaded: boolean;
 			isLoading: boolean;
+			preloadIcons: (icons: string[]) => Promise<void>;
 		};
 		__iconifyLoaderInitialized?: boolean;
 		__pioInstance?: unknown;
@@ -91,6 +92,13 @@ declare global {
 		__mizukiRightSidebarResizeHandler?: () => void;
 		__mizukiRightSidebarSwupHooked?: boolean;
 		__mizukiRightSidebarManagerInitialized?: boolean;
+
+		panelManager?: any;
+		themeOptimizer?: any;
+		CodeBlockCollapser?: any;
+		codeBlockCollapser?: any;
+		rightSidebarLayout?: any;
+		sakuraInitialized?: boolean;
 	}
 
 	interface Fancybox {

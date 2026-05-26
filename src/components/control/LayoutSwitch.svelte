@@ -7,22 +7,28 @@
 
 	type LayoutMode = "list" | "grid";
 
-	export let currentLayout: LayoutMode = "list";
+	interface Props {
+		currentLayout?: LayoutMode;
+	}
 
-	let mounted = false;
-	let isSmallScreen = false;
-	let isSwitching = false;
-	let userPreference: LayoutMode = "list";
+	const { currentLayout: _currentLayout = "list" }: Props = $props();
+
+	let mounted = $state(false);
+	let isSmallScreen = $state(false);
+	let isSwitching = $state(false);
+	let userPreference = $state<LayoutMode>(_currentLayout);
 	let mediaQueryList: MediaQueryList | null = null;
 
 	const BREAKPOINT =
 		sidebarLayoutConfig.responsive?.breakpoints?.desktop ?? 1280;
 
-	$: currentLayout = isSmallScreen ? "list" : userPreference;
+	const currentLayout = $derived(isSmallScreen ? "list" : userPreference);
 
-	$: if (mounted) {
-		dispatchLayoutChange(currentLayout);
-	}
+	$effect(() => {
+		if (mounted) {
+			dispatchLayoutChange(currentLayout);
+		}
+	});
 
 	function dispatchLayoutChange(layout: LayoutMode) {
 		if (typeof window !== "undefined") {
@@ -172,7 +178,7 @@
 		class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90 flex items-center justify-center theme-switch-btn {isSwitching
 			? 'switching'
 			: ''}"
-		on:click={switchLayout}
+		onclick={switchLayout}
 		disabled={isSwitching}
 		title={userPreference === "list"
 			? i18n(I18nKey.switchToGridMode)
@@ -180,7 +186,7 @@
 	>
 		<div
 			class="icon-container w-5 h-5 flex items-center justify-center relative"
-			on:animationend={onAnimationEnd}
+			onanimationend={onAnimationEnd}
 		>
 			{#if userPreference === "list"}
 				<svg

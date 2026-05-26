@@ -41,13 +41,13 @@ export function navigateToPage(
 	}
 
 	// 检查 Swup 是否可用
-	if (typeof window !== "undefined" && (window as any).swup) {
+	if (typeof window !== "undefined" && window.swup) {
 		try {
 			// 使用 Swup 进行无刷新跳转
 			if (options?.replace) {
-				(window as any).swup.navigate(url, { history: false });
+				window.swup.navigate?.(url, { history: false });
 			} else {
-				(window as any).swup.navigate(url);
+				window.swup.navigate?.(url);
 			}
 		} catch (error) {
 			console.error("Swup navigation failed:", error);
@@ -82,7 +82,7 @@ function fallbackNavigation(
  * 检查 Swup 是否已准备就绪
  */
 export function isSwupReady(): boolean {
-	return typeof window !== "undefined" && !!(window as any).swup;
+	return typeof window !== "undefined" && !!window.swup;
 }
 
 /**
@@ -127,9 +127,9 @@ export function preloadPage(url: string): void {
 	}
 
 	// 如果 Swup 可用，使用其预加载功能
-	if (isSwupReady() && (window as any).swup.preload) {
+	if (isSwupReady() && window.swup?.preload) {
 		try {
-			(window as any).swup.preload(url);
+			window.swup.preload(url);
 		} catch (error) {
 			console.warn("Failed to preload page:", error);
 		}
@@ -259,14 +259,4 @@ export function isPostPage(): boolean {
 	return path.startsWith("/posts/");
 }
 
-/**
- * 检查两个路径是否相等
- */
-export function pathsEqual(path1: string, path2: string): boolean {
-	// 标准化路径（移除末尾斜杠）
-	const normalize = (path: string) => {
-		return path.endsWith("/") && path.length > 1 ? path.slice(0, -1) : path;
-	};
 
-	return normalize(path1) === normalize(path2);
-}

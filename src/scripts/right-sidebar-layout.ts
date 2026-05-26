@@ -1,13 +1,21 @@
 // 右侧边栏布局管理器
 // 用于在网格模式下隐藏右侧边栏
 
+import { SIDEBAR_WIDTH } from "../constants/constants";
+
+interface LayoutChangeEvent extends CustomEvent {
+	detail: {
+		layout: string;
+	};
+}
+
 /**
  * 初始化页面布局
- * @param {string} pageType - 页面类型（projects, skills等）
+ * @param pageType - 页面类型（projects, skills等）
  */
-function initPageLayout(pageType) {
+function initPageLayout(pageType: string): void {
 	// 获取布局配置
-	const defaultPostListLayout =
+	const defaultPostListLayout: string =
 		localStorage.getItem("postListLayout") || "list";
 
 	// 如果默认布局是网格模式，则隐藏右侧边栏
@@ -18,17 +26,17 @@ function initPageLayout(pageType) {
 	}
 
 	// 监听布局切换事件
-	window.addEventListener("layoutChange", (event) => {
-		const layout = event.detail.layout;
+	window.addEventListener("layoutChange", ((event: LayoutChangeEvent) => {
+		const layout: string = event.detail.layout;
 		if (layout === "grid") {
 			hideRightSidebar();
 		} else {
 			showRightSidebar();
 		}
-	});
+	}) as EventListener);
 
 	// 监听本地存储变化（用于跨标签页同步）
-	window.addEventListener("storage", (event) => {
+	window.addEventListener("storage", ((event: StorageEvent) => {
 		if (event.key === "postListLayout") {
 			if (event.newValue === "grid") {
 				hideRightSidebar();
@@ -36,12 +44,12 @@ function initPageLayout(pageType) {
 				showRightSidebar();
 			}
 		}
-	});
+	}) as EventListener);
 
 	// 监听页面导航事件
 	document.addEventListener("astro:page-load", () => {
 		setTimeout(() => {
-			const currentLayout =
+			const currentLayout: string =
 				localStorage.getItem("postListLayout") || "list";
 			if (currentLayout === "grid") {
 				hideRightSidebar();
@@ -54,7 +62,7 @@ function initPageLayout(pageType) {
 	// 监听SWUP导航事件
 	document.addEventListener("swup:contentReplaced", () => {
 		setTimeout(() => {
-			const currentLayout =
+			const currentLayout: string =
 				localStorage.getItem("postListLayout") || "list";
 			if (currentLayout === "grid") {
 				hideRightSidebar();
@@ -68,8 +76,8 @@ function initPageLayout(pageType) {
 /**
  * 隐藏右侧边栏
  */
-function hideRightSidebar() {
-	const rightSidebar = document.querySelector(".right-sidebar-container");
+function hideRightSidebar(): void {
+	const rightSidebar = document.querySelector(".right-sidebar-container") as HTMLElement | null;
 	if (rightSidebar) {
 		// 添加隐藏类
 		rightSidebar.classList.add("hidden-in-grid-mode");
@@ -78,9 +86,9 @@ function hideRightSidebar() {
 		rightSidebar.style.display = "none";
 
 		// 调整主网格布局
-		const mainGrid = document.getElementById("main-grid");
+		const mainGrid = document.getElementById("main-grid") as HTMLElement | null;
 		if (mainGrid) {
-			mainGrid.style.gridTemplateColumns = "17.5rem 1fr";
+			mainGrid.style.gridTemplateColumns = `${SIDEBAR_WIDTH} 1fr`;
 			mainGrid.setAttribute("data-layout-mode", "grid");
 		}
 	}
@@ -89,8 +97,8 @@ function hideRightSidebar() {
 /**
  * 显示右侧边栏
  */
-function showRightSidebar() {
-	const rightSidebar = document.querySelector(".right-sidebar-container");
+function showRightSidebar(): void {
+	const rightSidebar = document.querySelector(".right-sidebar-container") as HTMLElement | null;
 	if (rightSidebar) {
 		// 移除隐藏类
 		rightSidebar.classList.remove("hidden-in-grid-mode");
@@ -99,7 +107,7 @@ function showRightSidebar() {
 		rightSidebar.style.display = "";
 
 		// 恢复主网格布局
-		const mainGrid = document.getElementById("main-grid");
+		const mainGrid = document.getElementById("main-grid") as HTMLElement | null;
 		if (mainGrid) {
 			mainGrid.style.gridTemplateColumns = "";
 			mainGrid.setAttribute("data-layout-mode", "list");
@@ -108,8 +116,8 @@ function showRightSidebar() {
 }
 
 // 页面加载完成后初始化
-function initialize() {
-	const pageType =
+function initialize(): void {
+	const pageType: string =
 		document.documentElement.getAttribute("data-page-type") || "projects";
 	initPageLayout(pageType);
 }
@@ -131,7 +139,7 @@ if (typeof module !== "undefined" && module.exports) {
 
 // 同时也挂载到 window 对象，以便在浏览器环境中直接调用
 if (typeof window !== "undefined") {
-	window.rightSidebarLayout = {
+	(window as any).rightSidebarLayout = {
 		initPageLayout,
 		hideRightSidebar,
 		showRightSidebar,

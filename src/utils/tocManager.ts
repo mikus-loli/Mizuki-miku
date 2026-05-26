@@ -424,7 +424,3 @@ export class TOCManager {
 		this.updateActiveState();
 	}
 }
-
-export function isPostPage(): boolean {
-	return window.location.pathname.includes("/posts/");
-}

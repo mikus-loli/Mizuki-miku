@@ -12,7 +12,33 @@
  * - 使用 content-visibility 隐藏屏幕外元素
  */
 
+interface HiddenElementInfo {
+	element: HTMLElement;
+	originalVisibility: string;
+}
+
+interface CompositedElementInfo {
+	element: HTMLElement;
+	original: string;
+}
+
 class ThemeOptimizer {
+	// 代码块优化相关
+	visibleBlocks: Set<Element>;
+	pendingThemeUpdate: string | null;
+	codeBlockObserver: IntersectionObserver | null;
+	hideCodeBlocksDuringTransition: boolean;
+
+	// 性能优化相关
+	isOptimizing: boolean;
+	heavySelectors: string[];
+	useViewTransition: boolean;
+
+	// 临时状态
+	tempStyleSheet: HTMLStyleElement | null;
+	hiddenElements: HiddenElementInfo[] | null;
+	compositedElements: CompositedElementInfo[] | null;
+
 	constructor() {
 		// 代码块优化相关
 		this.visibleBlocks = new Set();
@@ -37,11 +63,17 @@ class ThemeOptimizer {
 			".post-card",
 			".custom-md",
 		];
+		this.useViewTransition = false;
+
+		// 临时状态
+		this.tempStyleSheet = null;
+		this.hiddenElements = null;
+		this.compositedElements = null;
 
 		this.init();
 	}
 
-	init() {
+	init(): void {
 		// 从配置中初始化
 		this.initFromConfig();
 
@@ -63,12 +95,12 @@ class ThemeOptimizer {
 
 	// ==================== Swup 钩子设置 ====================
 
-	setupSwupHooks() {
+	setupSwupHooks(): void {
 		// 设置 Swup 钩子的函数
-		const setupHooks = () => {
-			if (window.swup) {
+		const setupHooks = (): boolean => {
+			if ((window as any).swup) {
 				// 监听 page:view 事件
-				window.swup.hooks.on("page:view", () => {
+				(window as any).swup.hooks.on("page:view", () => {
 					// 页面切换后重新初始化代码块优化
 					setTimeout(() => {
 						this.observeCodeBlocks();
@@ -79,7 +111,7 @@ class ThemeOptimizer {
 				});
 
 				// 监听 content:replace 事件（更早触发）
-				window.swup.hooks.on("content:replace", () => {
+				(window as any).swup.hooks.on("content:replace", () => {
 					// 内容替换时也重新应用代码块过渡行为
 					setTimeout(() => {
 						this.applyCodeBlockTransitionBehavior();
@@ -101,7 +133,7 @@ class ThemeOptimizer {
 			});
 
 			// 额外的延迟重试机制，确保捕获到 Swup
-			const retryInterval = setInterval(() => {
+			const retryInterval: ReturnType<typeof setInterval> = setInterval(() => {
 				if (setupHooks()) {
 					clearInterval(retryInterval);
 				}
@@ -114,51 +146,54 @@ class ThemeOptimizer {
 		}
 	}
 
-	forceApplyThemeTransitionStyles() {
+	forceApplyThemeTransitionStyles(): void {
 		// 强制应用主题切换样式，确保在页面切换后也能正确工作
 		const codeBlocks = document.querySelectorAll(".expressive-code");
 
-		codeBlocks.forEach((block) => {
+		codeBlocks.forEach((block: Element) => {
+			const htmlBlock = block as HTMLElement;
 			// 确保代码块有正确的类
 			if (this.hideCodeBlocksDuringTransition) {
-				block.classList.add("hide-during-transition");
+				htmlBlock.classList.add("hide-during-transition");
 			} else {
-				block.classList.remove("hide-during-transition");
+				htmlBlock.classList.remove("hide-during-transition");
 			}
 
 			// 强制重新计算样式
-			void block.offsetWidth;
+			void htmlBlock.offsetWidth;
 		});
 
 		// 检查当前是否处于主题切换状态
-		const isTransitioning = document.documentElement.classList.contains(
+		const isTransitioning: boolean = document.documentElement.classList.contains(
 			"is-theme-transitioning",
 		);
 
 		if (isTransitioning) {
 			// 如果正在切换主题，确保样式立即应用
-			codeBlocks.forEach((block) => {
-				if (block.classList.contains("hide-during-transition")) {
-					block.style.setProperty(
+			codeBlocks.forEach((block: Element) => {
+				const htmlBlock = block as HTMLElement;
+				if (htmlBlock.classList.contains("hide-during-transition")) {
+					htmlBlock.style.setProperty(
 						"content-visibility",
 						"hidden",
 						"important",
 					);
-					block.style.setProperty("opacity", "0.99", "important");
+					htmlBlock.style.setProperty("opacity", "0.99", "important");
 				}
 			});
 		} else {
 			// 如果不在切换状态，确保样式恢复正常
-			codeBlocks.forEach((block) => {
-				block.style.removeProperty("content-visibility");
-				block.style.removeProperty("opacity");
+			codeBlocks.forEach((block: Element) => {
+				const htmlBlock = block as HTMLElement;
+				htmlBlock.style.removeProperty("content-visibility");
+				htmlBlock.style.removeProperty("opacity");
 			});
 		}
 	}
 
 	// ==================== 配置初始化 ====================
 
-	initFromConfig() {
+	initFromConfig(): void {
 		try {
 			// 尝试从配置中获取设置
 			// 检查是否已经有从配置中传递的设置
@@ -177,11 +212,11 @@ class ThemeOptimizer {
 		}
 	}
 
-	applyCodeBlockTransitionBehavior() {
+	applyCodeBlockTransitionBehavior(): void {
 		// 应用代码块在主题切换期间的行为设置
 		const codeBlocks = document.querySelectorAll(".expressive-code");
 
-		codeBlocks.forEach((block) => {
+		codeBlocks.forEach((block: Element) => {
 			if (this.hideCodeBlocksDuringTransition) {
 				// 默认行为：添加类以便在主题切换时隐藏
 				block.classList.add("hide-during-transition");
@@ -195,11 +230,11 @@ class ThemeOptimizer {
 		this.updateTempStyleSheet();
 	}
 
-	updateTempStyleSheet() {
+	updateTempStyleSheet(): void {
 		// 如果临时样式表存在，更新其内容以反映当前设置
 		if (this.tempStyleSheet) {
 			// 获取当前内容
-			let content = this.tempStyleSheet.textContent;
+			let content: string | null = this.tempStyleSheet.textContent;
 
 			// 更新代码块隐藏规则
 			const hideRule = `.is-theme-transitioning .expressive-code {
@@ -215,7 +250,7 @@ class ThemeOptimizer {
       }`;
 
 			// 检查是否已存在这些规则，如果不存在则添加
-			if (!content.includes(".is-theme-transitioning .expressive-code")) {
+			if (content && !content.includes(".is-theme-transitioning .expressive-code")) {
 				content += "\n" + hideRule + "\n" + showRule;
 				this.tempStyleSheet.textContent = content;
 			}
@@ -224,11 +259,11 @@ class ThemeOptimizer {
 
 	// ==================== 代码块优化 ====================
 
-	initCodeBlockOptimization() {
+	initCodeBlockOptimization(): void {
 		// 创建 Intersection Observer 追踪可见代码块
 		this.codeBlockObserver = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
+			(entries: IntersectionObserverEntry[]) => {
+				entries.forEach((entry: IntersectionObserverEntry) => {
 					if (entry.isIntersecting) {
 						this.visibleBlocks.add(entry.target);
 						// 如果有待处理的主题更新，立即应用
@@ -256,20 +291,20 @@ class ThemeOptimizer {
 		this.setupThemeListener();
 
 		// 页面变化时重新观察
-		if (window.swup) {
-			window.swup.hooks.on("page:view", () => {
+		if ((window as any).swup) {
+			(window as any).swup.hooks.on("page:view", () => {
 				setTimeout(() => this.observeCodeBlocks(), 100);
 			});
 		}
 	}
 
-	observeCodeBlocks() {
+	observeCodeBlocks(): void {
 		this.visibleBlocks.clear();
 
 		requestAnimationFrame(() => {
 			const codeBlocks = document.querySelectorAll(".expressive-code");
-			codeBlocks.forEach((block) => {
-				this.codeBlockObserver.observe(block);
+			codeBlocks.forEach((block: Element) => {
+				this.codeBlockObserver!.observe(block);
 
 				// 根据配置设置代码块在主题切换时的行为
 				if (this.hideCodeBlocksDuringTransition) {
@@ -281,15 +316,15 @@ class ThemeOptimizer {
 		});
 	}
 
-	setupThemeListener() {
+	setupThemeListener(): void {
 		// 监听 data-theme 属性变化
-		const themeObserver = new MutationObserver((mutations) => {
+		const themeObserver = new MutationObserver((mutations: MutationRecord[]) => {
 			for (const mutation of mutations) {
 				if (
 					mutation.type === "attributes" &&
 					mutation.attributeName === "data-theme"
 				) {
-					const newTheme =
+					const newTheme: string | null =
 						document.documentElement.getAttribute("data-theme");
 					this.handleThemeChange(newTheme);
 					break;
@@ -303,28 +338,28 @@ class ThemeOptimizer {
 		});
 	}
 
-	handleThemeChange(newTheme) {
+	handleThemeChange(newTheme: string | null): void {
 		this.pendingThemeUpdate = newTheme;
 
-		const visibleBlocksArray = Array.from(this.visibleBlocks);
+		const visibleBlocksArray: Element[] = Array.from(this.visibleBlocks);
 
 		if (visibleBlocksArray.length === 0) {
 			return;
 		}
 
 		// 分批更新可见代码块
-		this.batchUpdateBlocks(visibleBlocksArray, newTheme);
+		this.batchUpdateBlocks(visibleBlocksArray, newTheme!);
 	}
 
-	batchUpdateBlocks(blocks, theme) {
-		const batchSize = 3;
-		let currentIndex = 0;
+	batchUpdateBlocks(blocks: Element[], theme: string): void {
+		const batchSize: number = 3;
+		let currentIndex: number = 0;
 
-		const processBatch = () => {
+		const processBatch = (): void => {
 			const batch = blocks.slice(currentIndex, currentIndex + batchSize);
 
 			requestAnimationFrame(() => {
-				batch.forEach((block) => {
+				batch.forEach((block: Element) => {
 					this.applyThemeToBlock(block, theme);
 				});
 
@@ -339,16 +374,16 @@ class ThemeOptimizer {
 		processBatch();
 	}
 
-	applyThemeToBlock(block, theme) {
+	applyThemeToBlock(block: Element, theme: string): void {
 		// 标记该代码块已更新
-		block.dataset.themeUpdated = theme;
+		(block as HTMLElement).dataset.themeUpdated = theme;
 	}
 
 	// ==================== 重型元素优化 ====================
 
-	interceptThemeSwitch() {
+	interceptThemeSwitch(): void {
 		// 监听 class 变化来拦截主题切换
-		const observer = new MutationObserver((mutations) => {
+		const observer = new MutationObserver((mutations: MutationRecord[]) => {
 			for (const mutation of mutations) {
 				if (
 					mutation.type === "attributes" &&
@@ -356,10 +391,10 @@ class ThemeOptimizer {
 					mutation.target === document.documentElement
 				) {
 					const classList = document.documentElement.classList;
-					const isTransitioning = classList.contains(
+					const isTransitioning: boolean = classList.contains(
 						"is-theme-transitioning",
 					);
-					const useViewTransition = classList.contains(
+					const useViewTransition: boolean = classList.contains(
 						"use-view-transition",
 					);
 
@@ -378,7 +413,7 @@ class ThemeOptimizer {
 		});
 	}
 
-	optimizeThemeSwitch(useViewTransition = false) {
+	optimizeThemeSwitch(useViewTransition: boolean = false): void {
 		this.isOptimizing = true;
 		this.useViewTransition = useViewTransition;
 
@@ -397,7 +432,7 @@ class ThemeOptimizer {
 		this.forceCompositing();
 	}
 
-	disableHeavyAnimations() {
+	disableHeavyAnimations(): void {
 		if (!this.tempStyleSheet) {
 			this.tempStyleSheet = document.createElement("style");
 			this.tempStyleSheet.id = "theme-optimizer-temp";
@@ -416,21 +451,21 @@ class ThemeOptimizer {
         transition: none !important;
         animation: none !important;
       }
-      
+
       /* 强制隔离渲染上下文 */
       .is-theme-transitioning .float-panel,
       .is-theme-transitioning .post-card,
       .is-theme-transitioning .widget {
         contain: layout style paint !important;
       }
-      
+
       /* 隐藏装饰性元素 */
       .is-theme-transitioning .gradient-overlay,
       .is-theme-transitioning .decoration,
       .is-theme-transitioning .animation-element {
         visibility: hidden !important;
       }
-      
+
       /* 在主题切换期间临时隐藏代码块以提升性能 */
       /* 这个行为可以通过配置文件中的 expressiveCodeConfig.hideDuringThemeTransition 控制 */
       .is-theme-transitioning .expressive-code {
@@ -438,14 +473,14 @@ class ThemeOptimizer {
         /* 避免闪烁 */
         opacity: 0.99;
       }
-      
+
       /* 当禁用隐藏代码块功能时（通过JavaScript动态控制） */
       .is-theme-transitioning .expressive-code:not(.hide-during-transition) {
         /* 保持代码块可见，但禁用过渡效果 */
         content-visibility: visible !important;
         opacity: 1 !important;
       }
-      
+
       /* 确保打开的TOC面板在主题切换期间保持可点击 */
       .is-theme-transitioning .float-panel:not(.float-panel-closed) {
         pointer-events: auto !important;
@@ -453,33 +488,34 @@ class ThemeOptimizer {
     `;
 	}
 
-	hideOffscreenHeavyElements() {
-		const viewportHeight = window.innerHeight;
-		const scrollTop = window.scrollY;
+	hideOffscreenHeavyElements(): void {
+		const viewportHeight: number = window.innerHeight;
+		const scrollTop: number = window.scrollY;
 
 		this.hiddenElements = [];
 
-		this.heavySelectors.forEach((selector) => {
+		this.heavySelectors.forEach((selector: string) => {
 			const elements = document.querySelectorAll(selector);
-			elements.forEach((element) => {
-				const rect = element.getBoundingClientRect();
-				const elementTop = rect.top + scrollTop;
-				const elementBottom = elementTop + rect.height;
+			elements.forEach((element: Element) => {
+				const htmlElement = element as HTMLElement;
+				const rect = htmlElement.getBoundingClientRect();
+				const elementTop: number = rect.top + scrollTop;
+				const elementBottom: number = elementTop + rect.height;
 
 				// 完全在视口外（增加200px边距）
 				if (
 					elementBottom < scrollTop - 200 ||
 					elementTop > scrollTop + viewportHeight + 200
 				) {
-					const originalVisibility = element.style.contentVisibility;
-					element.style.contentVisibility = "hidden";
-					this.hiddenElements.push({ element, originalVisibility });
+					const originalVisibility: string = htmlElement.style.contentVisibility;
+					htmlElement.style.contentVisibility = "hidden";
+					this.hiddenElements!.push({ element: htmlElement, originalVisibility });
 				}
 			});
 		});
 	}
 
-	forceCompositing() {
+	forceCompositing(): void {
 		const criticalElements = document.querySelectorAll(`
       .expressive-code,
       .post-card,
@@ -489,16 +525,17 @@ class ThemeOptimizer {
 
 		this.compositedElements = [];
 
-		criticalElements.forEach((element) => {
-			const original = element.style.transform;
-			element.style.transform = "translateZ(0)";
-			element.style.willChange = "transform";
+		criticalElements.forEach((element: Element) => {
+			const htmlElement = element as HTMLElement;
+			const original: string = htmlElement.style.transform;
+			htmlElement.style.transform = "translateZ(0)";
+			htmlElement.style.willChange = "transform";
 
-			this.compositedElements.push({ element, original });
+			this.compositedElements!.push({ element: htmlElement, original });
 		});
 	}
 
-	restoreAfterThemeSwitch(useViewTransition = false) {
+	restoreAfterThemeSwitch(useViewTransition: boolean = false): void {
 		this.isOptimizing = false;
 
 		// 如果使用 View Transitions，直接清理即可
@@ -519,7 +556,7 @@ class ThemeOptimizer {
 				// 恢复隐藏的元素
 				if (this.hiddenElements) {
 					this.hiddenElements.forEach(
-						({ element, originalVisibility }) => {
+						({ element, originalVisibility }: HiddenElementInfo) => {
 							element.style.contentVisibility =
 								originalVisibility || "";
 						},
@@ -529,7 +566,7 @@ class ThemeOptimizer {
 
 				// 恢复合成层设置
 				if (this.compositedElements) {
-					this.compositedElements.forEach(({ element, original }) => {
+					this.compositedElements.forEach(({ element, original }: CompositedElementInfo) => {
 						element.style.transform = original || "";
 						element.style.willChange = "";
 					});
@@ -540,7 +577,7 @@ class ThemeOptimizer {
 	}
 
 	// 清理资源
-	destroy() {
+	destroy(): void {
 		if (this.codeBlockObserver) {
 			this.codeBlockObserver.disconnect();
 		}
@@ -552,4 +589,4 @@ class ThemeOptimizer {
 const themeOptimizer = new ThemeOptimizer();
 
 // 导出到全局（统一API）
-window.themeOptimizer = themeOptimizer;
+(window as any).themeOptimizer = themeOptimizer;

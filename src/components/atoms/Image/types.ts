@@ -6,4 +6,7 @@ export interface ImageProps {
 	position?: string;
 	basePath?: string;
 	loading?: "eager" | "lazy";
+	fetchpriority?: "high" | "low" | "auto";
+	widths?: number[];
+	sizes?: string;
 }

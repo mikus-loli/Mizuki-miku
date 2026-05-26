@@ -14,7 +14,7 @@ const relativeTime = formatRelativeTime(
 ---
 
 <div
-	class="moment-card group relative bg-transparent rounded-xl border border-black/10 dark:border-white/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+	class="moment-card card-fade-in-up group relative bg-transparent rounded-xl border border-black/10 dark:border-white/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
 	data-tags={moment.tags?.join(",") || ""}
 >
 	<div class="p-5">
@@ -119,61 +119,8 @@ const relativeTime = formatRelativeTime(
 </div>
 
 <style>
-	.moment-card {
-		animation: fadeInUp 0.5s ease-out forwards;
-		opacity: 0;
-	}
-
 	.moment-card.filtered-out {
 		display: none;
-	}
-
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	.moment-card:nth-child(1) {
-		animation-delay: 0.03s;
-	}
-	.moment-card:nth-child(2) {
-		animation-delay: 0.06s;
-	}
-	.moment-card:nth-child(3) {
-		animation-delay: 0.09s;
-	}
-	.moment-card:nth-child(4) {
-		animation-delay: 0.12s;
-	}
-	.moment-card:nth-child(5) {
-		animation-delay: 0.15s;
-	}
-	.moment-card:nth-child(6) {
-		animation-delay: 0.18s;
-	}
-	.moment-card:nth-child(7) {
-		animation-delay: 0.21s;
-	}
-	.moment-card:nth-child(8) {
-		animation-delay: 0.24s;
-	}
-	.moment-card:nth-child(9) {
-		animation-delay: 0.27s;
-	}
-	.moment-card:nth-child(10) {
-		animation-delay: 0.3s;
-	}
-	.moment-card:nth-child(11) {
-		animation-delay: 0.33s;
-	}
-	.moment-card:nth-child(12) {
-		animation-delay: 0.36s;
 	}
 
 	/* 1 image: large, max-width constrained */

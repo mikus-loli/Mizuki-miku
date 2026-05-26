@@ -1,22 +1,12 @@
 ---
 import path from "node:path";
 
-interface Props {
-	id?: string;
-	src: string;
-	class?: string;
-	alt?: string;
-	position?: string;
-	basePath?: string;
-	loading?: "eager" | "lazy";
-	fetchpriority?: "high" | "low" | "auto";
-	widths?: number[];
-	sizes?: string;
-}
-
 import { Image as AstroImage } from "astro:assets";
 
 import { url } from "../../../utils/url-utils";
+import type { ImageProps } from "./types";
+
+type Props = ImageProps;
 
 const {
 	id,

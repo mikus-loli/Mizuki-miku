@@ -25,7 +25,7 @@
 	};
 
 	const packageName = iconSetMap[collection];
-	let svgContent = "";
+	let svgContent = $state("");
 
 	async function loadIcon() {
 		if (!packageName) {

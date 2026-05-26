@@ -41,7 +41,10 @@ export function getPostUrl(post: {
 	id: string;
 	data: { alias?: string; permalink?: string };
 }): string;
-export function getPostUrl(post: any): string {
+export function getPostUrl(post: {
+	id: string;
+	data: { alias?: string; permalink?: string };
+}): string {
 	// 如果文章有自定义 permalink，优先使用（在根目录下）
 	if (post.data.permalink) {
 		const slug = post.data.permalink
@@ -52,7 +55,7 @@ export function getPostUrl(post: any): string {
 
 	// 如果全局 permalink 功能启用，使用生成的 slug（在根目录下）
 	if (permalinkConfig.enable) {
-		const slug = generatePermalinkSlug(post);
+		const slug = generatePermalinkSlug(post as CollectionEntry<"posts">);
 		return url(`/${slug}/`);
 	}
 

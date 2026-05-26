@@ -118,6 +118,8 @@ export function calculateGridLayout(
 	const initialRightSidebarHidden = defaultPostListLayout === "grid";
 
 	// 动态网格布局类名 - 根据侧边栏模式和是否有组件调整列宽
+	// 注意：Tailwind CSS 4 的扫描器需要完整的类名字符串才能生成对应样式
+	// 因此这里必须使用字符串字面量而非模板字符串拼接
 	let desktopGridCols = "lg:grid-cols-1";
 	if (desktopShowLeftSidebar && desktopShowRightSidebar) {
 		desktopGridCols = "lg:grid-cols-[17.5rem_1fr_17.5rem]";

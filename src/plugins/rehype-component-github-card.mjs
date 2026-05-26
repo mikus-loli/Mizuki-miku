@@ -25,6 +25,14 @@ export function GithubCardComponent(properties, children) {
 	}
 
 	const repo = properties.repo;
+	// 严格验证 repo 格式，只允许字母、数字、连字符、下划线、点号
+	if (!/^[a-zA-Z0-9._-]+\/[a-zA-Z0-9._-]+$/.test(repo)) {
+		return h(
+			"div",
+			{ class: "hidden" },
+			'Invalid repository format. Only alphanumeric characters, hyphens, underscores, and dots are allowed.',
+		);
+	}
 	const cardUuid = `GC${Math.random().toString(36).slice(-6)}`; // Collisions are not important
 
 	const nAvatar = h(`div#${cardUuid}-avatar`, { class: "gc-avatar" });

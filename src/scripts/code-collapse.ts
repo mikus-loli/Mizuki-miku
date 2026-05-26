@@ -1,4 +1,9 @@
 class CodeBlockCollapser {
+	processedBlocks: WeakSet<Element>;
+	observer: MutationObserver | null;
+	isThemeChanging: boolean;
+	debug: boolean;
+
 	constructor() {
 		this.processedBlocks = new WeakSet();
 		this.observer = null;
@@ -7,13 +12,13 @@ class CodeBlockCollapser {
 		this.init();
 	}
 
-	log(...args) {
+	log(...args: unknown[]): void {
 		if (this.debug) {
 			console.log("[CodeBlockCollapser]", ...args);
 		}
 	}
 
-	init() {
+	init(): void {
 		this.log("Initializing...");
 		if (document.readyState === "loading") {
 			document.addEventListener("DOMContentLoaded", () => {
@@ -29,7 +34,7 @@ class CodeBlockCollapser {
 		this.setupThemeOptimizerSync();
 	}
 
-	setupThemeOptimizerSync() {
+	setupThemeOptimizerSync(): void {
 		// 与主题优化器同步，确保代码块的隐藏/显示行为一致
 		this.syncWithThemeOptimizer();
 
@@ -48,16 +53,16 @@ class CodeBlockCollapser {
 		});
 	}
 
-	syncWithThemeOptimizer() {
+	syncWithThemeOptimizer(): void {
 		// 检查主题优化器是否存在
-		if (window.themeOptimizer) {
+		if ((window as any).themeOptimizer) {
 			// 获取当前主题优化器的设置
-			const shouldHideDuringTransition =
-				window.themeOptimizer.hideCodeBlocksDuringTransition;
+			const shouldHideDuringTransition: boolean =
+				(window as any).themeOptimizer.hideCodeBlocksDuringTransition;
 
 			// 应用相同的设置到代码块
 			const codeBlocks = document.querySelectorAll(".expressive-code");
-			codeBlocks.forEach((block) => {
+			codeBlocks.forEach((block: Element) => {
 				if (shouldHideDuringTransition) {
 					block.classList.add("hide-during-transition");
 				} else {
@@ -71,7 +76,7 @@ class CodeBlockCollapser {
 		} else {
 			// 如果主题优化器不存在，应用默认行为
 			const codeBlocks = document.querySelectorAll(".expressive-code");
-			codeBlocks.forEach((block) => {
+			codeBlocks.forEach((block: Element) => {
 				block.classList.add("hide-during-transition");
 			});
 
@@ -79,16 +84,16 @@ class CodeBlockCollapser {
 		}
 	}
 
-	setupThemeChangeListener() {
+	setupThemeChangeListener(): void {
 		// 监听主题切换，在切换期间暂停 observer 和优化性能
-		const themeObserver = new MutationObserver((mutations) => {
+		const themeObserver = new MutationObserver((mutations: MutationRecord[]) => {
 			for (const mutation of mutations) {
 				if (
 					mutation.type === "attributes" &&
 					(mutation.attributeName === "class" ||
 						mutation.attributeName === "data-theme")
 				) {
-					const isTransitioning =
+					const isTransitioning: boolean =
 						document.documentElement.classList.contains(
 							"is-theme-transitioning",
 						);
@@ -104,8 +109,8 @@ class CodeBlockCollapser {
 						// 性能优化：临时禁用代码块的动画和过渡
 						document
 							.querySelectorAll(".expressive-code")
-							.forEach((block) => {
-								block.style.transition = "none";
+							.forEach((block: Element) => {
+								(block as HTMLElement).style.transition = "none";
 							});
 					} else if (!isTransitioning && this.isThemeChanging) {
 						this.isThemeChanging = false;
@@ -115,8 +120,8 @@ class CodeBlockCollapser {
 							// 恢复代码块的过渡效果
 							document
 								.querySelectorAll(".expressive-code")
-								.forEach((block) => {
-									block.style.transition = "";
+								.forEach((block: Element) => {
+									(block as HTMLElement).style.transition = "";
 								});
 
 							// 重新连接 observer
@@ -136,15 +141,15 @@ class CodeBlockCollapser {
 		});
 	}
 
-	setupCodeBlocks() {
+	setupCodeBlocks(): void {
 		requestAnimationFrame(() => {
 			const codeBlocks = document.querySelectorAll(".expressive-code");
 			this.log(`Found ${codeBlocks.length} code blocks to process`);
 
-			codeBlocks.forEach((codeBlock, index) => {
+			codeBlocks.forEach((codeBlock: Element, index: number) => {
 				if (!this.processedBlocks.has(codeBlock)) {
 					this.log(`Enhancing code block ${index + 1}`);
-					this.enhanceCodeBlock(codeBlock);
+					this.enhanceCodeBlock(codeBlock as HTMLElement);
 					this.processedBlocks.add(codeBlock);
 				} else {
 					this.log(`Code block ${index + 1} already processed`);
@@ -153,7 +158,7 @@ class CodeBlockCollapser {
 		});
 	}
 
-	enhanceCodeBlock(codeBlock) {
+	enhanceCodeBlock(codeBlock: HTMLElement): void {
 		const frame = codeBlock.querySelector(".frame");
 		if (!frame) {
 			this.log("No frame found in code block, skipping");
@@ -174,7 +179,7 @@ class CodeBlockCollapser {
 		this.bindToggleEvents(codeBlock, toggleBtn);
 	}
 
-	createToggleButton() {
+	createToggleButton(): HTMLButtonElement {
 		const button = document.createElement("button");
 		button.className = "collapse-toggle-btn";
 		button.type = "button";
@@ -192,14 +197,14 @@ class CodeBlockCollapser {
 		return button;
 	}
 
-	bindToggleEvents(codeBlock, button) {
-		button.addEventListener("click", (e) => {
+	bindToggleEvents(codeBlock: HTMLElement, button: HTMLButtonElement): void {
+		button.addEventListener("click", (e: MouseEvent) => {
 			e.preventDefault();
 			e.stopPropagation();
 			this.toggleCollapse(codeBlock);
 		});
 
-		button.addEventListener("keydown", (e) => {
+		button.addEventListener("keydown", (e: KeyboardEvent) => {
 			if (e.key === "Enter" || e.key === " ") {
 				e.preventDefault();
 				this.toggleCollapse(codeBlock);
@@ -207,8 +212,8 @@ class CodeBlockCollapser {
 		});
 	}
 
-	toggleCollapse(codeBlock) {
-		const isCollapsed = codeBlock.classList.contains("collapsed");
+	toggleCollapse(codeBlock: HTMLElement): void {
+		const isCollapsed: boolean = codeBlock.classList.contains("collapsed");
 
 		requestAnimationFrame(() => {
 			if (isCollapsed) {
@@ -226,7 +231,7 @@ class CodeBlockCollapser {
 		document.dispatchEvent(event);
 	}
 
-	observePageChanges() {
+	observePageChanges(): void {
 		// 如果正在主题切换，不要重新连接
 		if (this.isThemeChanging) {
 			return;
@@ -237,15 +242,15 @@ class CodeBlockCollapser {
 			this.observer.disconnect();
 		}
 
-		let debounceTimer = null;
+		let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-		this.observer = new MutationObserver((mutations) => {
+		this.observer = new MutationObserver((mutations: MutationRecord[]) => {
 			// 如果正在主题切换，忽略所有变化
 			if (this.isThemeChanging) {
 				return;
 			}
 
-			let shouldReinit = false;
+			let shouldReinit: boolean = false;
 
 			// 外层循环：遍历所有变动
 			for (const mutation of mutations) {
@@ -257,10 +262,11 @@ class CodeBlockCollapser {
 					for (const node of mutation.addedNodes) {
 						// 只检查元素节点 (nodeType 1)
 						if (node.nodeType === Node.ELEMENT_NODE) {
+							const element = node as Element;
 							if (
-								node.classList.contains("expressive-code") ||
-								(node.getElementsByClassName &&
-									node.getElementsByClassName(
+								element.classList.contains("expressive-code") ||
+								(element.getElementsByClassName &&
+									element.getElementsByClassName(
 										"expressive-code",
 									).length > 0)
 							) {
@@ -276,7 +282,7 @@ class CodeBlockCollapser {
 			}
 
 			if (shouldReinit) {
-				clearTimeout(debounceTimer);
+				clearTimeout(debounceTimer!);
 				debounceTimer = setTimeout(() => this.setupCodeBlocks(), 30);
 			}
 		});
@@ -287,7 +293,7 @@ class CodeBlockCollapser {
 		});
 	}
 
-	destroy() {
+	destroy(): void {
 		if (this.observer) {
 			this.observer.disconnect();
 			this.observer = null;
@@ -296,37 +302,37 @@ class CodeBlockCollapser {
 	}
 
 	// 公共API方法
-	collapseAll() {
+	collapseAll(): void {
 		const allBlocks = document.querySelectorAll(
 			".expressive-code.expanded",
 		);
-		allBlocks.forEach((block) => {
-			this.toggleCollapse(block);
+		allBlocks.forEach((block: Element) => {
+			this.toggleCollapse(block as HTMLElement);
 		});
 	}
 
-	expandAll() {
+	expandAll(): void {
 		const allBlocks = document.querySelectorAll(
 			".expressive-code.collapsed",
 		);
-		allBlocks.forEach((block) => {
-			this.toggleCollapse(block);
+		allBlocks.forEach((block: Element) => {
+			this.toggleCollapse(block as HTMLElement);
 		});
 	}
 }
 
 const codeBlockCollapser = new CodeBlockCollapser();
 
-window.CodeBlockCollapser = CodeBlockCollapser;
-window.codeBlockCollapser = codeBlockCollapser;
+(window as any).CodeBlockCollapser = CodeBlockCollapser;
+(window as any).codeBlockCollapser = codeBlockCollapser;
 
 // 设置 Swup 钩子的函数
-function setupSwupHooks() {
-	if (window.swup) {
+function setupSwupHooks(): boolean {
+	if ((window as any).swup) {
 		codeBlockCollapser.log("Setting up Swup hooks");
 
 		// 监听 page:view 事件
-		window.swup.hooks.on("page:view", () => {
+		(window as any).swup.hooks.on("page:view", () => {
 			codeBlockCollapser.log(
 				"Swup page:view event - reinitializing code blocks",
 			);
@@ -338,7 +344,7 @@ function setupSwupHooks() {
 		});
 
 		// 监听 content:replace 事件（更早触发）
-		window.swup.hooks.on("content:replace", () => {
+		(window as any).swup.hooks.on("content:replace", () => {
 			codeBlockCollapser.log(
 				"Swup content:replace event - preparing for reinitialization",
 			);
@@ -366,7 +372,7 @@ if (!setupSwupHooks()) {
 	});
 
 	// 额外的延迟重试机制，确保捕获到 Swup
-	const retryInterval = setInterval(() => {
+	const retryInterval: ReturnType<typeof setInterval> = setInterval(() => {
 		if (setupSwupHooks()) {
 			codeBlockCollapser.log("Swup hooks set up successfully via retry");
 			clearInterval(retryInterval);

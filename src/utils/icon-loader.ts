@@ -14,8 +14,8 @@ interface GlobalIconifyLoader {
 }
 
 function getGlobalLoader(): GlobalIconifyLoader | null {
-	if (typeof window !== "undefined" && (window as any).__iconifyLoader) {
-		return (window as any).__iconifyLoader as GlobalIconifyLoader;
+	if (typeof window !== "undefined" && window.__iconifyLoader) {
+		return window.__iconifyLoader;
 	}
 	return null;
 }

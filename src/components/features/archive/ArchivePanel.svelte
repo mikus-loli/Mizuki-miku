@@ -3,12 +3,6 @@
 	import { i18n } from "@i18n/translation";
 	import { onMount } from "svelte";
 
-	export let tags: string[];
-	export let categories: string[];
-	export let sortedPosts: Post[] = [];
-
-	let uncategorized: string | null = null;
-
 	interface Post {
 		id: string;
 		url?: string;
@@ -27,7 +21,16 @@
 		posts: Post[];
 	}
 
-	let groups: Group[] = [];
+	interface Props {
+		tags: string[];
+		categories: string[];
+		sortedPosts?: Post[];
+	}
+
+	let { tags, categories, sortedPosts = [] }: Props = $props();
+
+	let uncategorized = $state<string | null>(null);
+	let groups = $state<Group[]>([]);
 
 	function formatDate(date: Date) {
 		const month = (date.getMonth() + 1).toString().padStart(2, "0");

@@ -2,6 +2,8 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
+import sanitizeHtml from "sanitize-html";
+
 import { footerConfig, profileConfig } from "../../../config";
 import { url } from "../../../utils/url-utils";
 
@@ -21,11 +23,18 @@ if (footerConfig.enable) {
 				"src",
 				"FooterConfig.html",
 			);
-			customFooterHtml = fs.readFileSync(footerConfigPath, "utf-8");
+			const rawHtml = fs.readFileSync(footerConfigPath, "utf-8");
 			// 移除HTML注释
-			customFooterHtml = customFooterHtml
-				.replace(/<!--[\s\S]*?-->/g, "")
-				.trim();
+			const cleaned = rawHtml.replace(/<!--[\s\S]*?-->/g, "").trim();
+			// 消毒 HTML 防止 XSS
+			customFooterHtml = sanitizeHtml(cleaned, {
+				allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "style"]),
+				allowedAttributes: {
+					...sanitizeHtml.defaults.allowedAttributes,
+					a: ["href", "target", "rel", "style"],
+					img: ["src", "alt", "width", "height", "style"],
+				},
+			});
 		} catch (error) {
 			console.warn("FooterConfig.html文件读取失败:", error.message);
 		}

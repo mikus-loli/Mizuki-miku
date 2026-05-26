@@ -1,3 +1,5 @@
+import { SIDEBAR_WIDTH } from "../constants/constants";
+
 export interface LayoutHandlerOptions {
 	containerId: string;
 	hasRightSidebars: boolean;
@@ -59,7 +61,7 @@ export function initAnimeLayoutHandler(options: LayoutHandlerOptions) {
 				"main-grid",
 			) as HTMLElement | null;
 			if (mainGrid) {
-				mainGrid.style.gridTemplateColumns = "17.5rem 1fr";
+				mainGrid.style.gridTemplateColumns = `${SIDEBAR_WIDTH} 1fr`;
 				mainGrid.classList.add("two-column-layout");
 			}
 		} else {

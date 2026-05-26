@@ -7,6 +7,7 @@
 /* 导入动画样式 */
 @import "./transition.css";
 @import "./animation-enhancements.css";
+@import "./animations.css";
 /* 导入渐变按钮样式 */
 @import "./gradient-buttons.css";
 /* 导入 Banner 和网格布局样式 */
@@ -251,12 +252,7 @@ html {
   }
 
   /* 全屏壁纸模式下的半透明效果 - 使用!important确保优先级 */
-  .wallpaper-transparent .card-base {
-    background: var(--card-bg-transparent) !important;
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
-  }
-
+  .wallpaper-transparent .card-base,
   body.wallpaper-transparent .card-base {
     background: var(--card-bg-transparent) !important;
     backdrop-filter: blur(8px) !important;
@@ -474,7 +470,7 @@ html {
   }
 
   /* 响应式隐藏 */
-  @media (max-width: 768px) {
+  @media (max-width: var(--breakpoint-md, 768px)) {
     .dropdown-container {
       @apply hidden;
     }
@@ -582,13 +578,13 @@ html {
   gap: 1.5rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-md, 768px)) {
   .post-list-container.grid-mode {
     gap: 0.75rem;
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: var(--breakpoint-md, 768px)) {
   .post-list-container.grid-mode {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -632,7 +628,7 @@ html {
   gap: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-md, 768px)) {
   #post-list-container {
     display: flex !important;
     flex-direction: column !important;
@@ -653,7 +649,7 @@ html {
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: calc(var(--breakpoint-md, 768px) + 1px)) {
   .post-list-container.list-mode {
     display: flex !important;
     flex-direction: column;

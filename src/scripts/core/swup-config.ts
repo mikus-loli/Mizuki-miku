@@ -3,10 +3,13 @@
  * 提供页面过渡动画的配置常量和类型定义
  */
 
-// Banner 高度常量
-export const BANNER_HEIGHT = 35;
-export const BANNER_HEIGHT_EXTEND = 30;
-export const BANNER_HEIGHT_HOME = BANNER_HEIGHT + BANNER_HEIGHT_EXTEND;
+import {
+	BANNER_HEIGHT,
+	BANNER_HEIGHT_EXTEND,
+	BANNER_HEIGHT_HOME,
+} from "@constants/constants";
+
+export { BANNER_HEIGHT, BANNER_HEIGHT_EXTEND, BANNER_HEIGHT_HOME };
 
 // 选择器配置
 export const SWUP_SELECTORS = {

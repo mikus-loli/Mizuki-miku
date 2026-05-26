@@ -1,12 +1,7 @@
 ---
-interface Props {
-	href?: string;
-	target?: "_blank" | "_self" | "_parent" | "_top";
-	rel?: string;
-	variant?: "default" | "muted" | "primary";
-	underline?: boolean;
-	class?: string;
-}
+import type { LinkProps } from "./types";
+
+type Props = LinkProps;
 
 const {
 	href = "#",

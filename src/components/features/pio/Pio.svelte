@@ -5,7 +5,11 @@
 
 	import type { PioProps } from "./types";
 
-	export let config: Partial<PioProps["config"]> = {};
+	interface Props {
+		config?: Partial<PioProps["config"]>;
+	}
+
+	const { config = {} }: Props = $props();
 
 	const pioOptions = {
 		mode: config?.mode ?? pioConfig.mode,
@@ -28,12 +32,12 @@
 	// 延迟加载配置：确保页面完全渲染后再加载 PixiJS
 	const LAZY_LOAD_DELAY = 8000;
 
-	let pioContainer: HTMLDivElement | null = null;
-	let pioCanvas: HTMLCanvasElement | null = null;
-	let isLoaded = false;
-	let isVisible = false;
-	let shouldRender = false;
-	let resizeObserver: ResizeObserver | null = null;
+	let pioContainer = $state<HTMLDivElement | null>(null);
+	let pioCanvas = $state<HTMLCanvasElement | null>(null);
+	let isLoaded = $state(false);
+	let isVisible = $state(false);
+	let shouldRender = $state(false);
+	const resizeObserver: ResizeObserver | null = null;
 	let mediaQuery: MediaQueryList | null = null;
 	let initRetryCount = 0;
 	const MAX_INIT_RETRIES = 30;
@@ -90,7 +94,7 @@
 	}
 
 	function initPio() {
-		if (typeof window === "undefined") return;
+		if (typeof window === "undefined") {return;}
 
 		const win = window as any;
 
@@ -148,7 +152,7 @@
 	}
 
 	async function loadPioAssets() {
-		if (typeof window === "undefined") return;
+		if (typeof window === "undefined") {return;}
 
 		const win = window as any;
 
@@ -210,7 +214,7 @@
 	// 延迟加载入口：使用 requestIdleCallback 或 setTimeout
 	function scheduleLazyLoad() {
 		const doLoad = () => {
-			if (!isVisible || isLoaded) return;
+			if (!isVisible || isLoaded) {return;}
 			loadPioAssets();
 		};
 
@@ -260,7 +264,7 @@
 	}
 
 	onMount(() => {
-		if (!pioConfig.enable) return;
+		if (!pioConfig.enable) {return;}
 
 		// 初始检查分辨率
 		isVisible = checkResolution();
@@ -292,7 +296,7 @@
 	});
 
 	function setupSwupHooks() {
-		if (typeof window === "undefined") return;
+		if (typeof window === "undefined") {return;}
 
 		const hideDialog = () => {
 			const win = window as any;
@@ -308,7 +312,7 @@
 
 		const setup = () => {
 			const swup = (window as any).swup;
-			if (!swup?.hooks) return false;
+			if (!swup?.hooks) {return false;}
 			swup.hooks.on("visit:start", hideDialog);
 			swup.hooks.on("animation:out:start", hideDialog);
 			swupCleanupFns.push(() => {

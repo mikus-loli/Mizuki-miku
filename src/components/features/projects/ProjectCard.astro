@@ -25,7 +25,7 @@ const getStatusText = (status: string) => {
 ---
 
 <div
-	class="project-card group relative rounded-xl border border-black/10 dark:border-white/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+	class="project-card card-fade-in-up group relative rounded-xl border border-black/10 dark:border-white/10 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
 	data-category={project.category}
 >
 	{
@@ -144,49 +144,8 @@ const getStatusText = (status: string) => {
 </div>
 
 <style>
-	.project-card {
-		animation: fadeInUp 0.5s ease-out forwards;
-		opacity: 0;
-	}
-
 	.project-card.filtered-out {
 		display: none;
-	}
-
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	.project-card:nth-child(1) {
-		animation-delay: 0.05s;
-	}
-	.project-card:nth-child(2) {
-		animation-delay: 0.1s;
-	}
-	.project-card:nth-child(3) {
-		animation-delay: 0.15s;
-	}
-	.project-card:nth-child(4) {
-		animation-delay: 0.2s;
-	}
-	.project-card:nth-child(5) {
-		animation-delay: 0.25s;
-	}
-	.project-card:nth-child(6) {
-		animation-delay: 0.3s;
-	}
-	.project-card:nth-child(7) {
-		animation-delay: 0.35s;
-	}
-	.project-card:nth-child(8) {
-		animation-delay: 0.4s;
 	}
 
 	.line-clamp-2 {

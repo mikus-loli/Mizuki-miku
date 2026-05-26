@@ -18,5 +18,7 @@ export const WALLPAPER_BANNER = "banner";
 export const WALLPAPER_FULLSCREEN = "fullscreen";
 export const WALLPAPER_NONE = "none";
 
+export const SIDEBAR_WIDTH = "17.5rem";
+
 export const BREAKPOINT_MOBILE = 768;
 export const BREAKPOINT_DESKTOP = 1280;
