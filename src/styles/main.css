@@ -267,16 +267,48 @@ html {
     -webkit-backdrop-filter: blur(8px) !important;
   }
 
+  /* 移动端减少 blur 值提升性能 */
+  @media (max-width: 1279px) {
+    .wallpaper-transparent .card-base,
+    body.wallpaper-transparent .card-base,
+    .wallpaper-transparent .card-base .card-base,
+    body.wallpaper-transparent .card-base .card-base {
+      backdrop-filter: blur(4px) !important;
+      -webkit-backdrop-filter: blur(4px) !important;
+    }
+  }
+
   .wallpaper-transparent .float-panel {
-    @apply bg-(--card-bg-transparent) backdrop-blur-sm;
+    @apply bg-(--card-bg-transparent);
+  }
+
+  @media (min-width: 1280px) {
+    .wallpaper-transparent .float-panel {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   }
 
   .wallpaper-transparent #navbar > div {
-    @apply bg-(--card-bg-transparent) backdrop-blur-sm;
+    @apply bg-(--card-bg-transparent);
+  }
+
+  @media (min-width: 1280px) {
+    .wallpaper-transparent #navbar > div {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   }
 
   .wallpaper-transparent .btn-card {
-    @apply bg-(--card-bg-transparent) backdrop-blur-sm;
+    @apply bg-(--card-bg-transparent);
+  }
+
+  @media (min-width: 1280px) {
+    .wallpaper-transparent .btn-card {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   }
 
   h1,

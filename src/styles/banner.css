@@ -44,13 +44,26 @@ body.no-banner-mode #toc-inner-wrapper {
 }
 
 /* 全屏壁纸模式下的 TOC 毛玻璃背景 */
-body.wallpaper-transparent #toc-inner-wrapper:has(table-of-contents[data-loaded="true"]) {
-  background: var(--card-bg-transparent) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-radius: var(--radius-large);
-  padding: 0.5rem;
-  box-shadow: var(--shadow-lg);
+@media (min-width: 1280px) {
+  body.wallpaper-transparent #toc-inner-wrapper:has(table-of-contents[data-loaded="true"]) {
+    background: var(--card-bg-transparent) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-radius: var(--radius-large);
+    padding: 0.5rem;
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+@media (max-width: 1279px) {
+  body.wallpaper-transparent #toc-inner-wrapper:has(table-of-contents[data-loaded="true"]) {
+    background: var(--card-bg-transparent) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border-radius: var(--radius-large);
+    padding: 0.5rem;
+    box-shadow: var(--shadow-lg);
+  }
 }
 
 /* 桌面端 Banner 模式下的主内容区域位置 */
@@ -405,23 +418,13 @@ body.wallpaper-transparent #toc-inner-wrapper:has(table-of-contents[data-loaded=
    ========================================================================== */
 @media (max-width: 1279px) {
   .banner-container {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: transform, opacity;
     contain: layout style paint;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
   }
 
   .banner-image-slot-mobile,
   .banner-image-slot-desktop {
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: transform, opacity;
+    contain: layout style;
     touch-action: pan-y;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
   }
 
   .banner-text-overlay {
@@ -431,14 +434,8 @@ body.wallpaper-transparent #toc-inner-wrapper:has(table-of-contents[data-loaded=
     contain: layout style;
   }
 
-  /* 移动端图片优化 */
   #banner-carousel img {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
     -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
     user-drag: none;
     pointer-events: none;
   }

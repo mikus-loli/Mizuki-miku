@@ -53,7 +53,13 @@ class Sakura {
 		cxt.translate(this.x, this.y);
 		cxt.rotate(this.r);
 		cxt.globalAlpha = this.a;
-		cxt.drawImage(this.img, 0, 0, SAKURA_DRAW_SIZE * this.s, SAKURA_DRAW_SIZE * this.s);
+		cxt.drawImage(
+			this.img,
+			0,
+			0,
+			SAKURA_DRAW_SIZE * this.s,
+			SAKURA_DRAW_SIZE * this.s,
+		);
 		cxt.restore();
 	}
 
@@ -135,8 +141,14 @@ type NumericOption = "x" | "y" | "s" | "r" | "a";
 type FnOption = "fnx" | "fny" | "fnr" | "fna";
 
 function getRandom(option: NumericOption, config: SakuraConfig): number;
-function getRandom(option: FnOption, config: SakuraConfig): ((...args: number[]) => number);
-function getRandom(option: RandomOption, config: SakuraConfig): number | ((...args: number[]) => number) {
+function getRandom(
+	option: FnOption,
+	config: SakuraConfig,
+): (...args: number[]) => number;
+function getRandom(
+	option: RandomOption,
+	config: SakuraConfig,
+): number | ((...args: number[]) => number) {
 	let ret: number | ((...args: number[]) => number);
 	let random: number;
 
@@ -223,7 +235,10 @@ export class SakuraManager {
 		this.startAnimation();
 		this.isRunning = true;
 
-		document.addEventListener("visibilitychange", this.boundVisibilityHandler);
+		document.addEventListener(
+			"visibilitychange",
+			this.boundVisibilityHandler,
+		);
 	}
 
 	private handleVisibilityChange(): void {
@@ -253,7 +268,7 @@ export class SakuraManager {
 		this.canvas.width = window.innerWidth;
 		this.canvas.setAttribute(
 			"style",
-			`position: fixed; left: 0; top: 0; pointer-events: none; z-index: ${this.config.zIndex}; transform: translateZ(0); will-change: transform;`,
+			`position: fixed; left: 0; top: 0; pointer-events: none; z-index: ${this.config.zIndex}; contain: strict;`,
 		);
 		this.canvas.setAttribute("id", "canvas_sakura");
 		document.body.appendChild(this.canvas);
@@ -353,7 +368,10 @@ export class SakuraManager {
 		}
 
 		window.removeEventListener("resize", this.boundResizeHandler);
-		document.removeEventListener("visibilitychange", this.boundVisibilityHandler);
+		document.removeEventListener(
+			"visibilitychange",
+			this.boundVisibilityHandler,
+		);
 		this.isRunning = false;
 	}
 

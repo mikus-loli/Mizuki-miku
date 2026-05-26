@@ -5,8 +5,10 @@
 #navbar > div {
   background: var(--card-bg);
   border-radius: var(--radius-large);
-  will-change: background, backdrop-filter, box-shadow;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  contain: layout style;
 }
 
 /* 桌面端 - 亮色 */
@@ -24,8 +26,9 @@
 @media (max-width: 1279px) {
   #banner-wrapper ~ * #navbar[data-transparent-mode="semi"][data-is-home="true"] > div,
   body:has(#banner-wrapper) #navbar[data-transparent-mode="semi"][data-is-home="true"] > div {
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.55);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
@@ -46,8 +49,9 @@
 @media (max-width: 1279px) {
   :root.dark #banner-wrapper ~ * #navbar[data-transparent-mode="semi"][data-is-home="true"] > div,
   :root.dark body:has(#banner-wrapper) #navbar[data-transparent-mode="semi"][data-is-home="true"] > div {
-    backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.65);
     border: 1px solid rgba(0, 0, 0, 0.55);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
@@ -124,15 +128,16 @@
 @media (max-width: 1279px) {
   #banner-wrapper ~ * #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled > div,
   body:has(#banner-wrapper) #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled > div {
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.55);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
 
   :root.dark #banner-wrapper ~ * #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled > div,
   :root.dark body:has(#banner-wrapper) #navbar[data-transparent-mode="semifull"][data-is-home="true"].scrolled > div {
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.65);
     border: 1px solid rgba(0, 0, 0, 0.55);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
@@ -233,8 +238,9 @@
   body:has(#banner-wrapper) #navbar[data-is-home="true"] #mobile-toc-panel,
   body:has(#banner-wrapper) #navbar[data-is-home="true"] #search-panel,
   body:has(#banner-wrapper) #navbar[data-is-home="true"] #display-setting {
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 
@@ -249,7 +255,7 @@
   :root.dark body:has(#banner-wrapper) #navbar[data-is-home="true"] #mobile-toc-panel,
   :root.dark body:has(#banner-wrapper) #navbar[data-is-home="true"] #search-panel,
   :root.dark body:has(#banner-wrapper) #navbar[data-is-home="true"] #display-setting {
-    background: rgba(24, 25, 38, 0.85);
+    background: rgba(24, 25, 38, 0.9);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   }
 }

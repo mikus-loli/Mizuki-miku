@@ -133,11 +133,14 @@ class ThemeOptimizer {
 			});
 
 			// 额外的延迟重试机制，确保捕获到 Swup
-			const retryInterval: ReturnType<typeof setInterval> = setInterval(() => {
-				if (setupHooks()) {
-					clearInterval(retryInterval);
-				}
-			}, 100);
+			const retryInterval: ReturnType<typeof setInterval> = setInterval(
+				() => {
+					if (setupHooks()) {
+						clearInterval(retryInterval);
+					}
+				},
+				100,
+			);
 
 			// 最多重试 20 次（2 秒）
 			setTimeout(() => {
@@ -164,9 +167,10 @@ class ThemeOptimizer {
 		});
 
 		// 检查当前是否处于主题切换状态
-		const isTransitioning: boolean = document.documentElement.classList.contains(
-			"is-theme-transitioning",
-		);
+		const isTransitioning: boolean =
+			document.documentElement.classList.contains(
+				"is-theme-transitioning",
+			);
 
 		if (isTransitioning) {
 			// 如果正在切换主题，确保样式立即应用
@@ -250,7 +254,10 @@ class ThemeOptimizer {
       }`;
 
 			// 检查是否已存在这些规则，如果不存在则添加
-			if (content && !content.includes(".is-theme-transitioning .expressive-code")) {
+			if (
+				content &&
+				!content.includes(".is-theme-transitioning .expressive-code")
+			) {
 				content += "\n" + hideRule + "\n" + showRule;
 				this.tempStyleSheet.textContent = content;
 			}
@@ -318,19 +325,21 @@ class ThemeOptimizer {
 
 	setupThemeListener(): void {
 		// 监听 data-theme 属性变化
-		const themeObserver = new MutationObserver((mutations: MutationRecord[]) => {
-			for (const mutation of mutations) {
-				if (
-					mutation.type === "attributes" &&
-					mutation.attributeName === "data-theme"
-				) {
-					const newTheme: string | null =
-						document.documentElement.getAttribute("data-theme");
-					this.handleThemeChange(newTheme);
-					break;
+		const themeObserver = new MutationObserver(
+			(mutations: MutationRecord[]) => {
+				for (const mutation of mutations) {
+					if (
+						mutation.type === "attributes" &&
+						mutation.attributeName === "data-theme"
+					) {
+						const newTheme: string | null =
+							document.documentElement.getAttribute("data-theme");
+						this.handleThemeChange(newTheme);
+						break;
+					}
 				}
-			}
-		});
+			},
+		);
 
 		themeObserver.observe(document.documentElement, {
 			attributes: true,
@@ -507,9 +516,13 @@ class ThemeOptimizer {
 					elementBottom < scrollTop - 200 ||
 					elementTop > scrollTop + viewportHeight + 200
 				) {
-					const originalVisibility: string = htmlElement.style.contentVisibility;
+					const originalVisibility: string =
+						htmlElement.style.contentVisibility;
 					htmlElement.style.contentVisibility = "hidden";
-					this.hiddenElements!.push({ element: htmlElement, originalVisibility });
+					this.hiddenElements!.push({
+						element: htmlElement,
+						originalVisibility,
+					});
 				}
 			});
 		});
@@ -527,9 +540,8 @@ class ThemeOptimizer {
 
 		criticalElements.forEach((element: Element) => {
 			const htmlElement = element as HTMLElement;
-			const original: string = htmlElement.style.transform;
-			htmlElement.style.transform = "translateZ(0)";
-			htmlElement.style.willChange = "transform";
+			const original: string = htmlElement.style.contain;
+			htmlElement.style.contain = "layout style";
 
 			this.compositedElements!.push({ element: htmlElement, original });
 		});
@@ -556,7 +568,10 @@ class ThemeOptimizer {
 				// 恢复隐藏的元素
 				if (this.hiddenElements) {
 					this.hiddenElements.forEach(
-						({ element, originalVisibility }: HiddenElementInfo) => {
+						({
+							element,
+							originalVisibility,
+						}: HiddenElementInfo) => {
 							element.style.contentVisibility =
 								originalVisibility || "";
 						},
@@ -566,10 +581,11 @@ class ThemeOptimizer {
 
 				// 恢复合成层设置
 				if (this.compositedElements) {
-					this.compositedElements.forEach(({ element, original }: CompositedElementInfo) => {
-						element.style.transform = original || "";
-						element.style.willChange = "";
-					});
+					this.compositedElements.forEach(
+						({ element, original }: CompositedElementInfo) => {
+							element.style.contain = original || "";
+						},
+					);
 					this.compositedElements = null;
 				}
 			});
