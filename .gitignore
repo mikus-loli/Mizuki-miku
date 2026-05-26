@@ -52,6 +52,3 @@ src/data/bilibili-data.json
 
 # Lighthouse CI
 .lighthouseci/
-
-# content repository (independent mode)
-content/
