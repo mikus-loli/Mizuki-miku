@@ -190,3 +190,74 @@ Make the emoji component display correctly when there are too many emoji packs
   position: relative;
   z-index: 100;
 }
+
+/* === SVG 图标尺寸保护 === */
+/* 防止 Twikoo 内部 SVG 图标在 CSS 未完全加载时渲染为巨大尺寸 */
+
+.twikoo svg,
+#tcomment svg {
+  max-width: 1.5em;
+  max-height: 1.5em;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* 评论标题区域图标 */
+.tk-comments-title svg {
+  max-width: 1.25em;
+  max-height: 1.25em;
+}
+
+/* 操作按钮图标（点赞、回复、编辑等） */
+.tk-action-icon svg,
+.tk-action-icon use {
+  width: 1em;
+  height: 1em;
+  max-width: 1em;
+  max-height: 1em;
+}
+
+/* 表单区域图标 */
+.tk-meta-icon svg,
+.tk-icon svg {
+  width: 1em;
+  height: 1em;
+  max-width: 1.25em;
+  max-height: 1.25em;
+}
+
+/* 加载状态图标 */
+.tk-loading svg {
+  width: 2rem;
+  height: 2rem;
+  max-width: 2rem;
+  max-height: 2rem;
+}
+
+/* 空状态/错误状态图标 */
+.tk-no-comment svg,
+.tk-error-container svg {
+  width: 4rem;
+  height: 4rem;
+  max-width: 4rem;
+  max-height: 4rem;
+}
+
+/* === 初始化过渡保护 === */
+/* 防止 Twikoo 初始化期间的样式闪烁 */
+.twikoo:not(.tk-loaded) {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.twikoo.tk-loaded {
+  opacity: 1;
+}
+
+/* === 主题切换保护 === */
+/* 防止全局主题切换 SVG 规则影响 Twikoo 图标 */
+.is-theme-transitioning .twikoo svg,
+.is-theme-transitioning #tcomment svg {
+  transition: fill 0.2s ease, opacity 0.2s ease;
+}
