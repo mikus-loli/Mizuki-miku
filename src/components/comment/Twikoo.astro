@@ -141,11 +141,6 @@ const config = {
 				const dynamicConfig = createTwikooConfig();
 				await twikoo.init(dynamicConfig);
 				twikooInitialized = true;
-
-				const twikooRoot = commentEl.querySelector(".twikoo");
-				if (twikooRoot) {
-					twikooRoot.classList.add("tk-loaded");
-				}
 			} catch (error) {
 				console.error("[Twikoo] 初始化失败:", error);
 				showError("评论系统初始化失败，请稍后重试");
@@ -192,10 +187,6 @@ const config = {
 					twikooInitialized = false;
 					const commentEl = document.getElementById("tcomment");
 					if (commentEl) {
-						const twikooRoot = commentEl.querySelector(".twikoo");
-						if (twikooRoot) {
-							twikooRoot.classList.remove("tk-loaded");
-						}
 						commentEl.innerHTML = `
 							<div class="twikoo-loading-content">
 								<p>评论加载中...</p>

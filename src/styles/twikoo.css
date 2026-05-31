@@ -244,17 +244,6 @@ Make the emoji component display correctly when there are too many emoji packs
   max-height: 4rem;
 }
 
-/* === 初始化过渡保护 === */
-/* 防止 Twikoo 初始化期间的样式闪烁 */
-.twikoo:not(.tk-loaded) {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.twikoo.tk-loaded {
-  opacity: 1;
-}
-
 /* === 主题切换保护 === */
 /* 防止全局主题切换 SVG 规则影响 Twikoo 图标 */
 .is-theme-transitioning .twikoo svg,
