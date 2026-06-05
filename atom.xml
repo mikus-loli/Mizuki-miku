@@ -5,8 +5,362 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-06-05T12:05:38.668Z</updated>
+  <updated>2026-06-05T13:59:06.581Z</updated>
   <language>zh_CN</language>
+  <entry>
+    <title>Meting-API - 多平台音乐 API 服务</title>
+    <link href="https://mikus.ink/posts/meting/" rel="alternate" type="text/html"/>
+    <id>https://mikus.ink/posts/meting/</id>
+    <published>2026-06-05T00:00:00.000Z</published>
+    <updated>2026-06-05T00:00:00.000Z</updated>
+    <summary>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期和监测通知功能</summary>
+    <content type="html"><![CDATA[<h1>Meting-API - 多平台音乐 API 服务</h1>
+<h2>项目简介</h2>
+<p>::github{repo="mikus-loli/Meting-API"}
+Meting-API 是一个开源的多平台音乐 API 服务，由 mikus-loli 开发维护。该项目 fork 自 xizeyoupan/Meting-API，并在此基础上进行了大量功能增强和优化。它支持网易云音乐和 QQ 音乐两大主流音乐平台，提供了完整的 Cookie 管理系统、VIP 歌曲播放能力、自动续期机制以及完善的监测通知功能。</p>
+<h2>界面截图</h2>
+<p><img src="%E4%B8%BB%E9%A1%B5.png" alt="（主页）" title="主页" />
+<img src="%E5%90%8E%E5%8F%B0.png" alt="（管理后台）" title="后台" /></p>
+<h2>核心功能特性</h2>
+<h3>双平台支持</h3>
+<p>Meting-API 同时支持网易云音乐和 QQ 音乐两大平台，为开发者提供了统一的音乐 API 接口。无论是获取歌曲信息、播放链接、歌词还是封面图片，都可以通过一致的 API 格式进行调用。</p>
+<h3>完善的 Cookie 管理系统</h3>
+<p>项目提供了功能完备的 Cookie 管理功能：</p>
+<ul>
+<li><strong>增删改查</strong>：支持 Cookie 的完整生命周期管理</li>
+<li><strong>在线验证</strong>：实时检测 Cookie 的有效性</li>
+<li><strong>VIP 播放能力检测</strong>：自动识别 Cookie 是否具有 VIP 播放权限</li>
+<li><strong>QQ音乐自动刷新</strong>：支持 musickey 和 refresh_token 两种续期方式</li>
+</ul>
+<h3>Cookie 定时监测</h3>
+<p>系统内置了定时监测功能，可以：</p>
+<ul>
+<li>配置 5 分钟到 24 小时的检查间隔</li>
+<li>自动检测 Cookie 失效情况</li>
+<li>监测 VIP 播放能力是否丢失</li>
+<li>失效或 VIP 丢失时自动发送通知</li>
+</ul>
+<h3>Webhook 通知系统</h3>
+<p>支持多种主流通知渠道：</p>
+<ul>
+<li>Gotify（推荐）</li>
+<li>企业微信</li>
+<li>钉钉</li>
+<li>飞书</li>
+</ul>
+<p>通知系统支持自定义消息格式和优先级设置，确保重要信息能够及时送达。</p>
+<h3>安全特性</h3>
+<p>项目内置了多重安全机制：</p>
+<ul>
+<li><strong>登录失败锁定</strong>：连续 5 次失败后锁定 15 分钟</li>
+<li><strong>隐藏管理入口</strong>：通过 <code>ADMIN_PATH</code> 自定义后台路径</li>
+<li><strong>动态路径修改</strong>：管理员可在后台设置页面修改路径</li>
+<li><strong>2FA 双因素认证</strong>：TOTP 实现，兼容 Google Authenticator / Authy</li>
+<li><strong>非 root 运行</strong>：Docker 容器以 <code>meting</code> 用户运行，提升安全性</li>
+</ul>
+<h3>管理后台</h3>
+<p>提供了一个功能完备的单页应用管理后台，具有响应式设计：</p>
+<ul>
+<li><strong>仪表盘</strong>：Cookie 统计、有效 Cookie 数、用户数、操作记录</li>
+<li><strong>Cookie 管理</strong>：增删改查、在线验证、QQ音乐刷新、获取教程</li>
+<li><strong>Cookie 监测</strong>：定时检查、自动刷新、Webhook 通知、监测历史</li>
+<li><strong>用户管理</strong>：增删改查、角色分配（管理员专属）</li>
+<li><strong>操作日志</strong>：所有操作记录查看</li>
+<li><strong>设置</strong>：个人资料、密码修改、后台路径修改、2FA 设置</li>
+</ul>
+<h2>API 支持矩阵</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+<th>网易云 (<code>netease</code>)</th>
+<th>QQ音乐 (<code>tencent</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>song</code></td>
+<td>单曲信息</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>playlist</code></td>
+<td>歌单</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>artist</code></td>
+<td>歌手歌曲</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>搜索</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>播放链接</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>lrc</code></td>
+<td>歌词</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>pic</code></td>
+<td>封面图片</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h2>地区限制说明</h2>
+<h3>部署在国外服务器</h3>
+<table>
+<thead>
+<tr>
+<th>客户端访问地区</th>
+<th>国内</th>
+<th>国外</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网易云</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>QQ音乐</td>
+<td>✅¹</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<h3>部署在国内服务器</h3>
+<table>
+<thead>
+<tr>
+<th>客户端访问地区</th>
+<th>国内</th>
+<th>国外</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网易云</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>QQ音乐</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<h2>Docker 部署</h2>
+<pre><code>services:
+  meting:
+    image: ghcr.docker.mikus.ink/mikus-loli/meting-api:latest #默认使用mikus的加速源
+    container_name: meting
+    volumes:
+      - ./data:/app/data
+    ports:
+      - 3000:3000
+    restart: always
+    networks:
+      - 1panel-network
+networks:
+  1panel-network:
+    external: true
+# 默认账号密码：admin / admin123，请登录后立即修改默认密码。
+</code></pre>
+<h2>环境变量配置</h2>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PORT</code></td>
+<td><code>3000</code></td>
+<td>服务监听端口</td>
+</tr>
+<tr>
+<td><code>OVERSEAS</code></td>
+<td><code>false</code></td>
+<td>海外模式。Vercel/Cloudflare 运行时自动设为 <code>true</code></td>
+</tr>
+<tr>
+<td><code>ADMIN_PATH</code></td>
+<td><code>admin</code></td>
+<td>管理后台路径。如设为 <code>secret-admin</code>，则后台地址为 <code>/secret-admin</code></td>
+</tr>
+<tr>
+<td><code>DATA_DIR</code></td>
+<td><code>./data</code></td>
+<td>数据存储目录</td>
+</tr>
+<tr>
+<td><code>UID</code></td>
+<td><code>1010</code></td>
+<td>Docker 容器用户 UID</td>
+</tr>
+<tr>
+<td><code>GID</code></td>
+<td><code>1010</code></td>
+<td>Docker 容器用户 GID</td>
+</tr>
+</tbody>
+</table>
+<h2>使用方法</h2>
+<h3>前端插件集成</h3>
+<p>在导入 MetingJS 前添加：</p>
+<pre><code>&lt;script&gt;
+var meting_api='http://your-domain/api?server=:server&amp;type=:type&amp;id=:id&amp;auth=:auth&amp;r=:r';
+&lt;/script&gt;
+</code></pre>
+<h3>API 请求示例</h3>
+<pre><code># 获取歌单
+GET /api?server=netease&amp;type=playlist&amp;id=7326220405
+
+# 获取单曲信息
+GET /api?server=tencent&amp;type=song&amp;id=004Yi5BD3ksoAN
+
+# 获取播放链接
+GET /api?server=netease&amp;type=url&amp;id=22704470
+
+# 获取歌词
+GET /api?server=tencent&amp;type=lrc&amp;id=004Yi5BD3ksoAN
+</code></pre>
+<h3>响应格式</h3>
+<ul>
+<li><code>type=url</code>：以 <code>@</code> 开头返回纯文本，否则 302 重定向到音频 URL</li>
+<li><code>type=pic</code>：302 重定向到图片 URL</li>
+<li><code>type=lrc</code>：返回纯文本歌词（含翻译合并）</li>
+<li>其他类型：返回 JSON 数组</li>
+</ul>
+<h2>Cookie 获取方法</h2>
+<h3>网易云音乐</h3>
+<ol>
+<li>登录 <a href="https://music.163.com/">music.163.com</a></li>
+<li>按 F12 打开开发者工具</li>
+<li>切换到 Network 标签，刷新页面</li>
+<li>找到任意请求，复制请求头中的 Cookie 字段</li>
+<li>粘贴到管理后台的 Cookie 输入框</li>
+<li>建议配合<a href="https://github.com/mikus-loli/Music-Cookie">Music-Cookie</a></li>
+</ol>
+<h3>QQ音乐</h3>
+<ol>
+<li>登录 <a href="https://y.qq.com/">y.qq.com</a></li>
+<li>按 F12 打开开发者工具</li>
+<li>切换到 Application → Cookies → y.qq.com</li>
+<li>复制 <code>uin</code> 和 <code>qqmusic_key</code> 的值</li>
+<li>格式：<code>uin=你的uin; qqmusic_key=你的key</code></li>
+<li>建议配合<a href="https://github.com/mikus-loli/Music-Cookie">Music-Cookie</a></li>
+</ol>
+<p><strong>提示</strong>：QQ音乐的完整 Cookie（包含 <code>psrf_qqrefresh_token</code>）支持自动续期，建议复制所有字段。</p>
+<h2>QQ音乐 Cookie 自动续期</h2>
+<p>系统支持 QQ音乐 Cookie 自动刷新，无需手动更新：</p>
+<ul>
+<li><strong>刷新方式</strong>：优先使用 <code>refresh_token</code>，失败后回退到 <code>musickey</code></li>
+<li><strong>触发条件</strong>：Cookie 监测检测到 VIP 播放能力丢失时自动触发</li>
+<li><strong>手动刷新</strong>：在 Cookie 管理页面点击「刷新」按钮</li>
+<li><strong>刷新后更新</strong>：<code>qqmusic_key</code>、<code>qm_keyst</code>、<code>access_token</code>、<code>openid</code>、过期时间等字段</li>
+</ul>
+<h2>Cookie 监测系统</h2>
+<h3>功能特性</h3>
+<ul>
+<li>定时监测 Cookie 有效性（间隔 5 分钟 ~ 24 小时）</li>
+<li>检测 VIP 播放能力丢失</li>
+<li>QQ音乐 Cookie 自动刷新续期</li>
+<li>Webhook 通知（Cookie 失效、VIP 丢失、刷新成功）</li>
+</ul>
+<h3>配置步骤</h3>
+<ol>
+<li>登录管理后台 → Cookie 监测</li>
+<li>启用定时监测，设置检查间隔</li>
+<li>配置 Webhook 通知（可选）</li>
+<li>保存设置</li>
+</ol>
+<h3>Webhook 消息格式</h3>
+<pre><code>{
+  "title": "Cookie失效通知 - 网易云音乐",
+  "message": "平台: 网易云音乐\n备注: VIP账号\n失效时间: 2024-01-15 18:30:00\n原因: Cookie已失效\n\n请及时更新Cookie以确保服务正常",
+  "priority": 5
+}
+</code></pre>
+<h3>通知事件优先级</h3>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cookie 失效</td>
+<td>5</td>
+</tr>
+<tr>
+<td>VIP 播放能力丢失</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Cookie 自动刷新成功</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h2>常见问题</h2>
+<h3>QQ音乐无法播放？</h3>
+<ul>
+<li>确认部署在国内服务器</li>
+<li>确认添加了有效的 VIP Cookie</li>
+<li>尝试使用包含 <code>psrf_qqrefresh_token</code> 的完整 Cookie 以支持自动续期</li>
+</ul>
+<h3>Cookie 刷新失败？</h3>
+<ul>
+<li>检查 Cookie 是否已完全过期（超过 90 天）</li>
+<li>尝试重新登录获取新 Cookie</li>
+<li>确保 Cookie 中包含 <code>psrf_qqrefresh_token</code> 字段</li>
+</ul>
+<h3>Docker 数据持久化？</h3>
+<p>使用 <code>-v</code> 挂载数据目录：</p>
+<pre><code>docker run -d -p 3000:3000 -v ./data:/app/data ghcr.io/mikus-loli/meting-api:latest
+</code></pre>
+<h3>忘记管理后台路径？</h3>
+<p>检查 <code>DATA_DIR/config.json</code> 中的 <code>adminPath</code> 字段，或通过环境变量 <code>ADMIN_PATH</code> 重新指定。</p>
+<h2>相关项目</h2>
+<ul>
+<li><a href="https://github.com/xizeyoupan/MetingJS">MetingJS</a> - 前端音乐播放插件</li>
+<li><a href="https://github.com/honojs/hono">Hono</a> - Web 框架</li>
+<li><a href="https://github.com/Binaryify/NeteaseCloudMusicApi">NeteaseCloudMusicApi</a> - 网易云音乐 API</li>
+<li><a href="https://github.com/jsososo/QQMusicApi">QQMusicApi</a> - QQ 音乐 API</li>
+</ul>
+<h2>开源协议</h2>
+<p>该项目采用 MIT 协议开源，用户可以自由使用、修改和分发。</p>
+]]></content>
+    <author>
+      <name>mikus</name>
+    </author>
+    <category term="mikus维护的开源项目"></category>
+  </entry>
   <entry>
     <title>Komari Mikus 主题</title>
     <link href="https://mikus.ink/posts/komari-mikus/" rel="alternate" type="text/html"/>
@@ -1766,10 +2120,8 @@ sudo service docker restart
 </tr>
 </tbody>
 </table>
-<h1>使用教程</h1>
+<p>:::caution[注意]</p>
 <ol>
-<li>打开<a href="https://live2d.mikus.ink/">live2d</a>有详细教程
-:::caution[注意]</li>
 <li>仅用于个人学习和研究使用，禁止违法用途</li>
 <li>请勿滥用，否则可能会被限制访问或封禁 IP</li>
 <li>若有疑问或建议，可通过博客评论区或邮箱联系博主</li>
