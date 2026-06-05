@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-05-31T04:53:24.052Z</updated>
+  <updated>2026-06-05T12:05:38.668Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Komari Mikus 主题</title>
@@ -1627,29 +1627,153 @@ sudo service docker restart
     <id>https://mikus.ink/posts/live2d-api/</id>
     <published>2026-01-14T00:00:00.000Z</published>
     <updated>2026-01-14T00:00:00.000Z</updated>
-    <summary>mikus自建的live2d-api</summary>
+    <summary>mikus自建的live2d-api，支持 Cubism 2.x 和 Cubism 4.x 模型</summary>
     <content type="html"><![CDATA[<h1>Live2D API</h1>
-<p>Live2d API地址:https://live2d.mikus.ink</p>
-<h1>使用方法</h1>
-<pre><code>&lt;!-- waifu-tips.js 依赖 JQuery 库 --&gt;放在body
-&lt;script src="https://static.mikus.ink/live2d/jquery.min.js"&gt;&lt;/script&gt;
-&lt;!-- 使用 aotuload.js 引入看板娘 --&gt;放在body
-&lt;script src="https://static.mikus.ink/live2d/autoload.js"&gt;&lt;/script&gt;
-</code></pre>
-<h1>接口用法</h1>
-<ul>
-<li>/add/ - 检测新增皮肤并更新缓存列表</li>
-<li>/get/?id=1-23 获取分组1的第23号皮肤</li>
-<li>/rand/?id=1 根据上一分组随机切换</li>
-<li>/switch/?id=1 根据上一分组顺序切换</li>
-<li>/rand_textures/?id=1-23 根据上一皮肤随机切换同分组其他皮肤</li>
-<li>/switch_textures/?id=1-23 根据上一皮肤顺序切换同分组其他皮肤</li>
-</ul>
-<p>:::caution[注意]</p>
+<p>Live2D 看板娘插件后端 API，支持 Cubism 2.x 和 Cubism 4.x 模型，提供完整的 Web 管理后台和 Docker 部署方案。</p>
+<p>::github{repo="mikus-loli/live2d_api"}</p>
+<p><strong>API 地址</strong>: <a href="https://live2d.mikus.ink">https://live2d.mikus.ink</a></p>
+<h2>可用模型</h2>
+<p>以下是目前 API 支持的部分模型列表（来自 <a href="https://live2d.mikus.ink/">live2d.mikus.ink</a>）：</p>
+<table>
+<thead>
+<tr>
+<th>模型名称</th>
+<th>皮肤数量</th>
+<th>模型名称</th>
+<th>皮肤数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pio</td>
+<td>87</td>
+<td>Tia</td>
+<td>63</td>
+</tr>
+<tr>
+<td>blanc_classic</td>
+<td>1</td>
+<td>blanc_normal</td>
+<td>1</td>
+</tr>
+<tr>
+<td>blanc_swimwear</td>
+<td>1</td>
+<td>histoire</td>
+<td>1</td>
+</tr>
+<tr>
+<td>nepgear</td>
+<td>1</td>
+<td>nepgear_extra</td>
+<td>1</td>
+</tr>
+<tr>
+<td>nepgearswim</td>
+<td>1</td>
+<td>nepmaid</td>
+<td>1</td>
+</tr>
+<tr>
+<td>nepnep</td>
+<td>1</td>
+<td>nepswim</td>
+<td>1</td>
+</tr>
+<tr>
+<td>neptune_classic</td>
+<td>1</td>
+<td>neptune_santa</td>
+<td>1</td>
+</tr>
+<tr>
+<td>noir</td>
+<td>1</td>
+<td>noir_classic</td>
+<td>1</td>
+</tr>
+<tr>
+<td>noir_santa</td>
+<td>1</td>
+<td>noireswim</td>
+<td>1</td>
+</tr>
+<tr>
+<td>shizuku-48</td>
+<td>1</td>
+<td>shizuku-pajama</td>
+<td>1</td>
+</tr>
+<tr>
+<td>vert_classic</td>
+<td>1</td>
+<td>vert_normal</td>
+<td>1</td>
+</tr>
+<tr>
+<td>vert_swimwear</td>
+<td>1</td>
+<td>伊雷娜</td>
+<td>1</td>
+</tr>
+<tr>
+<td>六初</td>
+<td>1</td>
+<td>后藤一里</td>
+<td>1</td>
+</tr>
+<tr>
+<td>奕</td>
+<td>1</td>
+<td>小修狗</td>
+<td>1</td>
+</tr>
+<tr>
+<td>星野</td>
+<td>1</td>
+<td>桃濑日和</td>
+<td>1</td>
+</tr>
+<tr>
+<td>洛琪希</td>
+<td>1</td>
+<td>無料</td>
+<td>1</td>
+</tr>
+<tr>
+<td>白圣女</td>
+<td>1</td>
+<td>纳西妲</td>
+<td>1</td>
+</tr>
+<tr>
+<td>绪山真寻</td>
+<td>1</td>
+<td>绪山美波里</td>
+<td>1</td>
+</tr>
+<tr>
+<td>高可动狐娘</td>
+<td>1</td>
+<td>魔王城圣使</td>
+<td>1</td>
+</tr>
+<tr>
+<td>鸠</td>
+<td>1</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>使用教程</h1>
 <ol>
+<li>打开<a href="https://live2d.mikus.ink/">live2d</a>有详细教程
+:::caution[注意]</li>
 <li>仅用于个人学习和研究使用，禁止违法用途</li>
 <li>请勿滥用，否则可能会被限制访问或封禁 IP</li>
-<li>若有疑问或建议，可通过博客评论区或邮箱联系博主
+<li>若有疑问或建议，可通过博客评论区或邮箱联系博主</li>
+<li>模型版权归原作者所有
 :::</li>
 </ol>
 ]]></content>
