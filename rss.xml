@@ -339,6 +339,613 @@ GET /api?server=tencent&amp;amp;type=lrc&amp;amp;id=004Yi5BD3ksoAN
 &lt;/ul&gt;
 &lt;h2&gt;开源协议&lt;/h2&gt;
 &lt;p&gt;该项目采用 MIT 协议开源，用户可以自由使用、修改和分发。&lt;/p&gt;
+</content:encoded></item><item><title>Music-Cookie</title><link>https://mikus.ink/posts/music-cookie/</link><guid isPermaLink="true">https://mikus.ink/posts/music-cookie/</guid><description>是一个自动抓取 QQ 音乐和网易云音乐客户端 Cookie 的工具</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;项目简介&lt;/h2&gt;
+&lt;p&gt;Music Cookie 是一个自动抓取 QQ 音乐和网易云音乐客户端 Cookie 的工具。它通过 MITM 代理拦截客户端网络请求，提取登录凭证，并自动发送到 &lt;a href=&quot;https://github.com/mikus-loli/Meting-API&quot;&gt;Meting-API&lt;/a&gt; 进行统一管理。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;项目地址&lt;/strong&gt;:
+::github{repo=&quot;mikus-loli/Music-Cookie&quot;}&lt;/p&gt;
+&lt;h2&gt;核心功能&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;功能&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;多平台支持&lt;/td&gt;
+&lt;td&gt;QQ音乐 + 网易云音乐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;自动抓取&lt;/td&gt;
+&lt;td&gt;MITM 代理拦截客户端请求中的 Cookie&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;自动发送&lt;/td&gt;
+&lt;td&gt;提取后自动 POST 到 Meting-API&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;定时循环&lt;/td&gt;
+&lt;td&gt;每24小时自动执行一次完整流程&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;通知推送&lt;/td&gt;
+&lt;td&gt;支持 Miotify 实时推送执行状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Web 管理&lt;/td&gt;
+&lt;td&gt;可视化管理界面，查看/管理 Cookie&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;工作流程&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;启动代理 (60s等待)
+    │
+    ├─► QQ音乐流程 ──────────────────────────────►
+    │   1. 启动 QQ 音乐客户端
+    │   2. 等待60秒应用初始化
+    │   3. 等待有效 Cookie (最长300秒)
+    │   4. 发送 Cookie 到 Meting-API
+    │   5. 关闭 QQ 音乐客户端
+    │
+    ├─► 网易云音乐流程 ──────────────────────────►
+    │   1. 启动网易云音乐客户端
+    │   2. 等待60秒应用初始化
+    │   3. 等待有效 Cookie (最长300秒)
+    │   4. 发送 Cookie 到 Meting-API
+    │   5. 关闭网易云音乐客户端
+    │
+    └─► 停止代理 → 清理文件 → 等待24小时 → 循环
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;环境准备&lt;/h2&gt;
+&lt;h3&gt;系统要求&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Windows 操作系统&lt;/li&gt;
+&lt;li&gt;Python 3.10+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Visual C++ 生成工具&lt;/strong&gt;（编译 mitmproxy 依赖必需）&lt;/li&gt;
+&lt;li&gt;QQ音乐客户端（已登录）&lt;/li&gt;
+&lt;li&gt;网易云音乐客户端（已登录）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;1. 安装 Visual C++ 生成工具（必需）&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;mitmproxy&lt;/code&gt; 的某些底层依赖（&lt;code&gt;zstandard&lt;/code&gt;、&lt;code&gt;cffi&lt;/code&gt;）需要 C++ 编译器才能安装。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;方式一：安装 Visual Studio Build Tools（推荐）&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;访问 &lt;a href=&quot;https://visualstudio.microsoft.com/zh-hans/downloads/&quot;&gt;Visual Studio 下载页面&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;展开 &lt;strong&gt;&quot;所有下载&quot;&lt;/strong&gt; → 找到 &lt;strong&gt;&quot;Visual Studio 2022 生成工具&quot;&lt;/strong&gt; → 下载&lt;/li&gt;
+&lt;li&gt;运行安装程序，勾选 &lt;strong&gt;&quot;C++ 生成工具&quot;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;确保包含以下组件：
+&lt;ul&gt;
+&lt;li&gt;MSVC v143 - VS 2022 C++ x64/x86 生成工具&lt;/li&gt;
+&lt;li&gt;Windows 11 SDK (最新版本)&lt;/li&gt;
+&lt;li&gt;C++ CMake 工具（可选）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;2. 安装 Python&lt;/h3&gt;
+&lt;p&gt;如果尚未安装 Python，请从 &lt;a href=&quot;https://www.python.org/downloads/&quot;&gt;python.org&lt;/a&gt; 下载安装。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;重要&lt;/strong&gt;：安装时勾选 &quot;Add Python to PATH&quot;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;3. 创建虚拟环境（推荐）&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# 在项目目录打开终端
+cd D:\miku\QQMusic-Cookie
+
+# 创建虚拟环境
+python -m venv venv
+
+# 激活虚拟环境
+venv\Scripts\activate
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;安装配置&lt;/h2&gt;
+&lt;h3&gt;1. 安装依赖&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;pip install -r requirements.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;依赖说明：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;依赖&lt;/th&gt;
+&lt;th&gt;版本&lt;/th&gt;
+&lt;th&gt;用途&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;mitmproxy&lt;/td&gt;
+&lt;td&gt;10.4.2&lt;/td&gt;
+&lt;td&gt;MITM 代理抓包&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;fastapi&lt;/td&gt;
+&lt;td&gt;0.109.0&lt;/td&gt;
+&lt;td&gt;Web API 服务&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;uvicorn&lt;/td&gt;
+&lt;td&gt;0.27.0&lt;/td&gt;
+&lt;td&gt;ASGI 服务器&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;apscheduler&lt;/td&gt;
+&lt;td&gt;3.10.4&lt;/td&gt;
+&lt;td&gt;定时任务调度&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;httpx&lt;/td&gt;
+&lt;td&gt;0.26.0&lt;/td&gt;
+&lt;td&gt;HTTP 客户端&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;pydantic&lt;/td&gt;
+&lt;td&gt;2.5.3&lt;/td&gt;
+&lt;td&gt;数据验证&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;2. 配置 .env 文件&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# 复制配置模板
+copy .env.example .env
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;打开 &lt;code&gt;.env&lt;/code&gt; 文件，填写以下关键配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# ===== 必填配置 =====
+# Meting-API 地址（你的 Meting-API 服务地址）
+TARGET_API_URL=https://meting.mikus.ink/admin/cookies
+
+# Meting-API Token（在 Meting-API 管理后台获取，以 mapi_ 开头）
+TARGET_API_TOKEN=mapi_your_token_here
+
+# QQ音乐客户端路径
+QQMUSIC_PATH=C:\QQMusic\QQMusic.exe
+
+# 网易云音乐客户端路径
+NETEASEMUSIC_PATH=C:\Program Files\Netease\CloudMusic\cloudmusic.exe
+
+# Miotify 通知（详见下方通知配置章节）#也支持 gotify 通知
+MIOTIFY_ENABLED=false
+MIOTIFY_URL=http://localhost:8080
+MIOTIFY_TOKEN=
+
+# 代理配置（一般无需修改）
+PROXY_HOST=127.0.0.1
+PROXY_PORT=8080
+
+# API 服务配置
+API_HOST=0.0.0.0
+API_PORT=5000
+API_TOKEN=your_api_token
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;3. 安装 MITM 证书&lt;/h3&gt;
+&lt;p&gt;MITM 代理需要安装 SSL 证书才能解密 HTTPS 流量。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;步骤：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;启动代理（任选一种方式）：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;python main.py --proxy-only
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;打开浏览器访问 &lt;code&gt;http://mitm.it&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下载 Windows 证书：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;点击 &lt;strong&gt;Windows&lt;/strong&gt; 图标下载 &lt;code&gt;mitmproxy-ca-cert.p12&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;安装证书：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;双击下载的证书文件&lt;/li&gt;
+&lt;li&gt;选择 &lt;strong&gt;&quot;本地计算机&quot;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;选择 &lt;strong&gt;&quot;将所有证书放入下列存储&quot;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;&quot;浏览&quot;&lt;/strong&gt; → 选择 &lt;strong&gt;&quot;受信任的根证书颁发机构&quot;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;完成安装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;或者通过命令行安装：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;certutil -addstore root %USERPROFILE%\.mitmproxy\mitmproxy-ca-cert.cer
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;客户端代理设置&lt;/h2&gt;
+&lt;p&gt;代理抓包需要客户端将所有网络请求发送到 MITM 代理。&lt;/p&gt;
+&lt;h3&gt;QQ音乐客户端&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;打开 QQ音乐客户端&lt;/li&gt;
+&lt;li&gt;点击右上角 &lt;strong&gt;菜单&lt;/strong&gt;（三条横线图标）&lt;/li&gt;
+&lt;li&gt;选择 &lt;strong&gt;设置&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;找到 &lt;strong&gt;网络设置&lt;/strong&gt; 或 &lt;strong&gt;代理设置&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;选择 &lt;strong&gt;自定义代理&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;填写：
+&lt;ul&gt;
+&lt;li&gt;类型：&lt;strong&gt;HTTP 代理&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;服务器地址：&lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;端口：&lt;code&gt;8080&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;保存&lt;/strong&gt; 或 &lt;strong&gt;确定&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;网易云音乐客户端&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;打开网易云音乐客户端&lt;/li&gt;
+&lt;li&gt;点击右上角 &lt;strong&gt;设置&lt;/strong&gt;（齿轮图标）&lt;/li&gt;
+&lt;li&gt;找到 &lt;strong&gt;工具&lt;/strong&gt; 或 &lt;strong&gt;代理设置&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;选择 &lt;strong&gt;自定义代理&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;填写：
+&lt;ul&gt;
+&lt;li&gt;类型：&lt;strong&gt;HTTP 代理&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;服务器地址：&lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;端口：&lt;code&gt;8080&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;保存&lt;/strong&gt; 或 &lt;strong&gt;确定&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：两个客户端都需要先登录账号，否则捕获的 Cookie 无效。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;运行方式&lt;/h2&gt;
+&lt;h3&gt;方式一：双击运行（最简单）&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;文件&lt;/th&gt;
+&lt;th&gt;功能&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;run_automate.bat&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;24小时自动化循环&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;run_once.bat&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;执行一次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;直接双击对应的 &lt;code&gt;.bat&lt;/code&gt; 文件即可启动。&lt;/p&gt;
+&lt;h3&gt;方式二：命令行运行&lt;/h3&gt;
+&lt;h4&gt;自动化模式（推荐）&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;# 每24小时循环一次，抓取所有平台
+python automate.py --interval 24
+
+# 只抓取 QQ音乐
+python automate.py --interval 24 --platform qqmusic
+
+# 只抓取 网易云音乐
+python automate.py --interval 24 --platform netease
+
+# 执行一次后退出
+python automate.py --once
+python automate.py --once --platform qqmusic
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;参数说明：&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;参数&lt;/th&gt;
+&lt;th&gt;可选值&lt;/th&gt;
+&lt;th&gt;默认值&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--interval&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;数字&lt;/td&gt;
+&lt;td&gt;24&lt;/td&gt;
+&lt;td&gt;循环间隔（小时）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--once&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;仅执行一次&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;--platform&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;all / qqmusic / netease&lt;/td&gt;
+&lt;td&gt;all&lt;/td&gt;
+&lt;td&gt;目标平台&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4&gt;手动模式&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;# 完整服务（代理 + API + 定时任务）
+python main.py
+
+# 仅启动 API 服务
+python main.py --api-only
+
+# 仅启动代理抓包
+python main.py --proxy-only
+
+# 手动发送已存储的 Cookie 到 Meting-API
+python main.py --send-now
+
+# 查看当前 Cookie 状态
+python main.py --status
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;自动化流程详解&lt;/h2&gt;
+&lt;h3&gt;各阶段说明&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;阶段&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;耗时&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;启动代理&lt;/td&gt;
+&lt;td&gt;启动 MITM 代理子进程，绑定 127.0.0.1:8080&lt;/td&gt;
+&lt;td&gt;~5秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;等待稳定&lt;/td&gt;
+&lt;td&gt;等待代理完全启动并准备接收连接&lt;/td&gt;
+&lt;td&gt;60秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;启动客户端&lt;/td&gt;
+&lt;td&gt;启动 QQ音乐/网易云音乐 EXE&lt;/td&gt;
+&lt;td&gt;~3秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;应用初始化&lt;/td&gt;
+&lt;td&gt;等待客户端加载 UI、连接网络、发送请求&lt;/td&gt;
+&lt;td&gt;60秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;等待 Cookie&lt;/td&gt;
+&lt;td&gt;轮询检查是否捕获到有效登录凭证&lt;/td&gt;
+&lt;td&gt;最长300秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;发送 Cookie&lt;/td&gt;
+&lt;td&gt;POST 到 Meting-API 保存&lt;/td&gt;
+&lt;td&gt;~3秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;关闭客户端&lt;/td&gt;
+&lt;td&gt;优雅关闭客户端进程&lt;/td&gt;
+&lt;td&gt;~5秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;清理文件&lt;/td&gt;
+&lt;td&gt;删除临时 cookie 文件&lt;/td&gt;
+&lt;td&gt;~1秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;等待循环&lt;/td&gt;
+&lt;td&gt;休眠至下次执行&lt;/td&gt;
+&lt;td&gt;24小时&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;定时执行&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;脚本会每24小时自动执行一次完整流程&lt;/li&gt;
+&lt;li&gt;执行时间取决于首次启动时间（例如首次 17:00 启动，下次也是 17:00）&lt;/li&gt;
+&lt;li&gt;按 &lt;code&gt;Ctrl+C&lt;/code&gt; 可随时停止&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Miotify 通知配置&lt;/h2&gt;
+&lt;p&gt;Miotify 是一个轻量级消息推送服务器，兼容 Gotify API。配置后可以实时收到 Cookie 抓取和发送的状态推送。&lt;/p&gt;
+&lt;h3&gt;1. 部署 Miotify&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/mikus-loli/Miotify
+cd Miotify
+docker-compose up -d
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;服务默认运行在 &lt;code&gt;http://localhost:8080&lt;/code&gt;。&lt;/p&gt;
+&lt;h3&gt;2. 获取 App Token&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;浏览器打开 &lt;code&gt;http://localhost:8080&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;使用默认账号登录（admin / admin）&lt;/li&gt;
+&lt;li&gt;点击 &lt;strong&gt;Apps&lt;/strong&gt; → &lt;strong&gt;Create Application&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;输入应用名称（如 &quot;Cookie Manager&quot;）&lt;/li&gt;
+&lt;li&gt;创建后会生成一个 App Token（UUID 格式），复制保存&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;3. 配置 .env&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;MIOTIFY_ENABLED=true
+MIOTIFY_URL=http://localhost:8080
+MIOTIFY_TOKEN=你的App_Token_（UUID格式）
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;4. 通知类型&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;通知&lt;/th&gt;
+&lt;th&gt;标题&lt;/th&gt;
+&lt;th&gt;场景&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;自动化周期开始&lt;/td&gt;
+&lt;td&gt;第 N 次 Cookie 抓取周期已启动&lt;/td&gt;
+&lt;td&gt;每个周期开始时&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;QQ音乐 Cookie 已抓取&lt;/td&gt;
+&lt;td&gt;成功抓取 QQ 音乐 Cookie&lt;/td&gt;
+&lt;td&gt;UIN 已获取&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;QQ音乐 Cookie 抓取失败&lt;/td&gt;
+&lt;td&gt;未捕获到有效的 QQ 音乐 Cookie&lt;/td&gt;
+&lt;td&gt;超时或未找到&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;QQ音乐 Cookie 已发送&lt;/td&gt;
+&lt;td&gt;Cookie 已成功发送到 Meting-API&lt;/td&gt;
+&lt;td&gt;POST 成功&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;QQ音乐 Cookie 发送失败&lt;/td&gt;
+&lt;td&gt;发送到 Meting-API 失败&lt;/td&gt;
+&lt;td&gt;网络错误等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;自动化周期完成&lt;/td&gt;
+&lt;td&gt;所有平台处理完毕&lt;/td&gt;
+&lt;td&gt;周期结束汇总&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;系统错误&lt;/td&gt;
+&lt;td&gt;异常错误详情&lt;/td&gt;
+&lt;td&gt;脚本异常&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;Cookie 状态检查&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;python main.py --status
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;输出示例：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;QQ Music Cookie Status
+========================================
+  UIN: 3166326944
+  Key: Q_H_L_63k3NLuJcvgUCi...
+  Refresh Token: Yes
+  Status: Valid
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;API 接口说明&lt;/h2&gt;
+&lt;h3&gt;认证方式&lt;/h3&gt;
+&lt;p&gt;需要认证的接口使用 Bearer Token：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;curl -H &quot;Authorization: Bearer your_token&quot; http://localhost:5000/api/meting
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;接口列表&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方法&lt;/th&gt;
+&lt;th&gt;路径&lt;/th&gt;
+&lt;th&gt;认证&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;GET&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;服务运行状态&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GET&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/health&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;健康检查&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GET&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/api/meting&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;获取完整 Cookie 数据&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GET&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/api/meting/simple&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;获取简化 Cookie 数据&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;POST&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/api/cookies&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;手动添加 Cookie&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;POST&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/api/send&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;发送 Cookie 到 Meting-API&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DELETE&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;/api/cookies&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;清空所有 Cookie&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Cookie 格式说明&lt;/h2&gt;
+&lt;h3&gt;QQ音乐&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;最简格式&lt;/strong&gt;（基本播放功能）：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;uin=你的QQ号; qqmusic_key=Q_H_L_开头的key
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;完整格式&lt;/strong&gt;（支持自动续期）：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;uin=你的QQ号; qqmusic_key=Q_H_L_...; qm_keyst=Q_H_L_...; psrf_qqrefresh_token=...; psrf_qqaccess_token=...; qqmusic_guid=...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;网易云音乐&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;MUSIC_U=用户token; MUSIC_A=认证key; __csrf=csrf值
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;发送到 Meting-API 的数据格式&lt;/h2&gt;
+&lt;h3&gt;QQ音乐&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &quot;platform&quot;: &quot;tencent&quot;,
+  &quot;cookie&quot;: &quot;uin=3166326944; qqmusic_key=Q_H_L_63k3...; psrf_qqrefresh_token=...&quot;,
+  &quot;note&quot;: &quot;Auto-synced from Music-Cookie-Manager&quot;,
+  &quot;isActive&quot;: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;网易云音乐&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &quot;platform&quot;: &quot;netease&quot;,
+  &quot;cookie&quot;: &quot;MUSIC_U=00FD08B3B2141E00C258...; __csrf=...&quot;,
+  &quot;note&quot;: &quot;Auto-synced from Music-Cookie-Manager&quot;,
+  &quot;isActive&quot;: true
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;项目结构&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;Music-Cookie/
+├── automate.py        # 自动化脚本
+├── main.py            # 主程序入口
+├── config.py          # 配置管理
+├── api_server.py      # REST API服务
+├── proxy_capture.py   # MITM代理抓包
+├── cookie_store.py    # Cookie存储
+├── scheduler.py       # 定时任务
+├── notify.py          # 通知推送
+├── run_automate.bat   # 自动化启动脚本
+├── run_once.bat       # 单次执行脚本
+├── static/            # 前端静态文件
+├── data/              # 数据目录
+├── logs/              # 日志目录
+├── requirements.txt   # 完整依赖
+├── requirements-lite.txt # 精简依赖
+└── .env.example       # 配置示例
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;安全建议&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;设置API_TOKEN&lt;/strong&gt; - 防止Cookie被未授权访问&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;使用HTTPS&lt;/strong&gt; - 生产环境建议配置反向代理&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;限制访问IP&lt;/strong&gt; - 通过防火墙限制API访问来源&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;定期更换Token&lt;/strong&gt; - 提高安全性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;常见问题&lt;/h2&gt;
+&lt;h3&gt;Q: 安装依赖报错 &lt;code&gt;error: Microsoft Visual C++ 14.0 or greater is required&lt;/code&gt;？&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;mitmproxy&lt;/code&gt; 的底层依赖 &lt;code&gt;zstandard&lt;/code&gt; 和 &lt;code&gt;cffi&lt;/code&gt; 需要 C++ 编译器。解决方案：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;安装 Visual Studio Build Tools（推荐）&lt;/li&gt;
+&lt;li&gt;使用预编译 wheel 安装&lt;/li&gt;
+&lt;li&gt;使用精简版依赖 &lt;code&gt;requirements-lite.txt&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Q: 自动化模式无法启动应用？&lt;/h3&gt;
+&lt;p&gt;检查 &lt;code&gt;.env&lt;/code&gt; 中的 &lt;code&gt;QQMUSIC_PATH&lt;/code&gt; 和 &lt;code&gt;NETEASEMUSIC_PATH&lt;/code&gt; 是否正确，或确保应用安装在默认路径。&lt;/p&gt;
+&lt;h3&gt;Q: Cookie抓取失败？&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;确保已安装MITM证书&lt;/li&gt;
+&lt;li&gt;确保客户端已配置代理 &lt;code&gt;127.0.0.1:8080&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;确保客户端已登录账号&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Q: 发送失败？&lt;/h3&gt;
+&lt;p&gt;检查 &lt;code&gt;TARGET_API_URL&lt;/code&gt; 和 &lt;code&gt;TARGET_API_TOKEN&lt;/code&gt; 配置是否正确。&lt;/p&gt;
+&lt;h3&gt;Q: 网易云音乐抓取不到Cookie？&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;网易云音乐需要在设置中配置代理&lt;/li&gt;
+&lt;li&gt;确保已登录账号&lt;/li&gt;
+&lt;li&gt;检查代理日志 &lt;code&gt;logs/proxy.log&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
 </content:encoded></item><item><title>Komari Mikus 主题</title><link>https://mikus.ink/posts/komari-mikus/</link><guid isPermaLink="true">https://mikus.ink/posts/komari-mikus/</guid><description>一个现代化、优雅的 Komari 监控主题</description><pubDate>Tue, 21 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;::github{repo=&quot;mikus-loli/komari-mikus&quot;}&lt;/p&gt;
 &lt;h2&gt;特性&lt;/h2&gt;
