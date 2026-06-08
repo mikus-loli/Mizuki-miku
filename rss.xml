@@ -1437,7 +1437,7 @@ docker logs mikutap
 &lt;h1&gt;预览网址&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;https://aidn.jp/mikutap/&lt;/li&gt;
-&lt;li&gt;https://mikutap.mikus.ink/ （mikus部署的Mikutap 国内访问优化）&lt;/li&gt;
+&lt;li&gt;https://mikutap.mikus.ink/ （mikus部署的Mikutap 国内优化）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;:::caution[注意]&lt;/p&gt;
 &lt;ol&gt;
