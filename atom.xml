@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-06-05T14:45:57.649Z</updated>
+  <updated>2026-06-08T08:35:11.040Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Meting-API - 多平台音乐 API 服务</title>
@@ -969,9 +969,9 @@ MIOTIFY_TOKEN=你的App_Token_（UUID格式）
 </ol>
 <h3>Q: 发送失败？</h3>
 <p>检查 <code>TARGET_API_URL</code> 和 <code>TARGET_API_TOKEN</code> 配置是否正确。</p>
-<h3>Q: 网易云音乐抓取不到Cookie？</h3>
+<h3>Q: 抓取不到Cookie？</h3>
 <ol>
-<li>网易云音乐需要在设置中配置代理</li>
+<li>音乐软件需要在设置中配置代理</li>
 <li>确保已登录账号</li>
 <li>检查代理日志 <code>logs/proxy.log</code></li>
 </ol>

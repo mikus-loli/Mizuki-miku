@@ -940,9 +940,9 @@ MIOTIFY_TOKEN=你的App_Token_（UUID格式）
 &lt;/ol&gt;
 &lt;h3&gt;Q: 发送失败？&lt;/h3&gt;
 &lt;p&gt;检查 &lt;code&gt;TARGET_API_URL&lt;/code&gt; 和 &lt;code&gt;TARGET_API_TOKEN&lt;/code&gt; 配置是否正确。&lt;/p&gt;
-&lt;h3&gt;Q: 网易云音乐抓取不到Cookie？&lt;/h3&gt;
+&lt;h3&gt;Q: 抓取不到Cookie？&lt;/h3&gt;
 &lt;ol&gt;
-&lt;li&gt;网易云音乐需要在设置中配置代理&lt;/li&gt;
+&lt;li&gt;音乐软件需要在设置中配置代理&lt;/li&gt;
 &lt;li&gt;确保已登录账号&lt;/li&gt;
 &lt;li&gt;检查代理日志 &lt;code&gt;logs/proxy.log&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
