@@ -1877,7 +1877,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;amp
 &lt;li&gt;固化SSH，选择【8】，再选择【7】固化SSH。&lt;/li&gt;
 &lt;li&gt;使用SSH工具连接到终端，出现Banner ARE U OK则成功。&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Meting API</title><link>https://mikus.ink/posts/meting-api/</link><guid isPermaLink="true">https://mikus.ink/posts/meting-api/</guid><description>mikus自建的Meting API</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting API&lt;/h1&gt;
+</content:encoded></item><item><title>Meting API</title><link>https://mikus.ink/posts/meting-api/</link><guid isPermaLink="true">https://mikus.ink/posts/meting-api/</guid><description>mikus自建的Meting API 支持VIP哦</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting API&lt;/h1&gt;
 &lt;p&gt;Meting API地址: https://meting.mikus.ink&lt;/p&gt;
 &lt;h2&gt;API 参数&lt;/h2&gt;
 &lt;h3&gt;服务器地址 (server)&lt;/h3&gt;

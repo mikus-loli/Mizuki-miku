@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-06-08T14:07:27.349Z</updated>
+  <updated>2026-06-08T14:34:48.919Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Meting-API - 多平台音乐 API 服务</title>
@@ -2022,7 +2022,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
     <id>https://mikus.ink/posts/meting-api/</id>
     <published>2026-01-15T00:00:00.000Z</published>
     <updated>2026-01-15T00:00:00.000Z</updated>
-    <summary>mikus自建的Meting API</summary>
+    <summary>mikus自建的Meting API 支持VIP哦</summary>
     <content type="html"><![CDATA[<h1>Meting API</h1>
 <p>Meting API地址: https://meting.mikus.ink</p>
 <h2>API 参数</h2>
