@@ -131,7 +131,26 @@
 		slider.addEventListener("pointercancel", handleCancel);
 	}
 
-	function handleVolumeKeyDown(event: KeyboardEvent) {
+	function isEditableTarget(target: EventTarget | null): boolean {
+		if (!(target instanceof HTMLElement)) {
+			return false;
+		}
+
+		return Boolean(
+			target.closest(
+				'input, textarea, select, [contenteditable="true"], [contenteditable=""]',
+			),
+		);
+	}
+
+	function handleVolumeKeyDown(
+		event: KeyboardEvent,
+		ignoreEditableTarget = false,
+	) {
+		if (ignoreEditableTarget && isEditableTarget(event.target)) {
+			return;
+		}
+
 		if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
 			event.preventDefault();
 			musicPlayerStore.setVolume(state.volume - 0.05);
@@ -192,7 +211,7 @@
 	});
 </script>
 
-<svelte:window on:keydown={handleVolumeKeyDown} />
+<svelte:window on:keydown={(event) => handleVolumeKeyDown(event, true)} />
 
 {#if shouldRenderFloatingUi}
 	{#if state.showError}
