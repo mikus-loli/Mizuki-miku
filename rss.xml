@@ -13,7 +13,7 @@ Meting-API 是一个开源的多平台音乐 API 服务，由 mikus-loli 开发�
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;增删改查&lt;/strong&gt;：支持 Cookie 的完整生命周期管理&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;在线验证&lt;/strong&gt;：实时检测 Cookie 的有效性&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;VIP 播放能力检测&lt;/strong&gt;：自动识别 Cookie 是否具有 VIP 播放权限&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;VIP 播放能力检测&lt;/strong&gt;：自动识别 Cookie 是否具有 VIP 权限&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;QQ音乐自动刷新&lt;/strong&gt;：支持 musickey 和 refresh_token 两种续期方式&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3&gt;Cookie 定时监测&lt;/h3&gt;
