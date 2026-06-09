@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-06-09T10:49:20.779Z</updated>
+  <updated>2026-06-09T14:52:54.615Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Meting-API - 多平台音乐 API 服务</title>
@@ -141,7 +141,7 @@ Meting-API 是一个开源的多平台音乐 API 服务，由 mikus-loli 开发�
 </tr>
 <tr>
 <td>QQ音乐</td>
-<td>✅¹</td>
+<td>✅</td>
 <td>❌</td>
 </tr>
 </tbody>
