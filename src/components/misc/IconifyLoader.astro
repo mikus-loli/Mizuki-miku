@@ -13,6 +13,14 @@ const { preloadIcons = [], timeout = 10000, retryCount = 3 } = Astro.props;
 
 <!-- Iconify图标库加载器 -->
 <script is:inline define:vars={{ preloadIcons, timeout, retryCount }}>
+	// 配置 Iconify API 端点 - 使用本地图标数据
+	window.IconifyProviders = {
+		// 默认 provider - 使用本地 API
+		"": {
+			resources: ["/cdn/iconify/api"],
+		},
+	};
+
 	// 全局图标加载逻辑
 	(function () {
 		"use strict";
