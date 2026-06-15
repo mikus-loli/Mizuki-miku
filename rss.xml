@@ -665,7 +665,7 @@ python main.py --send-now
 # 查看当前 Cookie 状态
 python main.py --status
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;自动化流程详解&lt;/h2&gt;
+&lt;h2&gt;自动化流程&lt;/h2&gt;
 &lt;h3&gt;各阶段说明&lt;/h3&gt;
 &lt;table&gt;
 &lt;thead&gt;

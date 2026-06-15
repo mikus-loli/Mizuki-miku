@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-06-12T17:27:53.856Z</updated>
+  <updated>2026-06-15T13:56:53.620Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Meting-API - 多平台音乐 API 服务</title>
@@ -694,7 +694,7 @@ python main.py --send-now
 # 查看当前 Cookie 状态
 python main.py --status
 </code></pre>
-<h2>自动化流程详解</h2>
+<h2>自动化流程</h2>
 <h3>各阶段说明</h3>
 <table>
 <thead>
