@@ -376,7 +376,7 @@ export const navBarConfig: NavBarConfig = {
 };
 
 export const profileConfig: ProfileConfig = {
-	avatar: "assets/images/miku.jpg", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
+	avatar: "assets/images/mikus.jpeg", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "mikus",
 	bio: "你好，世界 ！",
 	typewriter: {
