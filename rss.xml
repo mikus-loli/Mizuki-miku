@@ -2331,15 +2331,10 @@ if ($data[&apos;success&apos;]) {
 &lt;/ol&gt;
 </content:encoded></item><item><title>Docker加速源</title><link>https://mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</link><guid isPermaLink="true">https://mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</guid><description>mikus自建的docker加速源</description><pubDate>Wed, 14 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Docker加速源&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;docker hub 加速源 https://hub.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;elastic 加速源 https://elastic.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;gcr 加速源 https://gcr.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;ghcr 加速源 https://ghcr.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;k8s 加速源 https://k8s.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;k8s.gcr 加速源 https://k8s-gcr.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;mcr 加速源 https://mcr.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;nvcr 加速源 https://nvcr.docker.mikus.ink&lt;/li&gt;
-&lt;li&gt;quay 加速源 https://quay.docker.mikus.ink&lt;/li&gt;
+&lt;li&gt;docker hub 加速源 https://mirror.mikus.ink&lt;/li&gt;
+&lt;li&gt;ghcr 加速源 https://mirror.mikus.ink/ghcr.io&lt;/li&gt;
+&lt;li&gt;quay 加速源 https://mirror.mikus.ink/quay.io&lt;/li&gt;
+&lt;li&gt;k8s 加速源 https://mirror.mikus.ink/registry.k8s.io&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;配置使用示例&lt;/h1&gt;
 &lt;h2&gt;Linux/Mac 系统配置&lt;/h2&gt;
@@ -2349,7 +2344,7 @@ if ($data[&apos;success&apos;]) {
 &lt;h3&gt;2. 添加加速源配置&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;{
   &quot;registry-mirrors&quot;: [
-    &quot;https://hub.docker.mikus.ink&quot;
+    &quot;https://mirror.mikus.ink&quot;
   ]
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -2372,7 +2367,7 @@ sudo service docker restart
 &lt;/ol&gt;
 &lt;pre&gt;&lt;code&gt;{
   &quot;registry-mirrors&quot;: [
-    &quot;https://hub.docker.mikus.ink&quot;
+    &quot;https://mirror.mikus.ink&quot;
   ]
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -2386,16 +2381,13 @@ sudo service docker restart
 &lt;p&gt;如果输出显示配置的加速源 URL，则说明配置成功。&lt;/p&gt;
 &lt;h2&gt;使用示例&lt;/h2&gt;
 &lt;h3&gt;拉取 Docker Hub 镜像&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;docker pull nginx:latest
-# 自动使用 https://hub.docker.mikus.ink 加速
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3&gt;拉取 GCR 镜像&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;docker pull gcr.docker.mikus.ink/google-containers/pause:3.6
-# 等同于 docker pull k8s.gcr.io/pause:3.6
+&lt;pre&gt;&lt;code&gt;docker pull mirror.mikus.ink/nginx:latest
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;拉取 GHCR 镜像&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;docker pull ghcr.docker.mikus.ink/microsoft/vscode:latest
-# 等同于 docker pull ghcr.io/microsoft/vscode:latest
+&lt;pre&gt;&lt;code&gt;docker pull mirror.mikus.ink/ghcr.io/microsoft/vscode:latest
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;拉取 K8S 镜像&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;docker pull mirror.mikus.ink/registry.k8s.io/pause:3.8
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;:::caution[注意]&lt;/p&gt;
 &lt;ol&gt;

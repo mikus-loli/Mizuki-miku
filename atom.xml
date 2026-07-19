@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-06-15T13:56:53.620Z</updated>
+  <updated>2026-07-19T11:53:55.365Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Meting-API - 多平台音乐 API 服务</title>
@@ -2516,15 +2516,10 @@ if ($data['success']) {
     <summary>mikus自建的docker加速源</summary>
     <content type="html"><![CDATA[<h1>Docker加速源</h1>
 <ul>
-<li>docker hub 加速源 https://hub.docker.mikus.ink</li>
-<li>elastic 加速源 https://elastic.docker.mikus.ink</li>
-<li>gcr 加速源 https://gcr.docker.mikus.ink</li>
-<li>ghcr 加速源 https://ghcr.docker.mikus.ink</li>
-<li>k8s 加速源 https://k8s.docker.mikus.ink</li>
-<li>k8s.gcr 加速源 https://k8s-gcr.docker.mikus.ink</li>
-<li>mcr 加速源 https://mcr.docker.mikus.ink</li>
-<li>nvcr 加速源 https://nvcr.docker.mikus.ink</li>
-<li>quay 加速源 https://quay.docker.mikus.ink</li>
+<li>docker hub 加速源 https://mirror.mikus.ink</li>
+<li>ghcr 加速源 https://mirror.mikus.ink/ghcr.io</li>
+<li>quay 加速源 https://mirror.mikus.ink/quay.io</li>
+<li>k8s 加速源 https://mirror.mikus.ink/registry.k8s.io</li>
 </ul>
 <h1>配置使用示例</h1>
 <h2>Linux/Mac 系统配置</h2>
@@ -2534,7 +2529,7 @@ if ($data['success']) {
 <h3>2. 添加加速源配置</h3>
 <pre><code>{
   "registry-mirrors": [
-    "https://hub.docker.mikus.ink"
+    "https://mirror.mikus.ink"
   ]
 }
 </code></pre>
@@ -2557,7 +2552,7 @@ sudo service docker restart
 </ol>
 <pre><code>{
   "registry-mirrors": [
-    "https://hub.docker.mikus.ink"
+    "https://mirror.mikus.ink"
   ]
 }
 </code></pre>
@@ -2571,16 +2566,13 @@ sudo service docker restart
 <p>如果输出显示配置的加速源 URL，则说明配置成功。</p>
 <h2>使用示例</h2>
 <h3>拉取 Docker Hub 镜像</h3>
-<pre><code>docker pull nginx:latest
-# 自动使用 https://hub.docker.mikus.ink 加速
-</code></pre>
-<h3>拉取 GCR 镜像</h3>
-<pre><code>docker pull gcr.docker.mikus.ink/google-containers/pause:3.6
-# 等同于 docker pull k8s.gcr.io/pause:3.6
+<pre><code>docker pull mirror.mikus.ink/nginx:latest
 </code></pre>
 <h3>拉取 GHCR 镜像</h3>
-<pre><code>docker pull ghcr.docker.mikus.ink/microsoft/vscode:latest
-# 等同于 docker pull ghcr.io/microsoft/vscode:latest
+<pre><code>docker pull mirror.mikus.ink/ghcr.io/microsoft/vscode:latest
+</code></pre>
+<h3>拉取 K8S 镜像</h3>
+<pre><code>docker pull mirror.mikus.ink/registry.k8s.io/pause:3.8
 </code></pre>
 <p>:::caution[注意]</p>
 <ol>
