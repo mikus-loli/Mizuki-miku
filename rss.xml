@@ -1,4 +1,178 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>Meting-API - 多平台音乐 API 服务</title><link>https://mikus.ink/posts/meting/</link><guid isPermaLink="true">https://mikus.ink/posts/meting/</guid><description>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期和监测通知功能</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API - 多平台音乐 API 服务&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>Hermes Agent 部署指南</title><link>https://mikus.ink/posts/hermes-agent/</link><guid isPermaLink="true">https://mikus.ink/posts/hermes-agent/</guid><description>从零开始部署 Hermes Agent，搭建属于你自己的 AI 助手</description><pubDate>Thu, 23 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;前言&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/NousResearch/hermes-agent&quot;&gt;Hermes Agent&lt;/a&gt; 是由 Nous Research 开发的开源 AI 代理框架。它的 slogan 是 &lt;strong&gt;&quot;The agent that grows with you&quot;&lt;/strong&gt; —— 一个能随着你的使用不断进化的智能体。&lt;/p&gt;
+&lt;p&gt;相比其他 AI 框架，Hermes 有几个突出的特点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;🧩 &lt;strong&gt;丰富的工具生态&lt;/strong&gt; — 浏览器自动化、终端操作、代码执行、文件管理、网页搜索……开箱即用&lt;/li&gt;
+&lt;li&gt;🌐 &lt;strong&gt;多平台网关&lt;/strong&gt; — QQ、微信、Telegram、Discord、Slack……一个 Agent 跑通所有平台&lt;/li&gt;
+&lt;li&gt;🧠 &lt;strong&gt;灵活的大模型接入&lt;/strong&gt; — 支持 OpenAI、DeepSeek、Claude、本地模型等几乎所有主流 LLM&lt;/li&gt;
+&lt;li&gt;🔧 &lt;strong&gt;极高的可定制性&lt;/strong&gt; — Persona、Skills、Plugins 体系，让 Agent 越来越懂你&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这篇教程将带你从零开始部署 Hermes Agent，配置 QQ Bot，并介绍一些进阶玩法。&lt;/p&gt;
+&lt;h2&gt;前置要求&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一台 Linux 服务器（Debian/Ubuntu 推荐，本文以 Debian 为例）&lt;/li&gt;
+&lt;li&gt;Python 3.10+&lt;/li&gt;
+&lt;li&gt;Node.js 18+（部分插件需要）&lt;/li&gt;
+&lt;li&gt;Git&lt;/li&gt;
+&lt;li&gt;Docker（可选，某些功能需要）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;安装&lt;/h2&gt;
+&lt;h3&gt;一键安装&lt;/h3&gt;
+&lt;p&gt;Hermes 提供了一键安装脚本：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;安装完成后，重启终端或重新加载环境变量：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;source ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;验证安装&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;hermes --version
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果看到类似 &lt;code&gt;Hermes Agent v0.19.0&lt;/code&gt; 的输出，说明安装成功。&lt;/p&gt;
+&lt;h3&gt;从 Git 安装（推荐）&lt;/h3&gt;
+&lt;p&gt;一键安装走的是 pip，如果想获取最新的开发和修复，推荐从 Git 安装：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/NousResearch/hermes-agent.git
+cd hermes-agent
+pip install -e .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样以后升级只需要 &lt;code&gt;git pull&lt;/code&gt; 再 &lt;code&gt;hermes update&lt;/code&gt; 就好。&lt;/p&gt;
+&lt;h2&gt;基础配置&lt;/h2&gt;
+&lt;h3&gt;配置 LLM Provider&lt;/h3&gt;
+&lt;p&gt;Hermes 支持多种大模型提供商，配置非常简单：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;hermes setup
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;按照提示选择你的 provider（如 DeepSeek、OpenAI 等），输入 API Key 即可。&lt;/p&gt;
+&lt;p&gt;也可以用命令行直接设置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;hermes config set model.provider deepseek
+hermes config set model.default deepseek-v4-flash
+hermes config set model.base_url https://api.deepseek.com/v1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;API Key 保存在 &lt;code&gt;~/.hermes/.env&lt;/code&gt; 文件中：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo &apos;DEEPSEEK_API_KEY=sk-your-key-here&apos; &amp;gt;&amp;gt; ~/.hermes/.env
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;常用配置项&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# 语言设置（中文界面）
+hermes config set display.language zh-cn
+
+# 终端超时时间（秒）
+hermes config set terminal.timeout 300
+
+# 开启流式输出
+hermes config set display.streaming true
+
+# 会话自动重置（闲置 24 小时后）
+hermes config set session_reset.idle_minutes 1440
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;配置 QQ Bot 网关&lt;/h2&gt;
+&lt;p&gt;Hermes 最吸引人的功能之一就是可以通过 QQ 与你交互。&lt;/p&gt;
+&lt;h3&gt;安装 QQ Bot 插件&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;hermes plugins install qqbot
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;配置 QQ Bot&lt;/h3&gt;
+&lt;p&gt;编辑 &lt;code&gt;~/.hermes/config.yaml&lt;/code&gt;，添加 QQ Bot 配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;platforms:
+  qqbot:
+    enabled: true
+    extra:
+      allow_from:
+        - &quot;你的QQ号&quot;  # 允许谁给 Agent 发消息
+      dm_policy: allowlist  # 白名单模式
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;启动网关&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;hermes gateway start
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;网关会同时启动所有配置的平台连接。首次启动需要扫码登录 QQ。&lt;/p&gt;
+&lt;h3&gt;多平台同时运行&lt;/h3&gt;
+&lt;p&gt;Hermes 支持一个网关同时连接多个平台。例如同时跑 QQ Bot 和微信：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;platforms:
+  qqbot:
+    enabled: true
+    # ... QQ Bot 配置
+  weixin:
+    enabled: true
+    # ... 微信配置
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Docker 部署（进阶）&lt;/h2&gt;
+&lt;p&gt;如果你习惯用 Docker 管理服务，也可以用 Docker Compose 部署：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;version: &apos;3&apos;
+services:
+  hermes:
+    image: ghcr.io/nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    volumes:
+      - ./data:/root/.hermes
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DEEPSEEK_API_KEY=sk-your-key
+    network_mode: host
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;:::tip
+挂载 Docker socket 可以让 Hermes 在容器内也管理宿主机上的 Docker 容器。
+:::&lt;/p&gt;
+&lt;h2&gt;Camofox 浏览器集成&lt;/h2&gt;
+&lt;p&gt;Hermes 内置的浏览器工具在某些网站可能触发反爬机制。配合 Camofox 反检测浏览器可以解决这个问题。&lt;/p&gt;
+&lt;h3&gt;部署 Camofox&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;services:
+  camofox-browser:
+    image: ghcr.io/jo-inc/camofox-browser:latest
+    container_name: camofox-browser
+    restart: unless-stopped
+    shm_size: 2g
+    ports:
+      - &quot;9377:9377&quot;
+    volumes:
+      - ./data:/root/.camofox
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;配置 Hermes 使用 Camofox&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# 设置 Camofox 地址
+echo &apos;CAMOFOX_URL=http://localhost:9377&apos; &amp;gt;&amp;gt; ~/.hermes/.env
+
+# 启用持久化会话
+hermes config set browser.camofox.managed_persistence true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;配置好后，所有 &lt;code&gt;browser_*&lt;/code&gt; 工具会自动走 Camofox，Cookie、登录状态也不会丢失。&lt;/p&gt;
+&lt;h2&gt;升级&lt;/h2&gt;
+&lt;h3&gt;常规升级&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;hermes update
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个命令会自动拉取最新代码、重新安装依赖。升级前会自动备份配置。&lt;/p&gt;
+&lt;h3&gt;小版本升级&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;hermes update --check  # 先检查是否有更新
+hermes update -y       # 确认后升级，-y 跳过确认
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;常见问题&lt;/h2&gt;
+&lt;h3&gt;QQ Bot 发消息失败&lt;/h3&gt;
+&lt;p&gt;确保 QQ 号已登录且网关正常运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;hermes doctor    # 诊断工具
+hermes gateway logs  # 查看网关日志
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;网络问题导致更新失败&lt;/h3&gt;
+&lt;p&gt;国内服务器拉取 GitHub 可能较慢，可以配置代理：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;git config --global http.proxy http://your-proxy:port
+hermes update
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;模型返回异常&lt;/h3&gt;
+&lt;p&gt;检查 API Key 是否有效以及余额是否充足：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;curl -s https://api.deepseek.com/user/balance \
+  -H &quot;Authorization: Bearer $DEEPSEEK_API_KEY&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;后记&lt;/h2&gt;
+&lt;p&gt;部署完 Hermes 之后，你拥有的是一个随时待命的 AI 助手。它可以帮你：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;🤖 &lt;strong&gt;自动执行任务&lt;/strong&gt; — 写代码、查资料、管理服务器&lt;/li&gt;
+&lt;li&gt;💬 &lt;strong&gt;多平台聊天&lt;/strong&gt; — QQ、微信、Telegram 随时调用&lt;/li&gt;
+&lt;li&gt;🔧 &lt;strong&gt;不断进化&lt;/strong&gt; — Skills 和 Memory 系统让它越来越了解你&lt;/li&gt;
+&lt;li&gt;🌐 &lt;strong&gt;联网能力&lt;/strong&gt; — 搜索、抓取网页、操作浏览器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这篇文章里的配置就是 Miku 自己的运行环境，跑在宁宁云香港节点上，对接了 QQ Bot 和微信网关。希望这篇教程对你有帮助喵~ 🐱&lt;/p&gt;
+&lt;h2&gt;参考链接&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://hermes-agent.nousresearch.com/docs&quot;&gt;Hermes Agent 官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/NousResearch/hermes-agent&quot;&gt;Hermes Agent GitHub&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/jo-inc/camofox-browser&quot;&gt;Camofox Browser&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/matsuzaka-yuki/Mizuki&quot;&gt;Mizuki 主题&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content:encoded></item><item><title>Meting-API - 多平台音乐 API 服务</title><link>https://mikus.ink/posts/meting/</link><guid isPermaLink="true">https://mikus.ink/posts/meting/</guid><description>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期和监测通知功能</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API - 多平台音乐 API 服务&lt;/h1&gt;
 &lt;h2&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;::github{repo=&quot;mikus-loli/Meting-API&quot;}
 Meting-API 是一个开源的多平台音乐 API 服务，由 mikus-loli 开发维护。该项目 fork 自 xizeyoupan/Meting-API，并在此基础上进行了大量功能增强和优化。它支持网易云音乐和 QQ 音乐两大主流音乐平台，提供了完整的 Cookie 管理系统、VIP 歌曲播放能力、自动续期机制以及完善的监测通知功能。&lt;/p&gt;
