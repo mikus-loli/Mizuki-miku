@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-07-25T12:00:56.339Z</updated>
+  <updated>2026-07-25T12:40:35.798Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>Windows 启用 OpenSSH 指南</title>
@@ -1154,13 +1154,13 @@ MIOTIFY_TOKEN=你的App_Token_（UUID格式）
     <published>2026-03-24T00:00:00.000Z</published>
     <updated>2026-03-24T00:00:00.000Z</updated>
     <summary>通过 Meting-API 配置网易云音乐 Cookie，解决 VIP 歌曲的播放限制问题</summary>
-    <content type="html"><![CDATA[<h1>前言</h1>
+    <content type="html"><![CDATA[<h1>Meting-API 解决网易云音乐VIP播放限制</h1>
 <p>Mizuki 使用 meting 来提供音乐播放功能，但 meting 默认提供的 API 存在不稳定、下线或无人维护的风险。而最关键的问题是：它无法播放 VIP 歌曲，而网易云音乐上大部分歌曲都需要 VIP 才能播放。</p>
 <h2>网易云解决方法</h2>
-<h4>1. 获取网易云音乐 Cookie</h4>
+<h3>1. 获取网易云音乐 Cookie</h3>
 <p>登录网易云网页版并进入一首歌的页面，例如 https://music.163.com/#/song?id=1842206108。按 F12 打开开发者工具，在网络面板中找到 Cookie，如下图所示
 <img src="cookie.png" alt="（图片加载失败显示）" title="获取Cookie" /></p>
-<h4>2. 配置 Meting-API 的网易云 Cookie</h4>
+<h3>2. 配置 Meting-API 的网易云 Cookie</h3>
 <p>打开 <code>Meting-API/src/providers/netease/util.js</code>，替换以下内容</p>
 <pre><code>import encrypt from './crypto.js'
 import { net_ease_anonymous_token } from './config.js'
@@ -1382,7 +1382,7 @@ export const map_song_list = (song_list) =&gt; {
     })
 }
 </code></pre>
-<h4>3. 重启 Meting-API</h4>
+<h3>3. 重启 Meting-API</h3>
 <p>:::caution[注意]</p>
 <ol>
 <li>仅用于个人学习和研究，禁止用于违法用途</li>
@@ -1402,7 +1402,7 @@ export const map_song_list = (song_list) =&gt; {
     <published>2026-01-29T00:00:00.000Z</published>
     <updated>2026-01-29T00:00:00.000Z</updated>
     <summary>Umami 是一款开源、轻量级的网站分析工具，支持 Docker 快速部署，在保护用户隐私的同时提供详尽的流量统计数据</summary>
-    <content type="html"><![CDATA[<h1>Umami Docker 部署指南</h1>
+    <content type="html"><![CDATA[<h1>Umami Docker 部署</h1>
 <h2>项目介绍</h2>
 <p><a href="https://umami.is/">Umami</a> 是一款开源的网站分析工具，以简洁、轻量且注重隐私保护而著称。与 Google Analytics 等传统分析服务不同，Umami 不会追踪用户的个人信息，所有数据均存储在您自己的服务器上，全程可控可管。</p>
 <h3>主要特点</h3>
@@ -1558,11 +1558,11 @@ docker-compose up -d
     <published>2026-01-21T00:00:00.000Z</published>
     <updated>2026-01-21T00:00:00.000Z</updated>
     <summary>Mikutap Docker 部署指南 — 一键搭建初音未来风格电音交互页面，支持自定义构建与国内镜像加速</summary>
-    <content type="html"><![CDATA[<h1>项目地址</h1>
+    <content type="html"><![CDATA[<h1>Mikutap Docker版部署指南</h1>
 <p>::github{repo="AkariRin/mikutap"}</p>
-<h1>介绍</h1>
+<h2>介绍</h2>
 <p>Mikutap 是由日本知名 Vocaloid 音乐人 <em>daniwell</em> 开发的一款极简交互式声音艺术装置，灵感来源于 Patatap。其核心特点是无需任何音乐基础，只需通过简单的点击操作就能生成初音未来风格的电音旋律，配合绚丽的粒子动画，带来极致的解压体验。它没有复杂的规则，没有失败的惩罚，只有纯粹的创作乐趣与感官享受。miku厨狂喜</p>
-<h1>使用方法</h1>
+<h2>使用方法</h2>
 <p>:::caution[注意]
 部署前需确保服务器/本地已安装 Docker 和 Docker Compose
 :::</p>
@@ -1636,7 +1636,7 @@ docker ps  # 看到mikutap容器状态为Up即正常
 # 查看日志（排查启动失败）
 docker logs mikutap
 </code></pre>
-<h1>预览网址</h1>
+<h2>预览网址</h2>
 <ul>
 <li>https://aidn.jp/mikutap/</li>
 <li>https://mikutap.mikus.ink/（mikus 部署的 Mikutap，国内网络优化）</li>
@@ -1661,7 +1661,7 @@ docker logs mikutap
     <published>2026-01-19T00:00:00.000Z</published>
     <updated>2026-01-19T00:00:00.000Z</updated>
     <summary>为 Komari 的 Nezha-V1 主题打造一套精致的美化方案，全面提升面板的视觉体验</summary>
-    <content type="html"><![CDATA[<h1>Komari-Nezha-V1 主题美化</h1>
+    <content type="html"><![CDATA[<h1>Komari Nezha-V1 主题美化</h1>
 <h2>原项目</h2>
 <p>::github{repo="Akizon77/nezha-dash-v1"}
 感谢 <em>Akizon77</em> 大佬的移植以及 <em>まも</em> 大佬的美化\
@@ -1980,7 +1980,7 @@ mikus在 <em>まも</em> 大佬的基础上进行了一番调整，并添加了�
 <h2>美化效果</h2>
 <p><img src="%E5%8A%A0%E8%BD%BD.png" alt="加载" />
 <img src="Nezha.png" alt="主页" /></p>
-<h1>使用方式</h1>
+<h2>使用方式</h2>
 <ul>
 <li>下载 <a href="https://mirror.mikus.ink/https://github.com/mikus-loli/nezha-dash-v1/releases/download/miku/NezhaV1.zip">komari-nezha-v1美化.zip</a></li>
 <li>在komari 主题管理中导入主题</li>
@@ -2005,7 +2005,7 @@ mikus在 <em>まも</em> 大佬的基础上进行了一番调整，并添加了�
     <published>2026-01-18T00:00:00.000Z</published>
     <updated>2026-01-18T00:00:00.000Z</updated>
     <summary>mikus 自建的 GitHub 加速源，支持 Releases 下载、Raw 文件获取及仓库克隆，解决国内访问 GitHub 速度慢的问题</summary>
-    <content type="html"><![CDATA[<h1>GitHub 加速源</h1>
+    <content type="html"><![CDATA[<h1>Github加速源</h1>
 <p>由于国内网络环境限制，直接访问 GitHub 下载 Releases 资源、获取 Raw 文件或执行 <code>git clone</code> 往往速度缓慢甚至超时。mikus 搭建了一套基于 <code>mirror.mikus.ink</code> 的反向代理加速服务，只需在原始 GitHub 链接前加上镜像前缀即可享受高速下载。</p>
 <h2>使用方法</h2>
 <p>在任意 GitHub 链接（Releases、Raw 文件或仓库地址）前加上 <code>https://mirror.mikus.ink/</code> 即可。以下以 hubproxy 项目为例：</p>
@@ -2087,7 +2087,7 @@ mikus在 <em>まも</em> 大佬的基础上进行了一番调整，并添加了�
     <published>2026-01-18T00:00:00.000Z</published>
     <updated>2026-01-18T00:00:00.000Z</updated>
     <summary>开启小米 AX3000T 的 SSH 功能</summary>
-    <content type="html"><![CDATA[<h1>小米 AX3000T 开启 SSH 功能</h1>
+    <content type="html"><![CDATA[<h1>小米ax3000t 开启ssh</h1>
 <h2>方案一</h2>
 <h3>1.开启ssh</h3>
 <p>:::caution[注意]
@@ -2132,7 +2132,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
 4. 如果不需要自动开启 SSH 服务，使用命令移除开机自启动
 ./auto_ssh.sh uninstall
 </code></pre>
-<h1>方案二</h1>
+<h2>方案二</h2>
 <p>::github{repo="openwrt-xiaomi/xmir-patcher"}</p>
 <ol>
 <li>下载 xmir-patcher</li>
@@ -2280,7 +2280,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
     <published>2026-01-15T00:00:00.000Z</published>
     <updated>2026-01-15T00:00:00.000Z</updated>
     <summary>Mikus 自建的智能图片服务 API，支持格式转换、设备自适应与外链模式</summary>
-    <content type="html"><![CDATA[<h1>PicFlow API</h1>
+    <content type="html"><![CDATA[<h1>Picflow API</h1>
 <p>PicFlow API 地址: https://picflow-api.mikus.ink</p>
 <h2>接口用法</h2>
 <p>PicFlow API 是一款智能图片服务接口，支持多种图片格式转换、设备自适应以及外链模式。</p>
@@ -2288,7 +2288,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
 <pre><code>GET /api_v2.php
 </code></pre>
 <h2>请求参数</h2>
-<h4>基础参数</h4>
+<h3>基础参数</h3>
 <table>
 <thead>
 <tr>
@@ -2325,7 +2325,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
 </tr>
 </tbody>
 </table>
-<h4>图片格式参数</h4>
+<h3>图片格式参数</h3>
 <table>
 <thead>
 <tr>
@@ -2344,7 +2344,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
 </tr>
 </tbody>
 </table>
-<h4>外链模式参数</h4>
+<h3>外链模式参数</h3>
 <table>
 <thead>
 <tr>
@@ -2618,10 +2618,10 @@ if ($data['success']) {
     <published>2026-01-15T00:00:00.000Z</published>
     <updated>2026-01-15T00:00:00.000Z</updated>
     <summary>Mikus 自建的 Random-pic API，提供高颜值随机图片接口，支持横屏（PC）与竖屏（Mobile）两种尺寸，适合用于个人项目、网站背景或开发测试</summary>
-    <content type="html"><![CDATA[<h1>random-pic API</h1>
+    <content type="html"><![CDATA[<h1>Random-pic API-随机图片</h1>
 <p>random-pic 是一个轻量、快速的随机图片 API 服务，由 Mikus 自建并维护。通过简单的 HTTP 请求即可获取一张随机图片，适合用作网站背景、个人项目占位图、Demo 开发测试等场景。</p>
 <p><strong>API 地址</strong>: https://random.mikus.ink</p>
-<h1>接口用法</h1>
+<h2>接口用法</h2>
 <h2>横屏图片</h2>
 <p>请求 <code>/pc</code> 接口即可获取一张横屏（宽 &gt; 高）随机图片：</p>
 <pre><code>https://random.api.mikus.ink/pc
@@ -2656,7 +2656,7 @@ if ($data['success']) {
     <published>2026-01-14T00:00:00.000Z</published>
     <updated>2026-01-14T00:00:00.000Z</updated>
     <summary>mikus 自建的 Docker 镜像加速源，支持 Docker Hub、GHCR、Quay、K8s 等多个主流仓库的镜像拉取加速</summary>
-    <content type="html"><![CDATA[<h1>Docker 加速源</h1>
+    <content type="html"><![CDATA[<h1>Docker加速源</h1>
 <p>国内直接拉取 Docker 镜像时常遇到速度缓慢或连接超时的问题。本文介绍的是一套自建的 Docker 镜像加速服务，覆盖 Docker Hub、GHCR、Quay、K8s 等主流仓库，可帮助大家更顺畅地拉取容器镜像。</p>
 <ul>
 <li>Docker Hub 加速源 https://mirror.mikus.ink</li>
@@ -2664,7 +2664,7 @@ if ($data['success']) {
 <li>Quay 加速源 https://mirror.mikus.ink/quay.io</li>
 <li>K8s 加速源 https://mirror.mikus.ink/registry.k8s.io</li>
 </ul>
-<h1>配置使用示例</h1>
+<h2>配置使用示例</h2>
 <h2>Linux/Mac 系统配置</h2>
 <h3>1. 编辑 Docker 配置文件</h3>
 <pre><code>sudo nano /etc/docker/daemon.json
