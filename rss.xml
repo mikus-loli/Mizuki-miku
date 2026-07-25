@@ -1,4 +1,107 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>Meting-API - 多平台音乐 API 服务</title><link>https://mikus.ink/posts/meting/</link><guid isPermaLink="true">https://mikus.ink/posts/meting/</guid><description>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期及监控通知功能</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API - 多平台音乐 API 服务&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>Windows 启用 OpenSSH 指南</title><link>https://mikus.ink/posts/windows-ssh/</link><guid isPermaLink="true">https://mikus.ink/posts/windows-ssh/</guid><description>在 Windows 10/11 上启用 OpenSSH Server 和 Client 的完整教程，包括安装、配置、密钥认证和常见问题排查</description><pubDate>Sat, 25 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Windows 10 1809 和 Windows 11 已经内置了 OpenSSH，不需要装第三方工具就能当 SSH 服务端用。本文记录完整的启用和配置流程。&lt;/p&gt;
+&lt;h2&gt;检查是否已安装&lt;/h2&gt;
+&lt;p&gt;先看看系统里有没有装好。以管理员身份打开 PowerShell，执行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Get-WindowsCapability -Online | Where-Object Name -like &apos;OpenSSH*&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;输出会显示 OpenSSH Client 和 Server 的安装状态：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Name  : OpenSSH.Client~~~~0.0.1.0
+State : Installed
+
+Name  : OpenSSH.Server~~~~0.0.1.0
+State : NotPresent
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;默认情况下 Client 是装好的，Server 需要手动安装。&lt;/p&gt;
+&lt;h2&gt;安装 OpenSSH Server&lt;/h2&gt;
+&lt;p&gt;在管理员 PowerShell 里运行：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;等安装完成后启动服务并设为开机自启：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Start-Service sshd
+Set-Service -Name sshd -StartupType &apos;Automatic&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;验证一下服务是否在跑：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Get-Service sshd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;看到 &lt;code&gt;Running&lt;/code&gt; 就对了。&lt;/p&gt;
+&lt;h2&gt;防火墙配置&lt;/h2&gt;
+&lt;p&gt;Windows 默认防火墙一般会自动添加 SSH 的入站规则，不过最好确认一下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;New-NetFirewallRule -DisplayName &apos;OpenSSH Server (sshd)&apos; -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果提示规则已存在，说明 Windows 自动配好了，不用管。&lt;/p&gt;
+&lt;h2&gt;连接测试&lt;/h2&gt;
+&lt;p&gt;现在从另一台机器连过来试试：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh username@windows-ip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;第一次连会提示确认主机指纹，输入 &lt;code&gt;yes&lt;/code&gt;，然后输密码就登进去了。&lt;/p&gt;
+&lt;h2&gt;配置密钥认证（推荐）&lt;/h2&gt;
+&lt;p&gt;每次输密码挺烦的，配个密钥登录省事多了。&lt;/p&gt;
+&lt;h3&gt;在客户端生成密钥&lt;/h3&gt;
+&lt;p&gt;如果你还没有 SSH 密钥：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh-keygen -t ed25519 -C &quot;windows-ssh&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;一路回车就行。会生成 &lt;code&gt;~/.ssh/id_ed25519&lt;/code&gt; 和 &lt;code&gt;~/.ssh/id_ed25519.pub&lt;/code&gt;。&lt;/p&gt;
+&lt;h3&gt;把公钥复制到 Windows&lt;/h3&gt;
+&lt;p&gt;方式一：用 &lt;code&gt;ssh-copy-id&lt;/code&gt;（如果客户端是 Linux/macOS）&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ssh-copy-id username@windows-ip
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;方式二：手动复制&lt;/p&gt;
+&lt;p&gt;把 &lt;code&gt;id_ed25519.pub&lt;/code&gt; 的内容追加到 Windows 上的 &lt;code&gt;C:\Users\你的用户名\.ssh\authorized_keys&lt;/code&gt; 文件里。&lt;/p&gt;
+&lt;p&gt;Windows 上如果 &lt;code&gt;.ssh&lt;/code&gt; 目录不存在，先建一个：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir $env:USERPROFILE\.ssh
+notepad $env:USERPROFILE\.ssh\authorized_keys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后粘贴公钥内容保存。&lt;/p&gt;
+&lt;h3&gt;配置 sshd 允许密钥登录&lt;/h3&gt;
+&lt;p&gt;检查 &lt;code&gt;C:\ProgramData\ssh\sshd_config&lt;/code&gt;，确认这几项是设好的：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;PubkeyAuthentication yes
+PasswordAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;改完后重启服务：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Restart-Service sshd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;现在再连应该就不用输密码了。&lt;/p&gt;
+&lt;h3&gt;关于 authorized_keys 权限&lt;/h3&gt;
+&lt;p&gt;Windows 的 OpenSSH 对 &lt;code&gt;authorized_keys&lt;/code&gt; 的权限要求比较严格，权限不对会直接忽略密钥认证。如果配好后仍然要输密码，去检查文件权限：&lt;/p&gt;
+&lt;p&gt;在 PowerShell 里重置一下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 修复 authorized_keys 权限
+icacls $env:USERPROFILE\.ssh\authorized_keys /inheritance:r /grant &quot;$env:USERNAME:(R)&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;关闭密码登录（可选）&lt;/h2&gt;
+&lt;p&gt;配好密钥验证后，可以关掉密码登录来提高安全性。编辑 &lt;code&gt;C:\ProgramData\ssh\sshd_config&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;PasswordAuthentication no
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后重启服务：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Restart-Service sshd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;改之前一定确保密钥登录能正常工作&lt;/strong&gt;，不然你可能会把自己锁在外面。&lt;/p&gt;
+&lt;h2&gt;常见问题&lt;/h2&gt;
+&lt;h3&gt;连接被拒绝&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;ssh: connect to host xxx.xxx.xxx.xxx port 22: Connection refused
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;检查 sshd 服务是否在运行，以及防火墙 22 端口是否开放。&lt;/p&gt;
+&lt;h3&gt;密钥登录失败 / 仍要输密码&lt;/h3&gt;
+&lt;p&gt;最可能的原因是 &lt;code&gt;authorized_keys&lt;/code&gt; 权限不对。按上面的 icacls 命令修复一下。&lt;/p&gt;
+&lt;p&gt;另外检查 &lt;code&gt;sshd_config&lt;/code&gt; 里有没有被其他配置覆盖：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 确保这行没有被注释掉
+PubkeyAuthentication yes
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;修改 SSH 端口&lt;/h3&gt;
+&lt;p&gt;如果你不想用默认的 22 端口，编辑 &lt;code&gt;C:\ProgramData\ssh\sshd_config&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Port 2222
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后别忘了在防火墙里放行新端口：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;New-NetFirewallRule -DisplayName &apos;OpenSSH Server (2222)&apos; -Direction Inbound -Protocol TCP -LocalPort 2222 -Action Allow
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;重启 sshd 生效。&lt;/p&gt;
+&lt;h2&gt;卸载 OpenSSH Server&lt;/h2&gt;
+&lt;p&gt;不用了可以随时卸掉：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Remove-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;Windows 自带的 OpenSSH 已经够用了，不用折腾 Cygwin 或者第三方 SSH 服务器。装好配好密钥登录，日常管理 Windows 远程机器就方便多了。&lt;/p&gt;
+&lt;p&gt;如果需要管理多台 Windows 机器，可以考虑配合 Ansible 统一管理，那就是另一个话题了喵~&lt;/p&gt;
+</content:encoded></item><item><title>Meting-API - 多平台音乐 API 服务</title><link>https://mikus.ink/posts/meting/</link><guid isPermaLink="true">https://mikus.ink/posts/meting/</guid><description>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期及监控通知功能</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API - 多平台音乐 API 服务&lt;/h1&gt;
 &lt;h2&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;::github{repo=&quot;mikus-loli/Meting-API&quot;}
 Meting-API 是一个开源的多平台音乐 API 服务，由 mikus-loli 开发维护。该项目 Fork 自 xizeyoupan/Meting-API，并在此之上做了大量功能增强与优化。它支持网易云音乐和 QQ 音乐两大主流音乐平台，提供了完整的 Cookie 管理系统、VIP 歌曲播放能力、自动续期机制以及完善的监测通知功能。&lt;/p&gt;
