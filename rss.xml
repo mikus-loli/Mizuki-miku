@@ -1,4 +1,113 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>Windows 启用 OpenSSH 指南</title><link>https://mikus.ink/posts/windows-ssh/</link><guid isPermaLink="true">https://mikus.ink/posts/windows-ssh/</guid><description>在 Windows 10/11 上启用 OpenSSH Server 和 Client 的完整教程，包括安装、配置、密钥认证和常见问题排查</description><pubDate>Sat, 25 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Windows 10 1809 和 Windows 11 已经内置了 OpenSSH，不需要装第三方工具就能当 SSH 服务端用。本文记录完整的启用和配置流程。&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>Komari Theme Market CN — EdgeOne 加速国内主题市场</title><link>https://mikus.ink/posts/theme-market-cn/</link><guid isPermaLink="true">https://mikus.ink/posts/theme-market-cn/</guid><description>利用 EdgeOne Pages 为 Komari 监控主题市场搭建国内加速镜像，解决 GitHub 资源访问慢的问题</description><pubDate>Sun, 26 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://github.com/komari-monitor/komari&quot;&gt;Komari&lt;/a&gt; 是一款精致的服务器监控面板，它的主题市场默认从 GitHub 拉取主题目录和资源。但在国内，GitHub 的访问速度懂的都懂——预览图加载慢、主题包下载超时，体验很打折扣。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Komari Theme Market CN&lt;/strong&gt; 就是为了解决这个问题而生的：它通过 EdgeOne Pages 为 Komari 主题市场搭建了一个国内加速镜像站。&lt;/p&gt;
+&lt;p&gt;项目地址：&lt;a href=&quot;https://github.com/mikus-loli/theme-market-cn&quot;&gt;github.com/mikus-loli/theme-market-cn&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;工作原理&lt;/h2&gt;
+&lt;p&gt;整个流程围绕上游的 &lt;code&gt;v1.json&lt;/code&gt;（主题目录文件）展开：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GitHub 上游仓库 (komari-monitor/theme-market)
+     │  定时同步 v1.json
+     ▼
+data/v1.json  ──►  构建脚本下载所有 preview / download 资源
+     │                      │
+     │                      ▼
+     │               dist/resources/（资源本地副本）
+     │                      │
+     ▼                      ▼
+仅替换 v1.json 中的资源链接为 EdgeOne 加速链接
+     │
+     ▼
+部署到 EdgeOne Pages → https://komari-market.mikus.ink
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;简单来说就是三步：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;同步&lt;/strong&gt; — 从上游拉取最新的 &lt;code&gt;v1.json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;构建&lt;/strong&gt; — 下载所有主题的预览图和安装包到本地，然后把 &lt;code&gt;v1.json&lt;/code&gt; 里的链接换成 EdgeOne 的加速地址&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;部署&lt;/strong&gt; — 推送到 EdgeOne Pages&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;项目结构&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;theme-market-cn/
+├── config/config.json              # 全局配置
+├── scripts/
+│   ├── sync-upstream.js            # 上游同步脚本
+│   ├── build.js                    # 构建 + 资源下载 + 链接替换
+│   ├── utils.js                    # 工具函数
+│   └── logger.js                   # 日志系统
+├── data/                           # 同步下来的数据
+├── dist/                           # 构建产物（部署到 EdgeOne）
+├── src/                            # Vue3 前端
+└── .github/workflows/
+    └── sync-and-deploy.yml         # CI/CD 工作流
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;技术细节&lt;/h2&gt;
+&lt;h3&gt;配置驱动&lt;/h3&gt;
+&lt;p&gt;所有配置集中在 &lt;code&gt;config/config.json&lt;/code&gt; 里：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+  &quot;upstream&quot;: {
+    &quot;repo&quot;: &quot;komari-monitor/theme-market&quot;,
+    &quot;branch&quot;: &quot;main&quot;,
+    &quot;mirrorRawUrl&quot;: &quot;https://mirror.mikus.ink/https://raw.githubusercontent.com&quot;
+  },
+  &quot;edgeone&quot;: {
+    &quot;domain&quot;: &quot;https://komari-market.mikus.ink&quot;,
+    &quot;resourcePath&quot;: &quot;/resources/&quot;
+  },
+  &quot;build&quot;: {
+    &quot;concurrency&quot;: 8,
+    &quot;timeoutMs&quot;: 60000,
+    &quot;maxRetries&quot;: 3
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;同步脚本&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;sync-upstream.js&lt;/code&gt; 会按优先级依次尝试三种方式拉取 &lt;code&gt;v1.json&lt;/code&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;GitHub API&lt;/strong&gt;（有 Token 时优先，限流更高）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Raw&lt;/strong&gt;（直连）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;镜像地址&lt;/strong&gt;（通过 &lt;code&gt;mirror.mikus.ink&lt;/code&gt; 兜底）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;拉取后会与本地的 &lt;code&gt;data/v1.json&lt;/code&gt; 做内容对比，&lt;strong&gt;没有变化就跳过后续流程&lt;/strong&gt;，避免不必要的构建和部署。&lt;/p&gt;
+&lt;h3&gt;构建脚本&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;build.js&lt;/code&gt; 负责核心的加速逻辑：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;读取 &lt;code&gt;data/v1.json&lt;/code&gt;，遍历每个主题&lt;/li&gt;
+&lt;li&gt;并发下载 &lt;code&gt;preview&lt;/code&gt;（预览图）和 &lt;code&gt;download&lt;/code&gt;（主题包）到 &lt;code&gt;dist/resources/&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;替换 &lt;code&gt;v1.json&lt;/code&gt; 中的原始 GitHub 链接为 EdgeOne 加速链接&lt;/li&gt;
+&lt;li&gt;运行 Vite 构建前端&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;下载失败的资源保留原始 URL&lt;/strong&gt;，不影响其他资源&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;并发数、超时、重试次数均可配置。默认 8 并发、60 秒超时、3 次重试。&lt;/p&gt;
+&lt;h3&gt;CI/CD&lt;/h3&gt;
+&lt;p&gt;GitHub Actions 工作流做了几件事：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定时触发&lt;/strong&gt; — 每天 UTC 12:05 自动同步一次&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;push 触发&lt;/strong&gt; — 代码更新时自动同步&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;手动触发&lt;/strong&gt; — 支持 &lt;code&gt;workflow_dispatch&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提交同步数据&lt;/strong&gt; — 检测到上游更新时，自动 commit 并 push&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提交构建产物&lt;/strong&gt; — 构建完成后提交 &lt;code&gt;dist/&lt;/code&gt; 目录&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;EdgeOne 部署&lt;/strong&gt; — 可选的 EdgeOne CLI 部署，或者用 EdgeOne Git 集成自动部署&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;on:
+  schedule:
+    - cron: &apos;5 12 * * *&apos;   # 每天 UTC 12:05
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3&gt;日志系统&lt;/h3&gt;
+&lt;p&gt;日志同时输出到控制台和文件，按天滚动保留 14 天：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[2026-07-26T12:05:00.000Z] [INFO] [build] 下载成功 {&quot;type&quot;:&quot;preview&quot;,&quot;theme&quot;:&quot;Mikus&quot;,&quot;size&quot;:49956}
+[2026-07-26T12:05:01.000Z] [INFO] [build] 下载成功 {&quot;type&quot;:&quot;download&quot;,&quot;theme&quot;:&quot;Mikus&quot;,&quot;size&quot;:284561}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;部署&lt;/h2&gt;
+&lt;p&gt;两种部署方式：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;方式一：EdgeOne Git 集成（推荐）&lt;/strong&gt;
+在 EdgeOne 控制台创建 Pages 项目，关联本仓库，设置构建命令 &lt;code&gt;npm run sync:build&lt;/code&gt;，输出目录 &lt;code&gt;dist&lt;/code&gt;，绑定域名就完事了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;方式二：GitHub Actions + EdgeOne CLI&lt;/strong&gt;
+配置 &lt;code&gt;EDGEOONE_API_TOKEN&lt;/code&gt;，工作流会自动调用 &lt;code&gt;edgeone makers deploy&lt;/code&gt; 部署。&lt;/p&gt;
+&lt;h2&gt;总结&lt;/h2&gt;
+&lt;p&gt;Komari Theme Market CN 本质上是一个思路很简单的项目——GitHub 慢，就在国内 CDN 上存一份。通过 EdgeOne Pages 的 Git 集成，配合 GitHub Actions 实现全自动的同步 → 构建 → 部署流水线。&lt;/p&gt;
+&lt;p&gt;如果你也在用 Komari，可以参考这个项目的思路来解决类似的问题。&lt;/p&gt;
+&lt;p&gt;::github{repo=&quot;mikus-loli/theme-market-cn&quot;}&lt;/p&gt;
+</content:encoded></item><item><title>Windows 启用 OpenSSH 指南</title><link>https://mikus.ink/posts/windows-ssh/</link><guid isPermaLink="true">https://mikus.ink/posts/windows-ssh/</guid><description>在 Windows 10/11 上启用 OpenSSH Server 和 Client 的完整教程，包括安装、配置、密钥认证和常见问题排查</description><pubDate>Sat, 25 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Windows 10 1809 和 Windows 11 已经内置了 OpenSSH，不需要装第三方工具就能当 SSH 服务端用。本文记录完整的启用和配置流程。&lt;/p&gt;
 &lt;h2&gt;检查是否已安装&lt;/h2&gt;
 &lt;p&gt;先看看系统里有没有装好。以管理员身份打开 PowerShell，执行：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Get-WindowsCapability -Online | Where-Object Name -like &apos;OpenSSH*&apos;

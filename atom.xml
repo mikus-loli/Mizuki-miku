@@ -5,8 +5,130 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-07-25T13:06:02.965Z</updated>
+  <updated>2026-07-26T15:56:17.310Z</updated>
   <language>zh_CN</language>
+  <entry>
+    <title>Komari Theme Market CN — EdgeOne 加速国内主题市场</title>
+    <link href="https://mikus.ink/posts/theme-market-cn/" rel="alternate" type="text/html"/>
+    <id>https://mikus.ink/posts/theme-market-cn/</id>
+    <published>2026-07-26T00:00:00.000Z</published>
+    <updated>2026-07-26T00:00:00.000Z</updated>
+    <summary>利用 EdgeOne Pages 为 Komari 监控主题市场搭建国内加速镜像，解决 GitHub 资源访问慢的问题</summary>
+    <content type="html"><![CDATA[<p><a href="https://github.com/komari-monitor/komari">Komari</a> 是一款精致的服务器监控面板，它的主题市场默认从 GitHub 拉取主题目录和资源。但在国内，GitHub 的访问速度懂的都懂——预览图加载慢、主题包下载超时，体验很打折扣。</p>
+<p><strong>Komari Theme Market CN</strong> 就是为了解决这个问题而生的：它通过 EdgeOne Pages 为 Komari 主题市场搭建了一个国内加速镜像站。</p>
+<p>项目地址：<a href="https://github.com/mikus-loli/theme-market-cn">github.com/mikus-loli/theme-market-cn</a></p>
+<h2>工作原理</h2>
+<p>整个流程围绕上游的 <code>v1.json</code>（主题目录文件）展开：</p>
+<pre><code>GitHub 上游仓库 (komari-monitor/theme-market)
+     │  定时同步 v1.json
+     ▼
+data/v1.json  ──►  构建脚本下载所有 preview / download 资源
+     │                      │
+     │                      ▼
+     │               dist/resources/（资源本地副本）
+     │                      │
+     ▼                      ▼
+仅替换 v1.json 中的资源链接为 EdgeOne 加速链接
+     │
+     ▼
+部署到 EdgeOne Pages → https://komari-market.mikus.ink
+</code></pre>
+<p>简单来说就是三步：</p>
+<ol>
+<li><strong>同步</strong> — 从上游拉取最新的 <code>v1.json</code></li>
+<li><strong>构建</strong> — 下载所有主题的预览图和安装包到本地，然后把 <code>v1.json</code> 里的链接换成 EdgeOne 的加速地址</li>
+<li><strong>部署</strong> — 推送到 EdgeOne Pages</li>
+</ol>
+<h2>项目结构</h2>
+<pre><code>theme-market-cn/
+├── config/config.json              # 全局配置
+├── scripts/
+│   ├── sync-upstream.js            # 上游同步脚本
+│   ├── build.js                    # 构建 + 资源下载 + 链接替换
+│   ├── utils.js                    # 工具函数
+│   └── logger.js                   # 日志系统
+├── data/                           # 同步下来的数据
+├── dist/                           # 构建产物（部署到 EdgeOne）
+├── src/                            # Vue3 前端
+└── .github/workflows/
+    └── sync-and-deploy.yml         # CI/CD 工作流
+</code></pre>
+<h2>技术细节</h2>
+<h3>配置驱动</h3>
+<p>所有配置集中在 <code>config/config.json</code> 里：</p>
+<pre><code>{
+  "upstream": {
+    "repo": "komari-monitor/theme-market",
+    "branch": "main",
+    "mirrorRawUrl": "https://mirror.mikus.ink/https://raw.githubusercontent.com"
+  },
+  "edgeone": {
+    "domain": "https://komari-market.mikus.ink",
+    "resourcePath": "/resources/"
+  },
+  "build": {
+    "concurrency": 8,
+    "timeoutMs": 60000,
+    "maxRetries": 3
+  }
+}
+</code></pre>
+<h3>同步脚本</h3>
+<p><code>sync-upstream.js</code> 会按优先级依次尝试三种方式拉取 <code>v1.json</code>：</p>
+<ol>
+<li><strong>GitHub API</strong>（有 Token 时优先，限流更高）</li>
+<li><strong>GitHub Raw</strong>（直连）</li>
+<li><strong>镜像地址</strong>（通过 <code>mirror.mikus.ink</code> 兜底）</li>
+</ol>
+<p>拉取后会与本地的 <code>data/v1.json</code> 做内容对比，<strong>没有变化就跳过后续流程</strong>，避免不必要的构建和部署。</p>
+<h3>构建脚本</h3>
+<p><code>build.js</code> 负责核心的加速逻辑：</p>
+<ol>
+<li>读取 <code>data/v1.json</code>，遍历每个主题</li>
+<li>并发下载 <code>preview</code>（预览图）和 <code>download</code>（主题包）到 <code>dist/resources/</code></li>
+<li>替换 <code>v1.json</code> 中的原始 GitHub 链接为 EdgeOne 加速链接</li>
+<li>运行 Vite 构建前端</li>
+<li><strong>下载失败的资源保留原始 URL</strong>，不影响其他资源</li>
+</ol>
+<p>并发数、超时、重试次数均可配置。默认 8 并发、60 秒超时、3 次重试。</p>
+<h3>CI/CD</h3>
+<p>GitHub Actions 工作流做了几件事：</p>
+<ul>
+<li><strong>定时触发</strong> — 每天 UTC 12:05 自动同步一次</li>
+<li><strong>push 触发</strong> — 代码更新时自动同步</li>
+<li><strong>手动触发</strong> — 支持 <code>workflow_dispatch</code></li>
+<li><strong>提交同步数据</strong> — 检测到上游更新时，自动 commit 并 push</li>
+<li><strong>提交构建产物</strong> — 构建完成后提交 <code>dist/</code> 目录</li>
+<li><strong>EdgeOne 部署</strong> — 可选的 EdgeOne CLI 部署，或者用 EdgeOne Git 集成自动部署</li>
+</ul>
+<pre><code>on:
+  schedule:
+    - cron: '5 12 * * *'   # 每天 UTC 12:05
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+</code></pre>
+<h3>日志系统</h3>
+<p>日志同时输出到控制台和文件，按天滚动保留 14 天：</p>
+<pre><code>[2026-07-26T12:05:00.000Z] [INFO] [build] 下载成功 {"type":"preview","theme":"Mikus","size":49956}
+[2026-07-26T12:05:01.000Z] [INFO] [build] 下载成功 {"type":"download","theme":"Mikus","size":284561}
+</code></pre>
+<h2>部署</h2>
+<p>两种部署方式：</p>
+<p><strong>方式一：EdgeOne Git 集成（推荐）</strong>
+在 EdgeOne 控制台创建 Pages 项目，关联本仓库，设置构建命令 <code>npm run sync:build</code>，输出目录 <code>dist</code>，绑定域名就完事了。</p>
+<p><strong>方式二：GitHub Actions + EdgeOne CLI</strong>
+配置 <code>EDGEOONE_API_TOKEN</code>，工作流会自动调用 <code>edgeone makers deploy</code> 部署。</p>
+<h2>总结</h2>
+<p>Komari Theme Market CN 本质上是一个思路很简单的项目——GitHub 慢，就在国内 CDN 上存一份。通过 EdgeOne Pages 的 Git 集成，配合 GitHub Actions 实现全自动的同步 → 构建 → 部署流水线。</p>
+<p>如果你也在用 Komari，可以参考这个项目的思路来解决类似的问题。</p>
+<p>::github{repo="mikus-loli/theme-market-cn"}</p>
+]]></content>
+    <author>
+      <name>mikus</name>
+    </author>
+    <category term="项目"></category>
+  </entry>
   <entry>
     <title>Windows 启用 OpenSSH 指南</title>
     <link href="https://mikus.ink/posts/windows-ssh/" rel="alternate" type="text/html"/>
