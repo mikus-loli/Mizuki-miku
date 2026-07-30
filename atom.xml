@@ -5,8 +5,221 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-07-26T15:56:17.310Z</updated>
+  <updated>2026-07-30T01:58:15.280Z</updated>
   <language>zh_CN</language>
+  <entry>
+    <title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title>
+    <link href="https://mikus.ink/posts/deepseek-to-opencode-go/" rel="alternate" type="text/html"/>
+    <id>https://mikus.ink/posts/deepseek-to-opencode-go/</id>
+    <published>2026-07-30T00:00:00.000Z</published>
+    <updated>2026-07-30T00:00:00.000Z</updated>
+    <summary>从 DeepSeek 官方 API 迁移到 OpenCode Go 订阅的体验分享，对比两者的定价、额度、模型选择和实际使用性价比。</summary>
+    <content type="html"><![CDATA[<h1>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</h1>
+<p>如果你在用 AI 辅助编程，一定听过 <strong>DeepSeek</strong>——国产模型的骄傲，V4 系列发布后一度是编程领域性价比之王。但最近我把它换成了 <strong>OpenCode Go</strong>，体验出乎意料地好。这次就来聊聊为什么。</p>
+<h2>背景</h2>
+<p>之前我的 Hermes Agent 一直跑 DeepSeek V4 Flash，走的是官方 API。每月账单虽然不算贵，但问题是：</p>
+<ul>
+<li><strong>用量波动大</strong> ——写代码多的时候 token 哗哗地跑</li>
+<li><strong>月底总得看一眼账单</strong> ——心理上总觉得在用"计价器"</li>
+<li><strong>只绑了一个模型</strong> ——想试试 GLM、Kimi 还得另起炉灶去注册充值</li>
+</ul>
+<p>所以当 OpenCode Go 出来的时候，我一开始没太在意。直到仔细算了一笔账……</p>
+<h2>定价对比</h2>
+<p>先看最核心的：<strong>钱</strong>。</p>
+<h3>DeepSeek 官方 API 价格</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>输入 (每 1M tokens)</th>
+<th>输出 (每 1M tokens)</th>
+<th>缓存 (每 1M tokens)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek V4 Flash</td>
+<td><strong>$0.14</strong></td>
+<td><strong>$0.28</strong></td>
+<td><strong>$0.0028</strong></td>
+</tr>
+<tr>
+<td>DeepSeek V4 Pro</td>
+<td><strong>$0.56</strong></td>
+<td><strong>$1.11</strong></td>
+<td><strong>$0.011</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意：这是 <strong>25 折促销价</strong>。如果促销结束恢复原价，Flash 的输入会涨到 $0.56，Pro 会涨到 $2.22。那差距就不是一星半点了。</p>
+</blockquote>
+<h3>OpenCode Go 订阅</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>价格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>首月</strong></td>
+<td><strong>$5</strong></td>
+</tr>
+<tr>
+<td><strong>续费</strong></td>
+<td><strong>$10/月</strong></td>
+</tr>
+<tr>
+<td><strong>月额度</strong></td>
+<td><strong>$60（美元信用额度）</strong></td>
+</tr>
+<tr>
+<td><strong>周额度</strong></td>
+<td>$30</td>
+</tr>
+<tr>
+<td><strong>每5小时额度</strong></td>
+<td>$12</td>
+</tr>
+</tbody>
+</table>
+<p>OpenCode Go 的机制是：<strong>$10 买 $60 的信用额度</strong>，相当于所有模型打 <strong>1.7 折</strong>。</p>
+<h3>折算对比</h3>
+<p>以 DeepSeek V4 Flash 为例：</p>
+<table>
+<thead>
+<tr>
+<th>渠道</th>
+<th>实际价格</th>
+<th>倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek 官方（促销价）</td>
+<td>$0.14 / $0.28</td>
+<td>1x</td>
+</tr>
+<tr>
+<td>OpenCode Go（折算后）</td>
+<td><strong>$0.023 / $0.047</strong></td>
+<td><strong>~6x 优惠</strong></td>
+</tr>
+</tbody>
+</table>
+<p>也就是说，通过 OpenCode Go 用 DeepSeek V4 Flash，<strong>实际成本是官方的 1/6</strong>。</p>
+<p>如果把 $10/月的投入全花在 DeepSeek V4 Flash 上：</p>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>官方 API（$10）</th>
+<th>OpenCode Go（$10 → $60）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V4 Flash Input</td>
+<td><strong>~71M tokens</strong></td>
+<td><strong>~428M tokens</strong></td>
+</tr>
+<tr>
+<td>V4 Flash Output</td>
+<td><strong>~36M tokens</strong></td>
+<td><strong>~214M tokens</strong></td>
+</tr>
+<tr>
+<td>月请求数（典型场景）</td>
+<td><strong>~26,000 次</strong></td>
+<td><strong>~158,000 次</strong></td>
+</tr>
+</tbody>
+</table>
+<p>差距非常明显。</p>
+<h2>不只是便宜</h2>
+<p>如果 OpenCode Go 只是便宜，那和换个 API 供应商没区别。它真正让我留下的理由是：</p>
+<h3>1. 一价全包</h3>
+<p>$10/月不只是 DeepSeek，而是下面这些模型<strong>全部随便用</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>定位</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek V4 Flash</td>
+<td>轻量/日常/快速</td>
+</tr>
+<tr>
+<td>DeepSeek V4 Pro</td>
+<td>复杂任务主力</td>
+</tr>
+<tr>
+<td>GLM 5.1 / 5.2</td>
+<td>中文编码强者</td>
+</tr>
+<tr>
+<td>Kimi K2.6 / K3</td>
+<td>超长上下文（1M tokens）</td>
+</tr>
+<tr>
+<td>Qwen 3.6 Plus</td>
+<td>阿里系通用模型</td>
+</tr>
+<tr>
+<td>MiMo V2.5</td>
+<td>轻量替代</td>
+</tr>
+<tr>
+<td>…… 以及更多更新中的模型</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>想试什么模型直接改配置就行，<strong>不用再注册充值、不用记 n 个 API Key、不用月底看 n 张账单</strong>。</p>
+<h3>2. 额度够用</h3>
+<p>$60/月的额度，用 DeepSeek V4 Flash 这种轻量模型基本<strong>用不完</strong>。即使是 V4 Pro 这种旗舰模型，日常开发也绰绰有余。</p>
+<p>三个滚动窗口（每5小时/$12、每周/$30、每月/$60）的设计很合理——既防止滥用，又不会卡正常使用。</p>
+<h3>3. 不再焦虑用量</h3>
+<p>之前用官方 API 的时候，每次跑个大任务都会下意识想"这波跑了多少 token"。换成订阅制后，<strong>心态完全变了</strong>——反正一个月 $10 已经付了，随便用。</p>
+<p>别小看这个心态变化。编程本身已经够烧脑了，少一个要操心的变量总是好的。</p>
+<h3>4. 模型自由</h3>
+<p>这是最大的隐性收益。</p>
+<p>之前绑定 DeepSeek 的时候，遇到某些场景（比如超长上下文）会想办法绕。现在想在 OpenCode 里切到 Kimi K3（1M 上下文）就是改一行配置的事。想用 GLM 5.1 跑中文项目也只是换一个 model 名。</p>
+<p>真正做到了 <strong>work with the best tool for the job</strong>。</p>
+<h2>什么场景适合 OpenCode Go？</h2>
+<p><strong>推荐入手：</strong></p>
+<ul>
+<li>AI 编程的重度用户（每天都在用）</li>
+<li>想尝试多种模型的开发者</li>
+<li>受够了多家 API 分别充值管理的</li>
+</ul>
+<p><strong>可能不太适合：</strong></p>
+<ul>
+<li>用量极低（每月花不到 $5 的）</li>
+<li>需要无限制并发调用的后端/生产环境</li>
+<li>特别依赖某个模型独家功能的</li>
+</ul>
+<h2>总结</h2>
+<p>从 DeepSeek 官方 API 换到 OpenCode Go，我用更少的钱（每月 $10 封顶），换来了更多的额度（约 6 倍），还附赠了十多个模型的自由选择权。</p>
+<p>如果你现在还在用 DeepSeek 官方 API 做编程辅助，建议你算算账——大概率 OpenCode Go 更划算。</p>
+<blockquote>
+<p>唯一需要注意的就是：<strong>趁促销赶紧上车</strong>。DeepSeek 官方 25 折结束后的价格和 OpenCode Go 的差距会更大，到时候 OpenCode Go 的优势会更明显。</p>
+</blockquote>
+<p>:::tip
+OpenCode Go 订阅地址：<a href="https://opencode.ai/zh/go">opencode.ai/zh/go</a>
+首月仅 $5，没有长期合约，随时可取消。
+:::</p>
+]]></content>
+    <author>
+      <name>mikus</name>
+    </author>
+    <category term="技术"></category>
+  </entry>
   <entry>
     <title>Komari Theme Market CN — EdgeOne 加速国内主题市场</title>
     <link href="https://mikus.ink/posts/theme-market-cn/" rel="alternate" type="text/html"/>
