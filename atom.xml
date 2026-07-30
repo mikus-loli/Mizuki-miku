@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-07-30T02:07:20.528Z</updated>
+  <updated>2026-07-30T03:06:58.479Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title>
@@ -216,7 +216,7 @@
 <p>从 DeepSeek 官方 API 换到 OpenCode Go，我用更少的钱（每月 $10 封顶），换来了更多的额度（低谷 6 倍、高峰 12 倍），还附赠了十多个模型的自由选择权——而且没有峰谷定价的心理负担。</p>
 <p>如果你现在还在用 DeepSeek 官方 API 做编程辅助，建议你算算账——大概率 OpenCode Go 更划算。</p>
 <p>:::tip
-OpenCode Go 订阅地址：<a href="https://opencode.ai/zh/go">opencode.ai/zh/go</a>
+OpenCode Go 订阅地址：<a href="https://opencode.ai/go?ref=09085J0PTV">opencode.ai/go?ref=09085J0PTV</a>
 首月仅 $5，没有长期合约，随时可取消。
 :::</p>
 ]]></content>
