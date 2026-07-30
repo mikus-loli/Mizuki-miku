@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-07-30T01:58:15.280Z</updated>
+  <updated>2026-07-30T02:05:40.817Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title>
@@ -51,9 +51,7 @@
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>注意：这是 <strong>25 折促销价</strong>。如果促销结束恢复原价，Flash 的输入会涨到 $0.56，Pro 会涨到 $2.22。那差距就不是一星半点了。</p>
-</blockquote>
+<p>|&gt; 注：DeepSeek 已于 2026 年 5 月将 75% 折扣转为<strong>永久定价</strong>，当前即为官方正式价格。</p>
 <h3>OpenCode Go 订阅</h3>
 <table>
 <thead>
@@ -98,7 +96,7 @@
 </thead>
 <tbody>
 <tr>
-<td>DeepSeek 官方（促销价）</td>
+<td>DeepSeek 官方（永久定价）</td>
 <td>$0.14 / $0.28</td>
 <td>1x</td>
 </tr>
@@ -207,9 +205,6 @@
 <h2>总结</h2>
 <p>从 DeepSeek 官方 API 换到 OpenCode Go，我用更少的钱（每月 $10 封顶），换来了更多的额度（约 6 倍），还附赠了十多个模型的自由选择权。</p>
 <p>如果你现在还在用 DeepSeek 官方 API 做编程辅助，建议你算算账——大概率 OpenCode Go 更划算。</p>
-<blockquote>
-<p>唯一需要注意的就是：<strong>趁促销赶紧上车</strong>。DeepSeek 官方 25 折结束后的价格和 OpenCode Go 的差距会更大，到时候 OpenCode Go 的优势会更明显。</p>
-</blockquote>
 <p>:::tip
 OpenCode Go 订阅地址：<a href="https://opencode.ai/zh/go">opencode.ai/zh/go</a>
 首月仅 $5，没有长期合约，随时可取消。
