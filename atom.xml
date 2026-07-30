@@ -5,7 +5,7 @@
   <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://mikus.ink/</id>
-  <updated>2026-07-30T02:05:40.817Z</updated>
+  <updated>2026-07-30T02:07:20.528Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title>
@@ -51,7 +51,9 @@
 </tr>
 </tbody>
 </table>
-<p>|&gt; 注：DeepSeek 已于 2026 年 5 月将 75% 折扣转为<strong>永久定价</strong>，当前即为官方正式价格。</p>
+<blockquote>
+<p>注：DeepSeek 已于 2026 年 5 月将 75% 折扣转为<strong>永久定价</strong>。但 7 月中旬起实施<strong>峰谷定价</strong>——工作日北京时间 9:00–12:00 和 14:00–18:00 为高峰时段，价格翻倍，其余时段（含周末）维持表中所列的低谷价。</p>
+</blockquote>
 <h3>OpenCode Go 订阅</h3>
 <table>
 <thead>
@@ -90,30 +92,37 @@
 <thead>
 <tr>
 <th>渠道</th>
-<th>实际价格</th>
+<th>实际价格（低谷）</th>
+<th>实际价格（高峰）</th>
 <th>倍数</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>DeepSeek 官方（永久定价）</td>
+<td>DeepSeek 官方</td>
 <td>$0.14 / $0.28</td>
+<td>$0.28 / $0.56</td>
 <td>1x</td>
 </tr>
 <tr>
 <td>OpenCode Go（折算后）</td>
 <td><strong>$0.023 / $0.047</strong></td>
-<td><strong>~6x 优惠</strong></td>
+<td><strong>$0.023 / $0.047</strong></td>
+<td><strong>~6x ~ 12x 优惠</strong></td>
 </tr>
 </tbody>
 </table>
-<p>也就是说，通过 OpenCode Go 用 DeepSeek V4 Flash，<strong>实际成本是官方的 1/6</strong>。</p>
+<p>也就是说，通过 OpenCode Go 用 DeepSeek V4 Flash：</p>
+<ul>
+<li><strong>低谷时段</strong>：实际成本是官方的 <strong>1/6</strong></li>
+<li><strong>高峰时段</strong>：实际成本是官方的 <strong>1/12</strong>（因为 DeepSeek 翻倍，OpenCode Go 不变）</li>
+</ul>
 <p>如果把 $10/月的投入全花在 DeepSeek V4 Flash 上：</p>
 <table>
 <thead>
 <tr>
 <th>资源</th>
-<th>官方 API（$10）</th>
+<th>官方 API（$10，低谷价）</th>
 <th>OpenCode Go（$10 → $60）</th>
 </tr>
 </thead>
@@ -135,6 +144,7 @@
 </tr>
 </tbody>
 </table>
+<p>不过要注意，如果赶上高峰时段调用，DeepSeek 官方 API 的产出会<strong>直接减半</strong>。而 OpenCode Go 的价格不受时段影响，什么时候用都一样。</p>
 <p>差距非常明显。</p>
 <h2>不只是便宜</h2>
 <p>如果 OpenCode Go 只是便宜，那和换个 API 供应商没区别。它真正让我留下的理由是：</p>
@@ -203,7 +213,7 @@
 <li>特别依赖某个模型独家功能的</li>
 </ul>
 <h2>总结</h2>
-<p>从 DeepSeek 官方 API 换到 OpenCode Go，我用更少的钱（每月 $10 封顶），换来了更多的额度（约 6 倍），还附赠了十多个模型的自由选择权。</p>
+<p>从 DeepSeek 官方 API 换到 OpenCode Go，我用更少的钱（每月 $10 封顶），换来了更多的额度（低谷 6 倍、高峰 12 倍），还附赠了十多个模型的自由选择权——而且没有峰谷定价的心理负担。</p>
 <p>如果你现在还在用 DeepSeek 官方 API 做编程辅助，建议你算算账——大概率 OpenCode Go 更划算。</p>
 <p>:::tip
 OpenCode Go 订阅地址：<a href="https://opencode.ai/zh/go">opencode.ai/zh/go</a>
