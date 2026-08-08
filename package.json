@@ -27,7 +27,8 @@
 		"lhci": "lhci",
 		"lighthouse": "lighthouse",
 		"performance:baseline": "node scripts/performance-baseline.js",
-		"performance:check": "node scripts/performance-check.js"
+		"performance:check": "node scripts/performance-check.js",
+		"test": "vitest run"
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.9.8",
@@ -45,7 +46,7 @@
 		"@swup/astro": "^1.8.0",
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.0.0",
-		"astro": "6.1.2",
+		"astro": "^6.4.6",
 		"astro-expressive-code": "^0.41.7",
 		"astro-icon": "^1.1.5",
 		"axios": "^1.13.6",
@@ -103,6 +104,7 @@
 		"fontmin": "^1.1.1",
 		"glob": "^13.0.6",
 		"globals": "^17.4.0",
+		"jsdom": "^30.0.1",
 		"postcss-import": "^16.1.1",
 		"postcss-nesting": "^13.0.2",
 		"prettier": "^3.8.1",
@@ -110,12 +112,30 @@
 		"prettier-plugin-svelte": "^3.5.0",
 		"sharp": "^0.34.5",
 		"svelte-eslint-parser": "^1.6.0",
-		"typescript-eslint": "^8.57.1"
+		"typescript-eslint": "^8.57.1",
+		"vitest": "^4.1.10"
 	},
 	"packageManager": "pnpm@10.22.0",
 	"pnpm": {
 		"overrides": {
-			"@emmetio/css-parser": "https://codeload.github.com/ramya-rao-a/css-parser/tar.gz/370c480ac103bd17c7bcfb34bf5d577dc40d3660"
+			"tar": "^7.5.19",
+			"serialize-javascript": "^7.0.3",
+			"undici": "^7.28.0",
+			"h3": "^1.15.6",
+			"defu": "^6.1.5",
+			"vite": "^7.3.2",
+			"axios": "^1.16.0",
+			"devalue": "^5.8.1",
+			"fast-uri": "^3.1.5",
+			"fast-xml-builder": "^1.1.7",
+			"picomatch": "^4.0.4",
+			"@babel/plugin-transform-modules-systemjs": "^7.29.4",
+			"linkify-it": "^5.0.2",
+			"brace-expansion": "^2.1.2",
+			"js-yaml": "^4.3.0",
+			"sharp": "^0.35.0",
+			"postcss": "^8.5.18",
+			"stylus>glob": "^10.5.0"
 		}
 	}
 }

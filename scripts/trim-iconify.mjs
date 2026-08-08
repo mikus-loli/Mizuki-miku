@@ -59,20 +59,21 @@ if (existsSync(srcDir)) {
 }
 
 // ---------- 2. 裁剪每个集合 ----------
-function collectNeeded(full, wanted) {
-  const needed = new Set(wanted);
-  const aliases = full.aliases || {};
-  let changed = true;
-  while (changed) {
-    changed = false;
-    for (const [alias, def] of Object.entries(aliases)) {
-      if (needed.has(alias) && def.parent && !needed.has(def.parent)) {
-        needed.add(def.parent);
-        changed = true;
-      }
-    }
-  }
-  return needed;
+// 导出供单元测试使用：递归解析 alias，保留被引用的父图标
+export function collectNeeded(full, wanted) {
+	const needed = new Set(wanted);
+	const aliases = full.aliases || {};
+	let changed = true;
+	while (changed) {
+		changed = false;
+		for (const [alias, def] of Object.entries(aliases)) {
+			if (needed.has(alias) && def.parent && !needed.has(def.parent)) {
+				needed.add(def.parent);
+				changed = true;
+			}
+		}
+	}
+	return needed;
 }
 
 let totalBefore = 0, totalAfter = 0;

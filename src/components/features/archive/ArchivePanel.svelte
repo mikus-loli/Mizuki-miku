@@ -27,6 +27,7 @@
 		sortedPosts?: Post[];
 	}
 
+	// eslint-disable-next-line prefer-const -- Svelte 5 $props() 解构需用 let 保持响应式
 	let { tags, categories, sortedPosts = [] }: Props = $props();
 
 	let uncategorized = $state<string | null>(null);

@@ -264,13 +264,13 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 	{isCarouselEnabled && (
 		<script is:inline data-swup-ignore-script>
 			(function initBannerCarousel() {
-				var container = document.getElementById('banner-carousel');
+				let container = document.getElementById('banner-carousel');
 				if (!container) return;
 
-				var mobileCount = parseInt(container.dataset.mobileCount || '0', 10);
-				var desktopCount = parseInt(container.dataset.desktopCount || '0', 10);
-				var interval = parseInt(container.dataset.carouselInterval || '6000', 10);
-				var FADE_MS = parseInt(container.dataset.fadeMs || '1500', 10);
+				let mobileCount = parseInt(container.dataset.mobileCount || '0', 10);
+				let desktopCount = parseInt(container.dataset.desktopCount || '0', 10);
+				let interval = parseInt(container.dataset.carouselInterval || '6000', 10);
+				let FADE_MS = parseInt(container.dataset.fadeMs || '1500', 10);
 
 				if (mobileCount <= 1 && desktopCount <= 1) return;
 
@@ -286,39 +286,36 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					};
 				}
 
-				var frameElements = { mobile: [], desktop: [] };
+				let frameElements = { mobile: [], desktop: [] };
 
 				function buildFrameElements(slotClass, tplClass, type) {
 					if (frameElements[type].length > 0) return;
 
-					var initialSlot = container.querySelector('.' + slotClass);
+					let initialSlot = container.querySelector('.' + slotClass);
 					if (!initialSlot) return;
 
-					var baseClass = initialSlot.className.replace(/\bbanner-kb\b/g, '').trim();
-					var templates = container.querySelectorAll('.' + tplClass);
-					var allFrameHtml = [];
+					let baseClass = initialSlot.className.replace(/\bbanner-kb\b/g, '').trim();
+					let templates = container.querySelectorAll('.' + tplClass);
 
-					allFrameHtml.push(initialSlot.innerHTML);
-					for (var i = 0; i < templates.length; i++) {
-						allFrameHtml.push(templates[i].innerHTML);
-					}
+					// 收集帧源元素（先存引用，再移除原节点）
+					const sourceFrames = [initialSlot].concat(Array.from(templates));
 
 					initialSlot.parentNode.removeChild(initialSlot);
-					for (var t = 0; t < templates.length; t++) {
+					for (let t = 0; t < templates.length; t++) {
 						templates[t].parentNode.removeChild(templates[t]);
 					}
 
-					for (var f = 0; f < allFrameHtml.length; f++) {
-						var el = document.createElement('div');
+					// 用 cloneNode 复制帧结构（避免 innerHTML 序列化-反序列化）
+					for (let f = 0; f < sourceFrames.length; f++) {
+						const el = sourceFrames[f].cloneNode(true);
 						el.className = baseClass;
-						el.innerHTML = allFrameHtml[f];
 						el.style.opacity = '0';
 						el.style.pointerEvents = 'none';
 						container.appendChild(el);
 						frameElements[type].push(el);
 					}
 
-					var startIdx = window.__bannerCarouselIndex[type];
+					let startIdx = window.__bannerCarouselIndex[type];
 					frameElements[type][startIdx].style.opacity = '1';
 					frameElements[type][startIdx].style.pointerEvents = '';
 				}
@@ -327,8 +324,8 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 				buildFrameElements('banner-image-slot-desktop', 'banner-tpl-desktop', 'desktop');
 
 				function isSlotHiddenByBreakpoint(el) {
-					var cl = el.classList;
-					var isMd = window.matchMedia('(min-width: 768px)').matches;
+					let cl = el.classList;
+					let isMd = window.matchMedia('(min-width: 768px)').matches;
 					if (cl.contains('md:hidden') && isMd) return true;
 					if (cl.contains('hidden') && !cl.contains('md:hidden') && !isMd) return true;
 					return false;
@@ -341,20 +338,20 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					el.classList.add('banner-kb');
 				}
 
-				var isCrossfading = { mobile: false, desktop: false };
+				let isCrossfading = { mobile: false, desktop: false };
 
 				function crossfadeToIndex(slotClass, totalCount, type, targetIndex) {
 					if (totalCount <= 1) return;
 					if (isCrossfading[type]) return;
 
-					var frames = frameElements[type];
+					let frames = frameElements[type];
 					if (!frames || frames.length === 0) return;
 
-					var currentIndex = window.__bannerCarouselIndex[type];
+					let currentIndex = window.__bannerCarouselIndex[type];
 					if (currentIndex === targetIndex) return;
 
-					var oldEl = frames[currentIndex];
-					var newEl = frames[targetIndex];
+					let oldEl = frames[currentIndex];
+					let newEl = frames[targetIndex];
 					if (!oldEl || !newEl) return;
 					if (isSlotHiddenByBreakpoint(oldEl)) return;
 
@@ -384,26 +381,26 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 				}
 
 				function crossfade(slotClass, totalCount, type) {
-					var frames = frameElements[type];
+					let frames = frameElements[type];
 					if (!frames || frames.length === 0) return;
-					var currentIndex = window.__bannerCarouselIndex[type];
-					var nextIndex = (currentIndex + 1) % frames.length;
+					let currentIndex = window.__bannerCarouselIndex[type];
+					let nextIndex = (currentIndex + 1) % frames.length;
 					crossfadeToIndex(slotClass, totalCount, type, nextIndex);
 				}
 
-				var timerId = null;
-				var isPaused = false;
+				let timerId = null;
+				let isPaused = false;
 
-				var touchStartX = 0;
-				var touchStartY = 0;
-				var isSwiping = false;
+				let touchStartX = 0;
+				let touchStartY = 0;
+				let isSwiping = false;
 
 				function startCarousel() {
 					stopCarousel();
 					if (isPaused) return;
 
-					var mobileIdx = window.__bannerCarouselIndex.mobile;
-					var desktopIdx = window.__bannerCarouselIndex.desktop;
+					let mobileIdx = window.__bannerCarouselIndex.mobile;
+					let desktopIdx = window.__bannerCarouselIndex.desktop;
 					if (frameElements.mobile[mobileIdx]) applyKB(frameElements.mobile[mobileIdx]);
 					if (frameElements.desktop[desktopIdx]) applyKB(frameElements.desktop[desktopIdx]);
 
@@ -419,7 +416,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					if (timerId !== null) { clearInterval(timerId); timerId = null; }
 				}
 
-				var visibilityHandler = function() {
+				const visibilityHandler = function() {
 					if (document.hidden) {
 						stopCarousel();
 					} else if (!isPaused) {
@@ -428,7 +425,7 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 				};
 				document.addEventListener('visibilitychange', visibilityHandler);
 
-				var onTouchStart = function(e) {
+				const onTouchStart = function(e) {
 					touchStartX = e.touches[0].clientX;
 					touchStartY = e.touches[0].clientY;
 					isSwiping = false;
@@ -436,36 +433,36 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					stopCarousel();
 				};
 
-				var onTouchMove = function(e) {
+				const onTouchMove = function(e) {
 					if (!touchStartX || !touchStartY) return;
-					var diffX = Math.abs(e.touches[0].clientX - touchStartX);
-					var diffY = Math.abs(e.touches[0].clientY - touchStartY);
+					let diffX = Math.abs(e.touches[0].clientX - touchStartX);
+					let diffY = Math.abs(e.touches[0].clientY - touchStartY);
 					if (diffX > diffY && diffX > 30) {
 						isSwiping = true;
 						e.preventDefault();
 					}
 				};
 
-				var onTouchEnd = function(e) {
+				const onTouchEnd = function(e) {
 					if (!touchStartX || !touchStartY || !isSwiping) {
 						isPaused = false;
 						startCarousel();
 						return;
 					}
 
-					var endX = e.changedTouches[0].clientX;
-					var diffX = touchStartX - endX;
-					var isMobile = window.innerWidth < 768;
-					var type = isMobile ? 'mobile' : 'desktop';
-					var count = isMobile ? mobileCount : desktopCount;
-					var current = window.__bannerCarouselIndex[type];
+					let endX = e.changedTouches[0].clientX;
+					let diffX = touchStartX - endX;
+					let isMobile = window.innerWidth < 768;
+					let type = isMobile ? 'mobile' : 'desktop';
+					let count = isMobile ? mobileCount : desktopCount;
+					let current = window.__bannerCarouselIndex[type];
 
 					if (Math.abs(diffX) > 50) {
 						if (diffX > 0) {
-							var next = (current + 1) % count;
+							let next = (current + 1) % count;
 							crossfadeToIndex('', count, type, next);
 						} else {
-							var prev = (current - 1 + count) % count;
+							let prev = (current - 1 + count) % count;
 							crossfadeToIndex('', count, type, prev);
 						}
 					}
@@ -477,12 +474,12 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					startCarousel();
 				};
 
-				var onMouseEnter = function() {
+				const onMouseEnter = function() {
 					isPaused = true;
 					stopCarousel();
 				};
 
-				var onMouseLeave = function() {
+				const onMouseLeave = function() {
 					isPaused = false;
 					startCarousel();
 				};

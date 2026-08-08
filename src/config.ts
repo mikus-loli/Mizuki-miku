@@ -452,6 +452,8 @@ export const commentConfig: CommentConfig = {
 		lang: "zh-CN",
 	},
 	giscus: {
+		// ⚠️ 当前评论系统使用 twikoo，giscus 配置未启用。
+		// 切换到 giscus 前必须填写以下四项（GitHub Discussions 配置）：
 		repo: "your-github-username/your-repo-name",
 		repoId: "your-repo-id",
 		category: "Announcements",

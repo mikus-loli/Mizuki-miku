@@ -155,16 +155,11 @@
 				typeof window !== "undefined" &&
 				!!window.pagefind &&
 				typeof window.pagefind.search === "function";
-			console.log("Pagefind status on init:", pagefindLoaded);
 		};
 		if (import.meta.env.DEV) {
-			console.log(
-				"Pagefind is not available in development mode. Using mock data.",
-			);
 			initializeSearch();
 		} else {
 			document.addEventListener("pagefindready", () => {
-				console.log("Pagefind ready event received.");
 				initializeSearch();
 			});
 			document.addEventListener("pagefindloaderror", () => {
@@ -176,7 +171,6 @@
 			// Fallback in case events are not caught or pagefind is already loaded by the time this script runs
 			setTimeout(() => {
 				if (!initialized) {
-					console.log("Fallback: Initializing search after timeout.");
 					initializeSearch();
 				}
 			}, 2000); // Adjust timeout as needed

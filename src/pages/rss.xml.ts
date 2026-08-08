@@ -103,9 +103,7 @@ export async function GET(context: APIContext) {
 					);
 				} else {
 					// Debug: log the failed import path
-					console.log(
-						`Failed to load image: ${importPath} for post: ${post.id}`,
-					);
+console.warn(						`Failed to load image: ${importPath} for post: ${post.id}`,					);
 				}
 			} else if (src.startsWith("/")) {
 				// images starting with `/` are in public dir

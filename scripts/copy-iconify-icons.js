@@ -1,18 +1,22 @@
 /**
- * 复制 Iconify 图标数据到 public 目录
+ * 生成 Iconify API 数据到 public 目录
  * 用于本地化图标加载，避免网络请求
+ *
+ * 直接从 node_modules/@iconify-json/* 读取完整图标集，
+ * 生成 API 响应格式文件（public/cdn/iconify/api/<set>.json）。
+ * 不再复制完整的 icons/ 目录（17.5MB 整包）到 public ——
+ * 完整包只被构建时引用，运行时 iconify-icon 只请求 api/ 文件。
  */
 
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const rootDir = join(__dirname, "..");
-const publicDir = join(rootDir, "public", "cdn", "iconify", "icons");
 const nodeModulesDir = join(rootDir, "node_modules");
 
-// 需要复制的图标集
+// 需要生成的图标集
 const iconSets = [
 	"material-symbols",
 	"mdi",
@@ -23,45 +27,6 @@ const iconSets = [
 	"simple-icons",
 ];
 
-// 确保目标目录存在
-if (!existsSync(publicDir)) {
-	mkdirSync(publicDir, { recursive: true });
-}
-
-// 复制图标集
-for (const iconSet of iconSets) {
-	const sourceDir = join(nodeModulesDir, "@iconify-json", iconSet);
-	const targetDir = join(publicDir, iconSet);
-
-	if (!existsSync(sourceDir)) {
-		console.log(`⚠️  图标集 ${iconSet} 不存在，跳过`);
-		continue;
-	}
-
-	// 创建目标目录
-	if (!existsSync(targetDir)) {
-		mkdirSync(targetDir, { recursive: true });
-	}
-
-	// 复制 icons.json
-	const iconsJsonPath = join(sourceDir, "icons.json");
-	const targetIconsJsonPath = join(targetDir, "icons.json");
-
-	if (existsSync(iconsJsonPath)) {
-		copyFileSync(iconsJsonPath, targetIconsJsonPath);
-		console.log(`✅ 已复制 ${iconSet}/icons.json`);
-	}
-
-	// 复制 chars.json (如果存在)
-	const charsJsonPath = join(sourceDir, "chars.json");
-	const targetCharsJsonPath = join(targetDir, "chars.json");
-
-	if (existsSync(charsJsonPath)) {
-		copyFileSync(charsJsonPath, targetCharsJsonPath);
-		console.log(`✅ 已复制 ${iconSet}/chars.json`);
-	}
-}
-
 // 创建 API 响应格式的索引文件
 const apiDir = join(rootDir, "public", "cdn", "iconify", "api");
 if (!existsSync(apiDir)) {
@@ -70,14 +35,15 @@ if (!existsSync(apiDir)) {
 
 // 为每个图标集创建 API 响应文件
 for (const iconSet of iconSets) {
-	const iconsJsonPath = join(publicDir, iconSet, "icons.json");
+	const iconsJsonPath = join(nodeModulesDir, "@iconify-json", iconSet, "icons.json");
 	if (!existsSync(iconsJsonPath)) {
+		console.log(`⚠️  图标集 ${iconSet} 不存在，跳过`);
 		continue;
 	}
 
 	try {
 		const iconsData = JSON.parse(readFileSync(iconsJsonPath, "utf-8"));
-		
+
 		// 创建符合 Iconify API 格式的响应
 		const apiResponse = {
 			prefix: iconSet,
@@ -92,6 +58,5 @@ for (const iconSet of iconSets) {
 	}
 }
 
-console.log("\n🎉 图标数据复制完成！");
-console.log(`📁 图标数据位置: ${publicDir}`);
+console.log("\n🎉 图标 API 数据生成完成！");
 console.log(`📁 API 数据位置: ${apiDir}`);

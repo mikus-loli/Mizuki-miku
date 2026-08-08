@@ -110,9 +110,6 @@ export function getAnimeList(
 			const skipLoad = isDev && !shouldFetchOnDev;
 
 			if (skipLoad) {
-				console.log(
-					`[Dev] Skipping ${mode} data load (fetchOnDev is off).`,
-				);
 				animeList = [];
 			} else {
 				animeList = loadAnimeData(currentConfig.filename);

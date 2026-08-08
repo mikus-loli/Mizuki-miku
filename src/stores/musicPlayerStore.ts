@@ -635,6 +635,8 @@ class MusicPlayerStore {
 			this.audio.src = "";
 			this.audio = null;
 		}
+		// 重置状态，确保重新 initialize 时是干净状态
+		this.state = this.createInitialState();
 		this.isInitialized = false;
 	}
 }
