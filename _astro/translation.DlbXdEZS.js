@@ -1,0 +1,1 @@
+import{s as c}from"./config.DZ3ppRub.js";import{j as o,z as f,a as g,e as n}from"./zh_TW.DQhvB9P3.js";const _=n,l={en:n,en_us:n,en_gb:n,en_au:n,zh_cn:g,zh_tw:f,ja:o,ja_jp:o};function u(t){return l[t.toLowerCase()]||_}function z(t,a){const s=c.lang;let e=u(s)[t];if(a)for(const[r,i]of Object.entries(a))e=e.replace(new RegExp(`\\{${r}\\}`,"g"),String(i));return e}export{z as i};
