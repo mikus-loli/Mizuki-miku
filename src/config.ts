@@ -667,7 +667,7 @@ export const sakuraConfig: SakuraConfig = {
 // Pio 看板娘配置
 export const pioConfig: import("./types/config").PioConfig = {
 	enable: true, // 禁用看板娘以提升性能
-	models: ["/pio/models/六初/六初.model3.json"], // 默认模型路径
+	models: ["/pio/models/miku/miku.model3.json"], // 默认模型路径
 	position: "left", // 模型位置
 	width: 280, // 默认宽度
 	height: 420, // 默认高度
