@@ -1,11 +1,13 @@
-import { siteConfig } from "../config";
-
 /**
  * Format relative time for diary moments
  * @param dateString ISO date string
  * @param minutesAgo text for minutes
  * @param hoursAgo text for hours
  * @param daysAgo text for days
+ *
+ * 注意：相对时间 = 绝对时间戳差值，与时区无关。
+ * 之前实现把当前时间按站点时区平移后再相减，在非 UTC+8 的运行环境
+ * （如 CI 的 UTC）会多算 8 小时。已移除时区转换。
  */
 export function formatRelativeTime(
 	dateString: string,
@@ -13,16 +15,9 @@ export function formatRelativeTime(
 	hoursAgo: string,
 	daysAgo: string,
 ): string {
-	let timeGap = 8; // Default UTC+8
-	if (siteConfig.timeZone >= -12 && siteConfig.timeZone <= 12) {
-		timeGap = siteConfig.timeZone;
-	}
-
 	const now = new Date();
-	const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
-	const localNow = utc + timeGap * 60 * 60 * 1000;
 	const date = new Date(dateString);
-	const diffInMinutes = Math.floor((localNow - date.getTime()) / (1000 * 60));
+	const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
 
 	if (diffInMinutes < 60) {
 		return `${diffInMinutes}${minutesAgo}`;
