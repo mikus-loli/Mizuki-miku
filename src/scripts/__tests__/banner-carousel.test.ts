@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
 import { JSDOM } from "jsdom";
+import { describe, expect, it } from "vitest";
 
 /**
  * Banner 轮播帧构建回归测试
