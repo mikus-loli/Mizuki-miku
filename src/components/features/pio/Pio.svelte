@@ -213,7 +213,7 @@
 		// 自动化测试环境（Lighthouse/Playwright 等 CDP 驱动）跳过 Live2D：
 		// 装饰性组件不参与性能测量，对真实用户零影响（navigator.webdriver 仅自动化为 true）
 		if (navigator.webdriver) {
-			console.info("[Pio] 自动化环境，跳过 Live2D 加载");
+			console.warn("[Pio] 自动化环境，跳过 Live2D 加载");
 			return;
 		}
 
