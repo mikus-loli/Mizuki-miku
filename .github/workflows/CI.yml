@@ -38,7 +38,8 @@ jobs:
       - name: Run Astro Check
         run: pnpm astro check
         env:
-          ENABLE_CONTENT_SYNC: false
+          # CI 完整验证内容同步后的类型检查（src/content 由 sync-content 从内容仓库同步）
+          ENABLE_CONTENT_SYNC: true
 
   lint:
     name: ESLint
@@ -134,5 +135,7 @@ jobs:
       - name: Run Build
         run: pnpm build
         env:
-          ENABLE_CONTENT_SYNC: false
+          # 内容分离模式：prebuild 的 sync-content 会 clone 内容仓库并同步内容，
+          # CI 需显式 true（loadEnv 不再覆盖显式传入的环境变量）
+          ENABLE_CONTENT_SYNC: true
           BILI_SESSDATA: ${{ secrets.BILI_SESSDATA }}
