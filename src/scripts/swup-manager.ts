@@ -80,7 +80,6 @@ export class SwupManager {
 		this.initPreloading();
 
 		this.initialized = true;
-		console.log("SwupManager: 初始化完成");
 	}
 
 	/**

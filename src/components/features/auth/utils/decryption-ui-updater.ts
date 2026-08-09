@@ -6,10 +6,14 @@ export interface UIUpdateStep {
 const highlightCodeStep: UIUpdateStep = {
 	name: "highlight-code",
 	execute() {
-		if (!window.hljs) return;
+		if (!window.hljs) {
+			return;
+		}
 
 		const contentDiv = document.getElementById("decrypted-content");
-		if (!contentDiv) return;
+		if (!contentDiv) {
+			return;
+		}
 
 		contentDiv.querySelectorAll("pre code").forEach((block) => {
 			window.hljs!.highlightElement(block as HTMLElement);
@@ -23,7 +27,9 @@ const regenerateTOCStep: UIUpdateStep = {
 		const tocElement = document.querySelector("table-of-contents") as
 			| (HTMLElement & { init?: () => void; regenerateTOC?: () => void })
 			| null;
-		if (!tocElement) return;
+		if (!tocElement) {
+			return;
+		}
 
 		if (typeof tocElement.regenerateTOC === "function") {
 			tocElement.regenerateTOC();
@@ -46,7 +52,9 @@ const mobileTOCStep: UIUpdateStep = {
 const bindFancyboxStep: UIUpdateStep = {
 	name: "bind-fancybox",
 	execute() {
-		if (typeof Fancybox === "undefined" || !Fancybox.bind) return;
+		if (typeof Fancybox === "undefined" || !Fancybox.bind) {
+			return;
+		}
 
 		Fancybox.unbind("[data-fancybox]");
 		Fancybox.bind("[data-fancybox]", {});
@@ -56,7 +64,9 @@ const bindFancyboxStep: UIUpdateStep = {
 const hashNavigationStep: UIUpdateStep = {
 	name: "hash-navigation",
 	execute() {
-		if (!window.location.hash) return;
+		if (!window.location.hash) {
+			return;
+		}
 
 		const targetId = window.location.hash.substring(1);
 		const targetElement = document.getElementById(targetId);
@@ -70,7 +80,9 @@ const imageLoadEventsStep: UIUpdateStep = {
 	name: "image-load-events",
 	execute() {
 		const contentDiv = document.getElementById("decrypted-content");
-		if (!contentDiv) return;
+		if (!contentDiv) {
+			return;
+		}
 
 		const images = contentDiv.querySelectorAll("img");
 		images.forEach((img) => {
@@ -94,7 +106,9 @@ const imageLoadEventsStep: UIUpdateStep = {
 const mermaidRenderStep: UIUpdateStep = {
 	name: "mermaid-render",
 	async execute() {
-		if (typeof window.renderMermaidDiagrams !== "function") return;
+		if (typeof window.renderMermaidDiagrams !== "function") {
+			return;
+		}
 
 		await new Promise((resolve) => setTimeout(resolve, 100));
 		window.renderMermaidDiagrams();

@@ -9,17 +9,19 @@
 		config?: Partial<PioProps["config"]>;
 	}
 
-	const { config = {} }: Props = $props();
+	// config 是 props，可能被父组件更新；用 $derived 保持响应式
+	// eslint-disable-next-line prefer-const -- $props() 解构需 let 保持响应式
+	let { config = {} }: Props = $props();
 
-	const pioOptions = {
+	const pioOptions = $derived({
 		mode: config?.mode ?? pioConfig.mode,
 		hidden: config?.hiddenOnMobile ?? pioConfig.hiddenOnMobile,
 		content: config?.dialog ?? pioConfig.dialog ?? {},
 		model: config?.models ??
 			pioConfig.models ?? ["/pio/models/pio/model.json"],
-	};
+	});
 
-	const isModel3 = pioOptions.model[0].includes("model3.json");
+	const isModel3 = $derived(pioOptions.model[0].includes("model3.json"));
 
 	const canvasWidth = pioConfig.width || 280;
 	const canvasHeight = pioConfig.height || 250;
@@ -62,7 +64,6 @@
 
 		if (isVisible && !wasVisible) {
 			// 从隐藏变为显示
-			console.log("[Pio] Resolution meets threshold, showing Live2D");
 			if (!isLoaded) {
 				shouldRender = true;
 				scheduleLazyLoad();
@@ -71,7 +72,6 @@
 			}
 		} else if (!isVisible && wasVisible) {
 			// 从显示变为隐藏
-			console.log("[Pio] Resolution below threshold, hiding Live2D");
 			hidePio();
 		}
 	}
@@ -99,9 +99,6 @@
 		const win = window as any;
 
 		if (win.__pioInstance || win.__pioInitialized) {
-			console.log(
-				"[Pio] Instance already exists, skipping initialization",
-			);
 			return;
 		}
 
@@ -143,9 +140,6 @@
 			win.__pioInstance = new win.Paul_Pio(pioOptions);
 			win.__pioInitialized = true;
 			isLoaded = true;
-			console.log(
-				`[Pio] Initialized successfully (${isModel3 ? "SDK4" : "SDK2"})`,
-			);
 		} catch (e) {
 			console.error("[Pio] Initialization error:", e);
 		}
@@ -157,7 +151,6 @@
 		const win = window as any;
 
 		if (win.__pioScriptsLoaded) {
-			console.log("[Pio] Scripts already loaded, initializing...");
 			setTimeout(initPio, 100);
 			return;
 		}
@@ -180,7 +173,6 @@
 		};
 
 		try {
-			console.log("[Pio] Starting lazy load after delay...");
 
 			if (isModel3) {
 				await Promise.all([
@@ -204,7 +196,6 @@
 			}
 
 			win.__pioScriptsLoaded = true;
-			console.log("[Pio] Scripts loaded successfully");
 			setTimeout(initPio, 100);
 		} catch (error) {
 			console.error("[Pio] Failed to load scripts:", error);
@@ -270,9 +261,6 @@
 		isVisible = checkResolution();
 
 		if (!isVisible) {
-			console.log(
-				`[Pio] Resolution below threshold (${window.innerWidth}x${window.innerHeight} < ${minWidth}x${minHeight ?? "any"}), Live2D hidden`,
-			);
 			return;
 		}
 
@@ -286,7 +274,6 @@
 	});
 
 	onDestroy(() => {
-		console.log("[Pio] Component destroyed (keeping instance alive)");
 		cleanupResizeListener();
 		swupCleanupFns.forEach((fn) => fn());
 		swupCleanupFns = [];

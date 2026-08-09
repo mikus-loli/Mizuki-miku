@@ -13,6 +13,7 @@
 		onSliderPointerDown: (event: PointerEvent) => void;
 		onSliderKeyDown: (event: KeyboardEvent) => void;
 		ariaLabel: string;
+		children?: import("svelte").Snippet;
 	}
 
 	const {
@@ -24,6 +25,7 @@
 		onSliderPointerDown,
 		onSliderKeyDown,
 		ariaLabel,
+		children,
 	}: Props = $props();
 </script>
 
@@ -37,5 +39,5 @@
 		onkeydown={onSliderKeyDown}
 		{ariaLabel}
 	/>
-	<slot />
+	{@render children?.()}
 </div>

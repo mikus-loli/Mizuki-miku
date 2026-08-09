@@ -93,11 +93,29 @@ declare global {
 		__mizukiRightSidebarSwupHooked?: boolean;
 		__mizukiRightSidebarManagerInitialized?: boolean;
 
-		panelManager?: any;
-		themeOptimizer?: any;
-		CodeBlockCollapser?: any;
-		codeBlockCollapser?: any;
-		rightSidebarLayout?: any;
+		panelManager?: {
+			init?: () => void;
+			cleanup?: () => void;
+			togglePanel?: (id: string) => void;
+		};
+		themeOptimizer?: {
+			init?: () => void;
+			forceApplyThemeTransitionStyles?: () => void;
+		};
+		CodeBlockCollapser?: {
+			new (): {
+				init: () => void;
+				cleanup?: () => void;
+			};
+		};
+		codeBlockCollapser?: {
+			init?: () => void;
+			cleanup?: () => void;
+		};
+		rightSidebarLayout?: {
+			init?: () => void;
+			cleanup?: () => void;
+		};
 		sakuraInitialized?: boolean;
 	}
 

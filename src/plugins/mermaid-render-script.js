@@ -700,7 +700,6 @@
 			script.src = "/cdn/mermaid/mermaid.min.js";
 
 			script.onload = () => {
-				console.log("Mermaid library loaded successfully");
 				resolve();
 			};
 
@@ -733,7 +732,6 @@
 
 			// 只有在有 Mermaid 图表时才加载库
 			if (!hasMermaidDiagrams()) {
-				console.log("No Mermaid diagrams found, skipping library load");
 				return;
 			}
 

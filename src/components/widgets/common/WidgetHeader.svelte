@@ -5,8 +5,9 @@
 		name: string;
 		icon?: string;
 		class?: string;
+		children?: import("svelte").Snippet;
 	}
-	const { name, icon, class: className = "" }: Props = $props();
+	const { name, icon, class: className = "", children }: Props = $props();
 </script>
 
 <div class="widget-header {className}">
@@ -14,7 +15,7 @@
 		<Icon {icon} class="widget-header-icon" />
 	{/if}
 	<span class="widget-header-title">{name}</span>
-	<slot />
+	{@render children?.()}
 </div>
 
 <style>
