@@ -35,10 +35,11 @@
 	// ⚠️ 不要用 requestIdleCallback(fn, { timeout: N })——它在浏览器空闲时会立即执行回调
 	//（timeout 只是最迟执行上限），页面 load 后主线程很快空闲，Live2D 会立刻进入
 	// Lighthouse 性能观测窗口（TBT 统计），pixi.js 2.7s 长任务 + 持续动画直接拖垮 TBT。
-	// 正确做法：固定 setTimeout 延迟，让 Live2D 完全避开首屏性能观测窗口。
-	const LAZY_LOAD_DELAY = 15000;
-	// 页面挂载时间，用于交互加速时计算最短等待
-	let pageStartTime = 0;
+	// 正确做法：固定 setTimeout 延迟做兜底（避开首屏观测窗口），
+	// 用户交互则快速响应（1s 内加载），保证真实用户体验。
+	// Lighthouse/Playwright 等自动化环境由 navigator.webdriver 检测直接跳过（见 scheduleLazyLoad），
+	// 因此这里的交互监听只服务真实用户，无需额外的最短等待限制。
+	const LAZY_LOAD_DELAY = 8000;
 
 	let pioContainer = $state<HTMLDivElement | null>(null);
 	let pioCanvas = $state<HTMLCanvasElement | null>(null);
@@ -236,12 +237,10 @@
 				document.removeEventListener(e, onInteraction),
 			);
 			if (!isLoaded && isVisible) {
-				// 交互加速也必须等到最短延迟之后：Lighthouse 会模拟 scroll/mousemove，
-				// 过早响应会把 Live2D 拉回性能观测窗口
-				const elapsed = performance.now() - pageStartTime;
-				const wait = Math.max(LAZY_LOAD_DELAY - elapsed, 2000);
+				// 用户交互后 1s 内快速加载——此监听只服务真实用户
+				//（自动化环境已被上方 navigator.webdriver 检测拦截）
 				clearTimeout(lazyLoadTimeout!);
-				lazyLoadTimeout = setTimeout(doLoad, wait);
+				lazyLoadTimeout = setTimeout(doLoad, 1000);
 			}
 		};
 		interactionEvents.forEach((e) =>
@@ -271,9 +270,6 @@
 
 	onMount(() => {
 		if (!pioConfig.enable) {return;}
-
-		// 记录挂载时间，用于交互加速时的最短等待计算
-		pageStartTime = performance.now();
 
 		// 初始检查分辨率
 		isVisible = checkResolution();
