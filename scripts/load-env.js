@@ -22,7 +22,11 @@ export function loadEnv() {
 				let value = match[2].trim();
 				// 移除引号
 				value = value.replace(/^["']|["']$/g, "");
-				process.env[key] = value;
+				// 不覆盖已存在的环境变量（与 dotenv 行为一致），
+				// 保证 shell 显式传入的值（如 ENABLE_CONTENT_SYNC=false）优先
+				if (process.env[key] === undefined) {
+					process.env[key] = value;
+				}
 			}
 		});
 	}

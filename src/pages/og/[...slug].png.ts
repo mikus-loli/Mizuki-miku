@@ -41,15 +41,51 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 let fontCache: { regular: Buffer | null; bold: Buffer | null } | null = null;
 
+// 本地 OG 字体（OFL 开源 Zen Maru Gothic，避免构建机访问 Google Fonts 失败/超时）
+// 与博客正文使用的显示字体一致，保证 OG 图视觉统一
+const LOCAL_OG_FONT_PATH = new URL(
+	"../../../public/assets/font/ZenMaruGothic-Medium.ttf",
+	import.meta.url,
+);
+
+function loadLocalFont(): Buffer | null {
+	try {
+		if (fs.existsSync(LOCAL_OG_FONT_PATH)) {
+			return fs.readFileSync(LOCAL_OG_FONT_PATH);
+		}
+	} catch (err) {
+		console.warn("Failed to load local OG font:", err);
+	}
+	return null;
+}
+
 async function fetchNotoSansSCFonts() {
 	if (fontCache) {
 		return fontCache;
 	}
 
+	// 1. 优先使用本地字体（OFL 开源，无网络依赖，国内构建稳定）
+	const localFont = loadLocalFont();
+	if (localFont) {
+		fontCache = { regular: localFont, bold: localFont };
+		return fontCache;
+	}
+
+	// 2. 降级：从 Google Fonts 拉取 Noto Sans SC（带超时，避免构建卡死）
 	try {
-		const cssResp = await fetch(
-			"https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap",
-		);
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+		let cssResp: Response;
+		try {
+			cssResp = await fetch(
+				"https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap",
+				{ signal: controller.signal },
+			);
+		} finally {
+			clearTimeout(timeoutId);
+		}
+
 		if (!cssResp.ok) {
 			throw new Error("Failed to fetch Google Fonts CSS");
 		}
