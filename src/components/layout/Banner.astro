@@ -306,9 +306,18 @@ const hasBannerLink = !!siteConfig.banner.credit.url;
 					}
 
 					// 用 cloneNode 复制帧结构（避免 innerHTML 序列化-反序列化）
+					// 注意：模板帧是 <template> 元素，其内容在 document fragment 中，
+					// 直接克隆 <template> 元素不会渲染内容（空白 bug），
+					// 必须克隆 template.content
 					for (let f = 0; f < sourceFrames.length; f++) {
-						const el = sourceFrames[f].cloneNode(true);
+						const el = document.createElement('div');
 						el.className = baseClass;
+						const src = sourceFrames[f];
+						if (src.tagName === 'TEMPLATE') {
+							el.appendChild(src.content.cloneNode(true));
+						} else {
+							el.appendChild(src.cloneNode(true));
+						}
 						el.style.opacity = '0';
 						el.style.pointerEvents = 'none';
 						container.appendChild(el);
