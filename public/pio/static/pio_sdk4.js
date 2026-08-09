@@ -21,6 +21,78 @@ If you have trouble setting up this, check following example's sources.
 https://jupiterbjy.github.io/PaulPio_PIXI_Demo/
 
 ---- */
+
+// ============================================================
+// moc3 gzip 预压缩加载补丁
+// 原理：本地将 miku.moc3 用 gzip 压缩为 miku.moc3.gz（-65%，9.5MB → 3.1MB），
+// 此处拦截 pixi-live2d-display 的 XHR 请求：.moc3 → .moc3.gz → DecompressionStream 解压。
+// 说明：浏览器 DecompressionStream 标准仅支持 gzip/deflate（不支持 brotli），故用 gzip。
+// 兼容性：DecompressionStream('gzip') Chrome 80+ / Edge 80+ / Firefox 113+ / Safari 16.4+，
+//         不支持时回退请求原始 .moc3（完整保留原逻辑）。
+// ============================================================
+(function patchMoc3Gzip() {
+	if (window.__moc3GzipPatched) return;
+	window.__moc3GzipPatched = true;
+
+	var origOpen = XMLHttpRequest.prototype.open;
+	var origSend = XMLHttpRequest.prototype.send;
+
+	XMLHttpRequest.prototype.open = function (method, url) {
+		this.__pioUrl = typeof url === "string" ? url : String(url);
+		return origOpen.apply(this, arguments);
+	};
+
+	XMLHttpRequest.prototype.send = function (body) {
+		var xhr = this;
+		var url = xhr.__pioUrl || "";
+
+		if (
+			url.indexOf(".moc3") !== -1 &&
+			typeof DecompressionStream !== "undefined"
+		) {
+			var gzUrl = url + ".gz";
+			fetch(gzUrl)
+				.then(function (res) {
+					if (!res.ok) throw new Error("gz not found: " + res.status);
+					return res.arrayBuffer();
+				})
+				.then(function (compressed) {
+					var ds = new DecompressionStream("gzip");
+					var stream = new Blob([compressed]).stream().pipeThrough(ds);
+					return new Response(stream).arrayBuffer();
+				})
+				.then(function (decoded) {
+					// 用解压后的数据填充 XHR 状态，触发 onload/onloadend
+					Object.defineProperty(xhr, "response", {
+						value: decoded,
+						writable: true,
+						configurable: true,
+					});
+					Object.defineProperty(xhr, "status", {
+						value: 200,
+						writable: true,
+						configurable: true,
+					});
+					Object.defineProperty(xhr, "readyState", {
+						value: 4,
+						writable: true,
+						configurable: true,
+					});
+					if (xhr.onreadystatechange) xhr.onreadystatechange();
+					if (xhr.onload) xhr.onload();
+					if (xhr.onloadend) xhr.onloadend();
+				})
+				.catch(function () {
+					// 回退：原始 URL 正常加载（不压缩）
+					return origSend.call(xhr, body);
+				});
+			return;
+		}
+
+		return origSend.apply(this, arguments);
+	};
+})();
+
 var app;
 var currentModel = null;
 var pio_has_expression = false;
