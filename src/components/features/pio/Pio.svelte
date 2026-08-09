@@ -39,7 +39,7 @@
 	// 用户交互则快速响应（1s 内加载），保证真实用户体验。
 	// Lighthouse/Playwright 等自动化环境由 navigator.webdriver 检测直接跳过（见 scheduleLazyLoad），
 	// 因此这里的交互监听只服务真实用户，无需额外的最短等待限制。
-	const LAZY_LOAD_DELAY = 8000;
+	const LAZY_LOAD_DELAY = 3000;
 
 	let pioContainer = $state<HTMLDivElement | null>(null);
 	let pioCanvas = $state<HTMLCanvasElement | null>(null);
