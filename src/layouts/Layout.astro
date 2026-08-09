@@ -29,10 +29,15 @@ interface Props {
 	lang?: string;
 	setOGTypeArticle?: boolean;
 	postSlug?: string;
+	/** 规范 URL（默认取当前路径）；文章页传 getPostUrl(entry) 避免 slug/permalink 重复内容 */
+	canonical?: string;
 }
 
-let { title, banner, description, lang, setOGTypeArticle, postSlug } =
+let { title, banner, description, lang, setOGTypeArticle, postSlug, canonical } =
 	Astro.props;
+
+// canonical URL：默认当前路径（无 query），文章页可覆盖为权威 URL
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteConfig.siteURL).href;
 
 // apply a class to the body element to decide the height of the banner, only used for initial page load
 // Swup can update the body for each page visit, but it's after the page transition, causing a delay for banner height change
@@ -175,6 +180,9 @@ if (siteConfig.font) {
 			setOGTypeArticle={setOGTypeArticle}
 			configHue={configHue}
 		/>
+
+		<!-- Canonical URL（避免 slug/permalink 重复内容） -->
+		<link rel="canonical" href={canonicalUrl} />
 
 		<!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
 		<slot name="head" />
