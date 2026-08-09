@@ -25,7 +25,7 @@ import {
 	hasCustomPermalink,
 	initPostIdMap,
 } from "@utils/permalink-utils";
-import { getFileDirFromPath } from "@utils/url-utils";
+import { getFileDirFromPath, getPostUrl } from "@utils/url-utils";
 import type { CollectionEntry } from "astro:content";
 import { render } from "astro:content";
 import { Icon } from "astro-icon/components";
@@ -117,6 +117,7 @@ const jsonLd = {
 	setOGTypeArticle={true}
 	postSlug={entry.id}
 	headings={headings}
+	canonical={getPostUrl(entry)}
 >
 	<script
 		is:inline

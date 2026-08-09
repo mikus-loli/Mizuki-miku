@@ -32,6 +32,8 @@ interface Props {
 	setOGTypeArticle?: boolean;
 	postSlug?: string;
 	headings?: MarkdownHeading[];
+	/** 规范 URL（透传给 Layout） */
+	canonical?: string;
 }
 
 // 获取 banner 图片
@@ -45,6 +47,7 @@ const {
 	setOGTypeArticle,
 	postSlug,
 	headings = [],
+	canonical,
 } = Astro.props;
 const hasBannerCredit = siteConfig.banner.credit.enable;
 const hasBannerLink = !!siteConfig.banner.credit.url;
@@ -95,6 +98,7 @@ const defaultPostListLayout = siteConfig.postListLayout?.defaultMode || "list";
 	lang={lang}
 	setOGTypeArticle={setOGTypeArticle}
 	postSlug={postSlug}
+	canonical={canonical}
 >
 	<GridScripts
 		navbarTransparentMode={siteConfig.banner?.navbar?.transparentMode ||
