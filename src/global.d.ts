@@ -106,6 +106,9 @@ declare global {
 		__mizukiRightSidebarManagerInitialized?: boolean;
 		/** 悬浮控件按钮的 MutationObserver 缓存（FloatingControls 使用）。 */
 		__floatingControlObservers?: Map<string, MutationObserver>;
+		/** 首页 Banner 轮播：清理函数与当前帧索引（跨实例复用）。 */
+		__bannerCarouselCleanup?: (() => void) | null;
+		__bannerCarouselIndex?: { mobile: number; desktop: number };
 		/** PostPage 的文章列表 swup 监听只挂一次。 */
 		_postListSwupListenerAttached?: boolean;
 
