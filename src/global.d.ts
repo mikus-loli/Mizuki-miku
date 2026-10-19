@@ -104,6 +104,8 @@ declare global {
 		__mizukiRightSidebarResizeHandler?: () => void;
 		__mizukiRightSidebarSwupHooked?: boolean;
 		__mizukiRightSidebarManagerInitialized?: boolean;
+		/** 悬浮控件按钮的 MutationObserver 缓存（FloatingControls 使用）。 */
+		__floatingControlObservers?: Map<string, MutationObserver>;
 		/** PostPage 的文章列表 swup 监听只挂一次。 */
 		_postListSwupListenerAttached?: boolean;
 
