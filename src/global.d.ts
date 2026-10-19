@@ -77,6 +77,14 @@ declare global {
 			preloadIcons: (icons: string[]) => Promise<void>;
 		};
 		__iconifyLoaderInitialized?: boolean;
+		/** IconifyLoader 组件的注入参数（is:inline 配置块 → 打包模块）。 */
+		__iconifyLoaderOptions?: {
+			preloadIcons?: string[];
+			timeout?: number;
+			retryCount?: number;
+		};
+		/** Iconify API 端点配置，供 iconify-icon 运行时读取。 */
+		IconifyProviders?: Record<string, { resources: string[] }>;
 		__pioInstance?: unknown;
 		__wallpaper_cleanup?: (() => void) | null;
 		loadIconify?: () => Promise<void>;
