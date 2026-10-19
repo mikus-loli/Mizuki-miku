@@ -14,6 +14,7 @@
 		type PostItem,
 		scrollToHeading as scrollToHeadingUtil,
 		type TOCItem,
+		updateActiveHeading as getActiveHeading,
 	} from "./hooks/useMobileTOC";
 
 	let tocItems: TOCItem[] = $state([]);
@@ -42,22 +43,9 @@
 		navigateToPage(url);
 	};
 
+	// 滚动位置的判定逻辑只在 hooks/useMobileTOC.ts 保留一份
 	const updateActiveHeading = () => {
-		const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
-		const scrollTop = window.scrollY;
-		const offset = 100;
-
-		let currentActiveId = "";
-		headings.forEach((heading) => {
-			if (heading.id) {
-				const elementTop = (heading as HTMLElement).offsetTop - offset;
-				if (scrollTop >= elementTop) {
-					currentActiveId = heading.id;
-				}
-			}
-		});
-
-		activeId = currentActiveId;
+		activeId = getActiveHeading();
 	};
 
 	const setupIntersectionObserver = () => {

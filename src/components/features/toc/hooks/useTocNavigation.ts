@@ -3,28 +3,13 @@
  * 处理标题提取、滚动导航等核心功能
  */
 
-import type { HeadingData, TOCScrollOptions } from "../types/toc";
+import type { TOCScrollOptions } from "../types/toc";
 
 /**
  * 从 DOM 中提取标题数据
+ * 实现只在 utils/toc-utils.ts 保留一份；这里导出同义名以维持既有公开 API。
  */
-export function extractHeadingsFromDOM(
-	containerSelector = "#post-container",
-): HeadingData[] {
-	const container = document.querySelector(containerSelector);
-	if (!container) {
-		return [];
-	}
-
-	const headings = container.querySelectorAll(
-		"h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]",
-	);
-	return Array.from(headings).map((h) => ({
-		id: h.id,
-		text: (h.textContent || "").replace(/#+\s*$/, ""),
-		level: parseInt(h.tagName[1], 10),
-	}));
-}
+export { extractHeadings as extractHeadingsFromDOM } from "../utils/toc-utils";
 
 /**
  * 滚动到指定标题
