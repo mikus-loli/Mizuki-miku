@@ -13,6 +13,13 @@ export function initBannerCarousel(): void {
 	// 闭包里 TS 不保留 null 收窄，这里固定成非空引用
 	const root: HTMLElement = container;
 
+	// swup 只替换 <main>，Banner 是持久节点：换页时脚本会被重新执行，
+	// 但 DOM 已是处理过的形态（模板已转成帧），再跑一次会重复克隆帧。
+	if (root.dataset.carouselReady === "1") {
+		return;
+	}
+	root.dataset.carouselReady = "1";
+
 	const mobileCount = parseInt(root.dataset.mobileCount || '0', 10);
 	const desktopCount = parseInt(root.dataset.desktopCount || '0', 10);
 	const interval = parseInt(root.dataset.carouselInterval || '6000', 10);
@@ -68,7 +75,9 @@ export function initBannerCarousel(): void {
 			frameElements[type].push(el);
 		}
 
-		const startIdx = index[type];
+		// 索引跨页保留，而新页面的帧数可能更少 —— 越界就回落，避免读 undefined.style
+		const startIdx = Math.min(index[type], frameElements[type].length - 1);
+		index[type] = startIdx;
 		frameElements[type][startIdx].style.opacity = '1';
 		frameElements[type][startIdx].style.pointerEvents = '';
 	}
