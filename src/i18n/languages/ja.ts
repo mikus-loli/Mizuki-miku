@@ -34,8 +34,6 @@ export const ja: Translation = {
 	[Key.friendsVisit]: "訪問",
 	[Key.friendsCopyLink]: "リンク",
 	[Key.friendsCopySuccess]: "コピーしました",
-	[Key.friendsTags]: "タグ",
-	[Key.untitled]: "無題",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "タグはありません",
 
@@ -50,7 +48,6 @@ export const ja: Translation = {
 
 	[Key.lightMode]: "ライト",
 	[Key.darkMode]: "ダーク",
-	[Key.systemMode]: "システム",
 
 	[Key.more]: "詳細を表示",
 
@@ -108,16 +105,10 @@ export const ja: Translation = {
 	[Key.musicPlayerCollapse]: "音楽プレーヤーを折りたたむ",
 	[Key.musicPlayerPause]: "一時停止",
 	[Key.musicPlayerPlay]: "再生",
-	[Key.musicPlayerPrevious]: "前へ",
-	[Key.musicPlayerNext]: "次へ",
-	[Key.musicPlayerShuffle]: "シャッフル",
-	[Key.musicPlayerRepeat]: "リピート",
-	[Key.musicPlayerRepeatOne]: "1曲のみリピート",
 	[Key.musicPlayerVolume]: "音量コントロール",
 	[Key.musicPlayerProgress]: "再生状況",
 	[Key.musicPlayerCover]: "カバー",
 	[Key.musicPlayerPlaylist]: "プレイリスト",
-	[Key.musicPlayerLoading]: "読み込み中...",
 	[Key.musicPlayerErrorPlaylist]: "プレイリストを取得できませんでした。",
 	[Key.musicPlayerErrorSong]:
 		"曲の読み込みに失敗しました。次の曲を再生します。",
@@ -137,7 +128,6 @@ export const ja: Translation = {
 	[Key.devices]: "デバイス",
 	[Key.devicesSubtitle]: "日常的に使用しているデバイスを紹介",
 	[Key.devicesViewDetails]: "詳細を表示",
-	[Key.albumsPhotoCount]: "件の写真",
 	[Key.albumsPhotosCount]: "件の写真",
 	[Key.albumsFilterAll]: "すべて",
 	[Key.albumsNoResults]: "一致するアルバムがありません",
@@ -145,77 +135,16 @@ export const ja: Translation = {
 	// プロジェクトページ
 	[Key.projects]: "プロジェクト",
 	[Key.projectsSubtitle]: "開発プロジェクトのポートフォリオ",
-	[Key.projectsAll]: "すべて",
 	[Key.projectsWeb]: "ウェブアプリ",
 	[Key.projectsMobile]: "モバイルアプリ",
 	[Key.projectsDesktop]: "デスクトップアプリ",
 	[Key.projectsOther]: "その他",
-	[Key.projectTechStack]: "技術スタック",
-	[Key.projectLiveDemo]: "ライブデモ",
-	[Key.projectSourceCode]: "ソースコード",
-	[Key.projectDescription]: "プロジェクトの説明",
-	[Key.projectStatus]: "ステータス",
-	[Key.projectStatusCompleted]: "完了",
-	[Key.projectStatusInProgress]: "進行中",
-	[Key.projectStatusPlanned]: "計画中",
-	[Key.projectsTotal]: "プロジェクトの合計",
 	[Key.projectsCompleted]: "完了",
 	[Key.projectsInProgress]: "進行中",
-	[Key.projectsTechStack]: "技術スタック",
-	[Key.projectsFeatured]: "注目のプロジェクト",
 	[Key.projectsPlanned]: "計画中",
-	[Key.projectsDemo]: "ライブデモ",
-	[Key.projectsSource]: "ソースコード",
 	[Key.projectsVisit]: "プロジェクトを開く",
-	[Key.projectsGitHub]: "GitHub",
-
-	// RSSページ
 	[Key.rss]: "RSSフィード",
-	[Key.rssDescription]: "最新情報を受け取るために購読する",
-	[Key.rssSubtitle]:
-		"RSSフィードを購読すると最新の記事や更新情報をすぐに確認できます。",
-	[Key.rssLink]: "RSSフィードのリンク",
-	[Key.rssCopyToReader]: "RSSリーダーへのリンクをコピーします",
-	[Key.rssCopyLink]: "コピー",
-	[Key.rssLatestPosts]: "最新の投稿",
-	[Key.rssWhatIsRSS]: "RSSとは何ですか?",
-	[Key.rssWhatIsRSSDescription]:
-		"RSS(Really Simple Syndication)は、頻繁に更新されるコンテンツを公開するための標準フォーマットです:",
-	[Key.rssBenefit1]:
-		"手動でウェブサイトにアクセスすることなく、最新のコンテンツをタイムリーに入手できます",
-	[Key.rssBenefit2]: "複数のウェブサイトへの購読を一括で管理できます",
-	[Key.rssBenefit3]: "重要な更新情報や記事を見逃すこともありません",
-	[Key.rssBenefit4]: "広告なしのクリーンな読書体験を楽しめます",
-	[Key.rssHowToUse]:
-		"このサイトの購読はFeedly、Inoreaderまたはその他のRSSリーダーの使用をおすすめします。",
-	[Key.rssCopied]: "RSSのリンクをクリップボードにコピーしました!",
-	[Key.rssCopyFailed]:
-		"コピーに失敗しました。リンクを手動で追加してください。",
-
-	// Atomページ
 	[Key.atom]: "Atomフィード",
-	[Key.atomDescription]: "最新情報を受け取るために購読する",
-	[Key.atomSubtitle]:
-		"Atomフィードを購読すると最新の記事や更新情報をすぐに確認できます。",
-	[Key.atomLink]: "Atomフィードのリンク",
-	[Key.atomCopyToReader]: "Atomリーダーへのリンクをコピーします",
-	[Key.atomCopyLink]: "コピー",
-	[Key.atomLatestPosts]: "最新の投稿",
-	[Key.atomWhatIsAtom]: "Atomとは何ですか?",
-	[Key.atomWhatIsAtomDescription]:
-		"Atom(Atom Syndication Format)はフィードとその項目を記述するためのXMLベースの標準フォーマットです:",
-	[Key.atomBenefit1]:
-		"手動でウェブサイトにアクセスすることなく、最新のコンテンツをタイムリーに入手できます",
-	[Key.atomBenefit2]: "複数のウェブサイトへの購読を一括で管理できます",
-	[Key.atomBenefit3]: "重要な更新情報や記事を見逃すこともありません",
-	[Key.atomBenefit4]: "広告なしのクリーンな読書体験を楽しめます",
-	[Key.atomHowToUse]:
-		"このサイトの購読はFeedly、Inoreaderまたはその他のAtomリーダーの使用をおすすめします。",
-	[Key.atomCopied]: "Atomのリンクをクリップボードにコピーしました!",
-	[Key.atomCopyFailed]:
-		"コピーに失敗しました。リンクを手動で追加してください。",
-
-	// 壁紙モード
 	[Key.wallpaperBanner]: "バナーモード",
 	[Key.wallpaperFullscreen]: "フルスクリーンモード",
 	[Key.wallpaperNone]: "壁紙を非表示",
@@ -228,24 +157,12 @@ export const ja: Translation = {
 	[Key.skillsDatabase]: "データベース",
 	[Key.skillsTools]: "開発ツール",
 	[Key.skillsOther]: "その他のスキル",
-	[Key.skillLevel]: "熟練度",
-	[Key.skillLevelBeginner]: "初心者",
-	[Key.skillLevelIntermediate]: "中級者",
-	[Key.skillLevelAdvanced]: "上級者",
-	[Key.skillLevelExpert]: "専門家",
-	[Key.skillExperience]: "経験の合計",
 	[Key.skillYears]: "年",
 	[Key.skillMonths]: "ヶ月",
-	[Key.skillsTotal]: "スキルの合計",
 	[Key.skillsExpert]: "エキスパートレベル",
 	[Key.skillsAdvanced]: "上級者",
 	[Key.skillsIntermediate]: "中級者",
 	[Key.skillsBeginner]: "初心者",
-	[Key.skillsAdvancedTitle]: "プロフェッショナルスキル",
-	[Key.skillsProjects]: "関連プロジェクト",
-	[Key.skillsDistribution]: "スキル分布",
-	[Key.skillsByLevel]: "レベル別",
-	[Key.skillsByCategory]: "カテゴリー別",
 	[Key.noData]: "データなし",
 
 	// タイムラインページ
@@ -256,23 +173,11 @@ export const ja: Translation = {
 	[Key.timelineProject]: "プロジェクト経験",
 	[Key.timelineAchievement]: "実績",
 	[Key.timelinePresent]: "現在",
-	[Key.timelineLocation]: "場所",
-	[Key.timelineDescription]: "詳細な説明",
 	[Key.timelineMonths]: "ヶ月",
 	[Key.timelineYears]: "年",
-	[Key.timelineTotal]: "合計",
-	[Key.timelineProjects]: "プロジェクト",
-	[Key.timelineExperience]: "実務経験",
 	[Key.timelineCurrent]: "現在のステータス",
-	[Key.timelineHistory]: "履歴",
 	[Key.timelineAchievements]: "実績",
-	[Key.timelineStartDate]: "開始日",
-	[Key.timelineDuration]: "期間",
-
-	// パスワード保護
 	[Key.passwordProtected]: "パスワードで保護されています",
-	[Key.passwordProtectedTitle]:
-		"このコンテンツはパスワードで保護されています",
 	[Key.passwordProtectedDescription]:
 		"保護されたコンテンツを表示するにはパスワードを入力してください。",
 	[Key.postEncrypted]: "暗号化",
@@ -280,17 +185,8 @@ export const ja: Translation = {
 	[Key.passwordUnlock]: "ロックを解除",
 	[Key.passwordUnlocking]: "ロックを解除中...",
 	[Key.passwordIncorrect]: "パスワードが間違っています。再度お試しください。",
-	[Key.passwordDecryptError]:
-		"復号に失敗しました。パスワードが正しいかどうか確認してください。",
 	[Key.passwordRequired]: "パスワードを入力してください。",
-	[Key.passwordVerifying]: "認証中...",
-	[Key.passwordDecryptFailed]:
-		"復号に失敗しました。パスワードを確認してください。",
 	[Key.passwordDecryptRetry]: "復号に失敗しました。再度お試しください。",
-	[Key.passwordUnlockButton]: "ロックを解除",
-	[Key.copyFailed]: "コピーに失敗しました:",
-	[Key.syntaxHighlightFailed]: "構文の強調表示が失敗しました:",
-	[Key.autoSyntaxHighlightFailed]: "自動構文強調表示が失敗しました:",
 	[Key.decryptionError]: "復号中にエラーが発生しました:",
 	[Key.passwordHint]: "ヒント",
 
@@ -351,13 +247,7 @@ export const ja: Translation = {
 	[Key.profileStatsLoading]: "統計を読み込み中...",
 	[Key.profileStatsPageViews]: "ページの閲覧",
 	[Key.profileStatsVisits]: "訪問",
-	[Key.profileStatsUnavailable]: "統計は利用できません",
-
-	// ページビューの統計
 	[Key.pageViewsLoading]: "統計を読み込み中...",
-	[Key.pageViewsUnavailable]: "統計は利用できません",
-
-	// レイアウト切り替えボタン
 	[Key.switchToGridMode]: "グリッド表示に切り替え",
 	[Key.switchToListMode]: "リスト表示に切り替え",
 

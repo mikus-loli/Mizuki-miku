@@ -34,8 +34,6 @@ export const en: Translation = {
 	[Key.friendsVisit]: "Visit",
 	[Key.friendsCopyLink]: "Copy Link",
 	[Key.friendsCopySuccess]: "Copied",
-	[Key.friendsTags]: "Tags",
-	[Key.untitled]: "Untitled",
 	[Key.uncategorized]: "Uncategorized",
 	[Key.noTags]: "No Tags",
 
@@ -50,7 +48,6 @@ export const en: Translation = {
 
 	[Key.lightMode]: "Light",
 	[Key.darkMode]: "Dark",
-	[Key.systemMode]: "System",
 
 	[Key.more]: "More",
 
@@ -108,16 +105,10 @@ export const en: Translation = {
 	[Key.musicPlayerCollapse]: "Collapse Music Player",
 	[Key.musicPlayerPause]: "Pause",
 	[Key.musicPlayerPlay]: "Play",
-	[Key.musicPlayerPrevious]: "Previous",
-	[Key.musicPlayerNext]: "Next",
-	[Key.musicPlayerShuffle]: "Shuffle",
-	[Key.musicPlayerRepeat]: "Repeat All",
-	[Key.musicPlayerRepeatOne]: "Repeat One",
 	[Key.musicPlayerVolume]: "Volume Control",
 	[Key.musicPlayerProgress]: "Playback Progress",
 	[Key.musicPlayerCover]: "Cover",
 	[Key.musicPlayerPlaylist]: "Playlist",
-	[Key.musicPlayerLoading]: "Loading...",
 	[Key.musicPlayerErrorPlaylist]: "Failed to fetch playlist",
 	[Key.musicPlayerErrorSong]: "Failed to load current song, trying next",
 	[Key.musicPlayerErrorEmpty]: "No available songs in playlist",
@@ -136,7 +127,6 @@ export const en: Translation = {
 	[Key.devices]: "My Devices",
 	[Key.devicesSubtitle]: "Here are the devices I use in my daily life",
 	[Key.devicesViewDetails]: "View Details",
-	[Key.albumsPhotoCount]: "photo",
 	[Key.albumsPhotosCount]: "photos",
 	[Key.albumsFilterAll]: "All",
 	[Key.albumsNoResults]: "No matching albums",
@@ -144,76 +134,16 @@ export const en: Translation = {
 	// Projects Page
 	[Key.projects]: "Projects",
 	[Key.projectsSubtitle]: "My development project portfolio",
-	[Key.projectsAll]: "All",
 	[Key.projectsWeb]: "Web Applications",
 	[Key.projectsMobile]: "Mobile Applications",
 	[Key.projectsDesktop]: "Desktop Applications",
 	[Key.projectsOther]: "Other",
-	[Key.projectTechStack]: "Tech Stack",
-	[Key.projectLiveDemo]: "Live Demo",
-	[Key.projectSourceCode]: "Source Code",
-	[Key.projectDescription]: "Project Description",
-	[Key.projectStatus]: "Status",
-	[Key.projectStatusCompleted]: "Completed",
-	[Key.projectStatusInProgress]: "In Progress",
-	[Key.projectStatusPlanned]: "Planned",
-	[Key.projectsTotal]: "Total Projects",
 	[Key.projectsCompleted]: "Completed",
 	[Key.projectsInProgress]: "In Progress",
-	[Key.projectsTechStack]: "Tech Stack Statistics",
-	[Key.projectsFeatured]: "Featured Projects",
 	[Key.projectsPlanned]: "Planned",
-	[Key.projectsDemo]: "Live Demo",
-	[Key.projectsSource]: "Source Code",
 	[Key.projectsVisit]: "Visit Project",
-	[Key.projectsGitHub]: "GitHub",
-
-	// RSS Page
 	[Key.rss]: "RSS Feed",
-	[Key.rssDescription]: "Subscribe to get latest updates",
-	[Key.rssSubtitle]:
-		"Subscribe via RSS to get the latest articles and updates immediately",
-	[Key.rssLink]: "RSS Link",
-	[Key.rssCopyToReader]: "Copy link to your RSS reader",
-	[Key.rssCopyLink]: "Copy",
-	[Key.rssLatestPosts]: "Latest Posts",
-	[Key.rssWhatIsRSS]: "What is RSS?",
-	[Key.rssWhatIsRSSDescription]:
-		"RSS (Really Simple Syndication) is a standard format for publishing frequently updated content. With RSS, you can:",
-	[Key.rssBenefit1]:
-		"Get latest website content in time without manually visiting",
-	[Key.rssBenefit2]: "Manage subscriptions to multiple websites in one place",
-	[Key.rssBenefit3]: "Avoid missing important updates and articles",
-	[Key.rssBenefit4]: "Enjoy an ad-free, clean reading experience",
-	[Key.rssHowToUse]:
-		"It is recommended to use Feedly, Inoreader or other RSS readers to subscribe to this site.",
-	[Key.rssCopied]: "RSS link copied to clipboard!",
-	[Key.rssCopyFailed]: "Copy failed, please copy the link manually",
-
-	// Atom Page
 	[Key.atom]: "Atom Feed",
-	[Key.atomDescription]: "Subscribe to get latest updates",
-	[Key.atomSubtitle]:
-		"Subscribe via Atom to get the latest articles and updates immediately",
-	[Key.atomLink]: "Atom Link",
-	[Key.atomCopyToReader]: "Copy link to your Atom reader",
-	[Key.atomCopyLink]: "Copy",
-	[Key.atomLatestPosts]: "Latest Posts",
-	[Key.atomWhatIsAtom]: "What is Atom?",
-	[Key.atomWhatIsAtomDescription]:
-		"Atom (Atom Syndication Format) is an XML-based standard for describing feeds and their items. With Atom, you can:",
-	[Key.atomBenefit1]:
-		"Get latest website content in time without manually visiting",
-	[Key.atomBenefit2]:
-		"Manage subscriptions to multiple websites in one place",
-	[Key.atomBenefit3]: "Avoid missing important updates and articles",
-	[Key.atomBenefit4]: "Enjoy an ad-free, clean reading experience",
-	[Key.atomHowToUse]:
-		"It is recommended to use Feedly, Inoreader or other Atom readers to subscribe to this site.",
-	[Key.atomCopied]: "Atom link copied to clipboard!",
-	[Key.atomCopyFailed]: "Copy failed, please copy the link manually",
-
-	// Wallpaper mode
 	[Key.wallpaperBanner]: "Banner Mode",
 	[Key.wallpaperFullscreen]: "Fullscreen Mode",
 	[Key.wallpaperNone]: "Hide Wallpaper",
@@ -226,24 +156,12 @@ export const en: Translation = {
 	[Key.skillsDatabase]: "Database",
 	[Key.skillsTools]: "Development Tools",
 	[Key.skillsOther]: "Other Skills",
-	[Key.skillLevel]: "Proficiency",
-	[Key.skillLevelBeginner]: "Beginner",
-	[Key.skillLevelIntermediate]: "Intermediate",
-	[Key.skillLevelAdvanced]: "Advanced",
-	[Key.skillLevelExpert]: "Expert",
-	[Key.skillExperience]: "Experience",
 	[Key.skillYears]: "years",
 	[Key.skillMonths]: "months",
-	[Key.skillsTotal]: "Total Skills",
 	[Key.skillsExpert]: "Expert Level",
 	[Key.skillsAdvanced]: "Advanced",
 	[Key.skillsIntermediate]: "Intermediate",
 	[Key.skillsBeginner]: "Beginner",
-	[Key.skillsAdvancedTitle]: "Professional Skills",
-	[Key.skillsProjects]: "Related Projects",
-	[Key.skillsDistribution]: "Skill Distribution",
-	[Key.skillsByLevel]: "By Level",
-	[Key.skillsByCategory]: "By Category",
 	[Key.noData]: "No data",
 
 	// Timeline Page
@@ -254,22 +172,11 @@ export const en: Translation = {
 	[Key.timelineProject]: "Project Experience",
 	[Key.timelineAchievement]: "Achievements",
 	[Key.timelinePresent]: "Present",
-	[Key.timelineLocation]: "Location",
-	[Key.timelineDescription]: "Detailed Description",
 	[Key.timelineMonths]: "months",
 	[Key.timelineYears]: "years",
-	[Key.timelineTotal]: "Total",
-	[Key.timelineProjects]: "Projects",
-	[Key.timelineExperience]: "Work Experience",
 	[Key.timelineCurrent]: "Current Status",
-	[Key.timelineHistory]: "History",
 	[Key.timelineAchievements]: "Achievements",
-	[Key.timelineStartDate]: "Start Date",
-	[Key.timelineDuration]: "Duration",
-
-	// Password Protection
 	[Key.passwordProtected]: "Password Protected",
-	[Key.passwordProtectedTitle]: "This content is password protected",
 	[Key.passwordProtectedDescription]:
 		"Please enter the password to view the protected content",
 	[Key.postEncrypted]: "Encrypted",
@@ -277,17 +184,8 @@ export const en: Translation = {
 	[Key.passwordUnlock]: "Unlock",
 	[Key.passwordUnlocking]: "Unlocking...",
 	[Key.passwordIncorrect]: "Incorrect password, please try again",
-	[Key.passwordDecryptError]:
-		"Decryption failed, please check if the password is correct",
 	[Key.passwordRequired]: "Please enter the password",
-	[Key.passwordVerifying]: "Verifying...",
-	[Key.passwordDecryptFailed]: "Decryption failed, please check the password",
 	[Key.passwordDecryptRetry]: "Decryption failed, please try again",
-	[Key.passwordUnlockButton]: "Unlock",
-	[Key.copyFailed]: "Copy failed:",
-	[Key.syntaxHighlightFailed]: "Syntax highlighting failed:",
-	[Key.autoSyntaxHighlightFailed]:
-		"Automatic syntax highlighting also failed:",
 	[Key.decryptionError]: "An error occurred during decryption:",
 	[Key.passwordHint]: "Hint",
 
@@ -348,13 +246,7 @@ export const en: Translation = {
 	[Key.profileStatsLoading]: "Loading stats...",
 	[Key.profileStatsPageViews]: "Page views",
 	[Key.profileStatsVisits]: "Visits",
-	[Key.profileStatsUnavailable]: "Stats unavailable",
-
-	// Page Views Stats
 	[Key.pageViewsLoading]: "Loading stats...",
-	[Key.pageViewsUnavailable]: "Stats unavailable",
-
-	// Layout Switch Button
 	[Key.switchToGridMode]: "Switch to Grid Mode",
 	[Key.switchToListMode]: "Switch to List Mode",
 
