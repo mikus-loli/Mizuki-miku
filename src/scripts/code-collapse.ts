@@ -56,10 +56,10 @@ class CodeBlockCollapser {
 
 	syncWithThemeOptimizer(): void {
 		// 检查主题优化器是否存在
-		if ((window as any).themeOptimizer) {
+		if (window.themeOptimizer) {
 			// 获取当前主题优化器的设置
 			const shouldHideDuringTransition: boolean =
-				(window as any).themeOptimizer.hideCodeBlocksDuringTransition;
+				window.themeOptimizer.hideCodeBlocksDuringTransition ?? false;
 
 			// 应用相同的设置到代码块
 			const codeBlocks = document.querySelectorAll(".expressive-code");
@@ -324,16 +324,16 @@ class CodeBlockCollapser {
 
 const codeBlockCollapser = new CodeBlockCollapser();
 
-(window as any).CodeBlockCollapser = CodeBlockCollapser;
-(window as any).codeBlockCollapser = codeBlockCollapser;
+window.CodeBlockCollapser = CodeBlockCollapser;
+window.codeBlockCollapser = codeBlockCollapser;
 
 // 设置 Swup 钩子的函数
 function setupSwupHooks(): boolean {
-	if ((window as any).swup) {
+	if (window.swup) {
 		codeBlockCollapser.log("Setting up Swup hooks");
 
 		// 监听 page:view 事件
-		(window as any).swup.hooks.on("page:view", () => {
+		window.swup.hooks.on("page:view", () => {
 			codeBlockCollapser.log(
 				"Swup page:view event - reinitializing code blocks",
 			);
@@ -345,7 +345,7 @@ function setupSwupHooks(): boolean {
 		});
 
 		// 监听 content:replace 事件（更早触发）
-		(window as any).swup.hooks.on("content:replace", () => {
+		window.swup.hooks.on("content:replace", () => {
 			codeBlockCollapser.log(
 				"Swup content:replace event - preparing for reinitialization",
 			);

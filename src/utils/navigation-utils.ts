@@ -116,11 +116,16 @@ function isSameOrigin(url: string): boolean {
 	}
 }
 
+interface NetworkInformationLike {
+	effectiveType?: string;
+}
+
 /**
  * 检查网络状态是否为慢速连接
  */
 function isSlowConnection(): boolean {
-	const conn = (navigator as any).connection;
+	const conn = (navigator as Navigator & { connection?: NetworkInformationLike })
+		.connection;
 	if (!conn) {
 		return false;
 	}

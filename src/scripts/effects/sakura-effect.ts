@@ -24,14 +24,14 @@ export class SakuraEffectHandler {
 		}
 
 		// 避免重复初始化
-		if ((window as any).sakuraInitialized) {
+		if (window.sakuraInitialized) {
 			return;
 		}
 
 		this.config = sakuraConfig;
 		initSakura(sakuraConfig);
 		this.initialized = true;
-		(window as any).sakuraInitialized = true;
+		window.sakuraInitialized = true;
 	}
 
 	/**

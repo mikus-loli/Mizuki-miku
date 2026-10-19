@@ -104,6 +104,9 @@ declare global {
 		__mizukiRightSidebarResizeHandler?: () => void;
 		__mizukiRightSidebarSwupHooked?: boolean;
 		__mizukiRightSidebarManagerInitialized?: boolean;
+		/** PostPage 的文章列表 swup 监听只挂一次。 */
+		_postListSwupListenerAttached?: boolean;
+
 
 		panelManager?: {
 			init?: () => void;
@@ -113,6 +116,7 @@ declare global {
 		themeOptimizer?: {
 			init?: () => void;
 			forceApplyThemeTransitionStyles?: () => void;
+			hideCodeBlocksDuringTransition?: boolean;
 		};
 		CodeBlockCollapser?: {
 			new (): {
@@ -127,6 +131,9 @@ declare global {
 		rightSidebarLayout?: {
 			init?: () => void;
 			cleanup?: () => void;
+			initPageLayout?: (pageType: string) => void;
+			hideRightSidebar?: () => void;
+			showRightSidebar?: () => void;
 		};
 		sakuraInitialized?: boolean;
 	}

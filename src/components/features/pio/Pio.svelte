@@ -1,5 +1,18 @@
 <script lang="ts">
-	import { onDestroy, onMount } from "svelte";
+	/** Paul_Pio / pixi 扩展挂在 window 上的字段。 */
+	interface PioInstance {
+		modules?: { hideDialog?: () => void };
+	}
+
+	interface PioWindow extends Window {
+		Paul_Pio?: new (options: Record<string, unknown>) => PioInstance;
+		initPioPixi?: (options: Record<string, unknown>) => void;
+		__pioInstance?: PioInstance;
+		__pioInitialized?: boolean;
+		__pioScriptsLoaded?: boolean;
+	}
+
+import { onDestroy, onMount } from "svelte";
 
 	import { pioConfig } from "@/config";
 
@@ -94,7 +107,7 @@
 			pioContainer.classList.add("hidden");
 		}
 		// 同时隐藏对话栏
-		const win = window as any;
+		const win = window as PioWindow;
 		if (win.__pioInstance?.modules?.hideDialog) {
 			win.__pioInstance.modules.hideDialog();
 		}
@@ -103,7 +116,7 @@
 	function initPio() {
 		if (typeof window === "undefined") {return;}
 
-		const win = window as any;
+		const win = window as PioWindow;
 
 		if (win.__pioInstance || win.__pioInitialized) {
 			return;
@@ -155,7 +168,7 @@
 	async function loadPioAssets() {
 		if (typeof window === "undefined") {return;}
 
-		const win = window as any;
+		const win = window as PioWindow;
 
 		if (win.__pioScriptsLoaded) {
 			setTimeout(initPio, 100);
@@ -300,7 +313,7 @@
 		if (typeof window === "undefined") {return;}
 
 		const hideDialog = () => {
-			const win = window as any;
+			const win = window as PioWindow;
 			if (win.__pioInstance?.modules?.hideDialog) {
 				win.__pioInstance.modules.hideDialog();
 			} else {
@@ -312,14 +325,14 @@
 		};
 
 		const setup = () => {
-			const swup = (window as any).swup;
+			const swup = window.swup;
 			if (!swup?.hooks) {return false;}
 			swup.hooks.on("visit:start", hideDialog);
 			swup.hooks.on("animation:out:start", hideDialog);
 			swupCleanupFns.push(() => {
-				if ((window as any).swup?.hooks) {
-					(window as any).swup.hooks.off("visit:start", hideDialog);
-					(window as any).swup.hooks.off(
+				if (window.swup?.hooks) {
+					window.swup.hooks.off("visit:start", hideDialog);
+					window.swup.hooks.off(
 						"animation:out:start",
 						hideDialog,
 					);

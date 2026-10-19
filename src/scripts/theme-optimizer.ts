@@ -98,9 +98,9 @@ class ThemeOptimizer {
 	setupSwupHooks(): void {
 		// 设置 Swup 钩子的函数
 		const setupHooks = (): boolean => {
-			if ((window as any).swup) {
+			if (window.swup) {
 				// 监听 page:view 事件
-				(window as any).swup.hooks.on("page:view", () => {
+				window.swup.hooks.on("page:view", () => {
 					// 页面切换后重新初始化代码块优化
 					setTimeout(() => {
 						this.observeCodeBlocks();
@@ -111,7 +111,7 @@ class ThemeOptimizer {
 				});
 
 				// 监听 content:replace 事件（更早触发）
-				(window as any).swup.hooks.on("content:replace", () => {
+				window.swup.hooks.on("content:replace", () => {
 					// 内容替换时也重新应用代码块过渡行为
 					setTimeout(() => {
 						this.applyCodeBlockTransitionBehavior();
@@ -298,8 +298,8 @@ class ThemeOptimizer {
 		this.setupThemeListener();
 
 		// 页面变化时重新观察
-		if ((window as any).swup) {
-			(window as any).swup.hooks.on("page:view", () => {
+		if (window.swup) {
+			window.swup.hooks.on("page:view", () => {
 				setTimeout(() => this.observeCodeBlocks(), 100);
 			});
 		}
@@ -605,4 +605,4 @@ class ThemeOptimizer {
 const themeOptimizer = new ThemeOptimizer();
 
 // 导出到全局（统一API）
-(window as any).themeOptimizer = themeOptimizer;
+window.themeOptimizer = themeOptimizer;

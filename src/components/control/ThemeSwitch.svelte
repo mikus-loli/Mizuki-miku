@@ -24,22 +24,22 @@
 			});
 		};
 
-		const swup = (window as any).swup;
+		const swup = window.swup;
 		if (swup?.hooks) {
 			swup.hooks.on("content:replace", handleContentReplace);
 			cleanupFns.push(() => {
-				if ((window as any).swup?.hooks) {
-					(window as any).swup.hooks.off("content:replace", handleContentReplace);
+				if (window.swup?.hooks) {
+					window.swup.hooks.off("content:replace", handleContentReplace);
 				}
 			});
 		} else {
 			const onSwupEnable = () => {
-				const swup = (window as any).swup;
+				const swup = window.swup;
 				if (swup?.hooks) {
 					swup.hooks.on("content:replace", handleContentReplace);
 					cleanupFns.push(() => {
-						if ((window as any).swup?.hooks) {
-							(window as any).swup.hooks.off("content:replace", handleContentReplace);
+						if (window.swup?.hooks) {
+							window.swup.hooks.off("content:replace", handleContentReplace);
 						}
 					});
 				}

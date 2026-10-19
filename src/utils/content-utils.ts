@@ -145,6 +145,18 @@ export async function getCategoryList(): Promise<Category[]> {
 	return ret;
 }
 
+interface SegmenterLike {
+	segment(input: string): Iterable<{ segment: string; isWordLike?: boolean }>;
+}
+
+/** Intl.Segmenter 不在所有 TS lib 里，这里补一个结构化声明。 */
+type IntlWithSegmenter = typeof Intl & {
+	Segmenter?: new (
+		locales?: string,
+		options?: { granularity?: "grapheme" | "word" | "sentence" },
+	) => SegmenterLike;
+};
+
 /**
  * 对标题进行分词，支持中英文混合
  *
@@ -157,13 +169,10 @@ function tokenizeTitle(title: string): Set<string> {
 	const tokens = new Set<string>();
 
 	// 运行时可能不支持 Intl.Segmenter（例如部分 Node 环境）
-	// 为了避免 SSR/构建时报错，这里做兼容处理
-	const hasSegmenter =
-		typeof Intl !== "undefined" &&
-		"Segmenter" in Intl &&
-		typeof (Intl as any).Segmenter === "function";
+	// 为了避免 SSR/构建时报错，这里做兼容处理（Intl.Segmenter 不在所有 TS lib 里）
+	const IntlSegmenter = (Intl as IntlWithSegmenter).Segmenter;
 
-	if (!hasSegmenter) {
+	if (typeof IntlSegmenter !== "function") {
 		// 简单回退方案：按照空白和标点拆分
 		const basicTokens = title
 			.toLowerCase()
@@ -176,7 +185,7 @@ function tokenizeTitle(title: string): Set<string> {
 	}
 
 	// 使用 Intl.Segmenter 进行更精细的中英文混合分词
-	const segmenter = new (Intl as any).Segmenter("zh", {
+	const segmenter = new IntlSegmenter("zh", {
 		granularity: "word",
 	});
 	for (const { segment, isWordLike } of segmenter.segment(title)) {

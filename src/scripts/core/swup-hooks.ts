@@ -13,6 +13,9 @@ import {
 	THEME_CONFIG,
 } from "./swup-config";
 
+/** TOC 容器元素：脚本会往它身上挂 init()（SidebarTOC / FloatingTOC 各自注册）。 */
+type TocElement = HTMLElement & { init?: () => void };
+
 // 钩子处理器接口
 export interface SwupHookHandlers {
 	fancyboxHandler?: FancyboxHandler;
@@ -207,19 +210,17 @@ export class SwupHooksManager {
 		if (isArticlePage) {
 			const tocElement = this.getCachedElement(
 				SWUP_SELECTORS.tableOfContents,
-			);
-			const hasDesktopTOC =
-				tocElement && typeof (tocElement as any).init === "function";
-			const hasMobileTOC =
-				typeof (window as any).mobileTOCInit === "function";
+			) as TocElement | null;
+			const hasDesktopTOC = typeof tocElement?.init === "function";
+			const hasMobileTOC = typeof window.mobileTOCInit === "function";
 
 			if (hasDesktopTOC || hasMobileTOC) {
 				setTimeout(() => {
 					if (hasDesktopTOC) {
-						(tocElement as any).init();
+						tocElement?.init?.();
 					}
 					if (hasMobileTOC) {
-						(window as any).mobileTOCInit();
+						window.mobileTOCInit?.();
 					}
 				}, ANIMATION_CONFIG.tocReadyDelay);
 			}
@@ -236,12 +237,7 @@ export class SwupHooksManager {
 				"data-transparent-mode",
 			);
 			if (transparentMode === "semifull") {
-				if (
-					typeof (window as any).initSemifullScrollDetection ===
-					"function"
-				) {
-					(window as any).initSemifullScrollDetection();
-				}
+				window.initSemifullScrollDetection?.();
 			}
 		}
 	}
@@ -289,12 +285,7 @@ export class SwupHooksManager {
 				"data-transparent-mode",
 			);
 			if (transparentMode === "semifull") {
-				if (
-					typeof (window as any).initSemifullScrollDetection ===
-					"function"
-				) {
-					(window as any).initSemifullScrollDetection();
-				}
+				window.initSemifullScrollDetection?.();
 			}
 		}
 	}

@@ -144,14 +144,14 @@ const initialLayoutClass = defaultLayout === "grid" ? "grid-mode" : "list-mode";
 	}
 
 	function setupSwupListeners() {
-		if ((window as any)._postListSwupListenerAttached) {
+		if (window._postListSwupListenerAttached) {
 			return;
 		}
 
 		function trySetupSwup() {
-			if (typeof window !== "undefined" && (window as any).swup) {
-				(window as any).swup.hooks.on("content:replace", initLayout);
-				(window as any)._postListSwupListenerAttached = true;
+			if (typeof window !== "undefined" && window.swup) {
+				window.swup.hooks.on("content:replace", initLayout);
+				window._postListSwupListenerAttached = true;
 				return true;
 			}
 			return false;

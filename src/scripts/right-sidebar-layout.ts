@@ -139,7 +139,7 @@ if (typeof module !== "undefined" && module.exports) {
 
 // 同时也挂载到 window 对象，以便在浏览器环境中直接调用
 if (typeof window !== "undefined") {
-	(window as any).rightSidebarLayout = {
+	window.rightSidebarLayout = {
 		initPageLayout,
 		hideRightSidebar,
 		showRightSidebar,
