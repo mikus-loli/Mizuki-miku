@@ -56,6 +56,8 @@ declare global {
 		toggleFloatingTOC?: () => void;
 		mobileTOCInit?: () => void;
 		initSemifullScrollDetection?: () => void;
+		semifullScrollHandler?: (() => void) | null;
+		__pendingLayoutMode?: string;
 		iconifyLoaded?: boolean;
 
 		CardTOC?: {
