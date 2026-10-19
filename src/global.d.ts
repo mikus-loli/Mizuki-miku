@@ -77,6 +77,8 @@ declare global {
 			preloadIcons: (icons: string[]) => Promise<void>;
 		};
 		__iconifyLoaderInitialized?: boolean;
+		/** Profile 卡片站点统计：多实例共享同一把请求锁。 */
+		__siteStatsFetching?: boolean;
 		/** IconifyLoader 组件的注入参数（is:inline 配置块 → 打包模块）。 */
 		__iconifyLoaderOptions?: {
 			preloadIcons?: string[];
