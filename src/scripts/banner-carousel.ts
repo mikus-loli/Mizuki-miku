@@ -9,16 +9,16 @@
 
 export function initBannerCarousel(): void {
 	const container = document.getElementById('banner-carousel');
-	if (!container) return;
+	if (!container) {return;}
 	// 闭包里 TS 不保留 null 收窄，这里固定成非空引用
 	const root: HTMLElement = container;
 
-	let mobileCount = parseInt(root.dataset.mobileCount || '0', 10);
-	let desktopCount = parseInt(root.dataset.desktopCount || '0', 10);
-	let interval = parseInt(root.dataset.carouselInterval || '6000', 10);
-	let FADE_MS = parseInt(root.dataset.fadeMs || '1500', 10);
+	const mobileCount = parseInt(root.dataset.mobileCount || '0', 10);
+	const desktopCount = parseInt(root.dataset.desktopCount || '0', 10);
+	const interval = parseInt(root.dataset.carouselInterval || '6000', 10);
+	const FADE_MS = parseInt(root.dataset.fadeMs || '1500', 10);
 
-	if (mobileCount <= 1 && desktopCount <= 1) return;
+	if (mobileCount <= 1 && desktopCount <= 1) {return;}
 
 	if (window.__bannerCarouselCleanup) {
 		window.__bannerCarouselCleanup();
@@ -30,16 +30,16 @@ export function initBannerCarousel(): void {
 			desktop: 0,
 	});
 
-	let frameElements = { mobile: [], desktop: [] };
+	const frameElements = { mobile: [], desktop: [] };
 
 	function buildFrameElements(slotClass, tplClass, type) {
-		if (frameElements[type].length > 0) return;
+		if (frameElements[type].length > 0) {return;}
 
-		let initialSlot = root.querySelector('.' + slotClass);
-		if (!initialSlot) return;
+		const initialSlot = root.querySelector('.' + slotClass);
+		if (!initialSlot) {return;}
 
-		let baseClass = initialSlot.className.replace(/\bbanner-kb\b/g, '').trim();
-		let templates = root.querySelectorAll('.' + tplClass);
+		const baseClass = initialSlot.className.replace(/\bbanner-kb\b/g, '').trim();
+		const templates = root.querySelectorAll('.' + tplClass);
 
 		// 收集帧源元素（先存引用，再移除原节点）
 		const sourceFrames = [initialSlot].concat(Array.from(templates));
@@ -68,7 +68,7 @@ export function initBannerCarousel(): void {
 			frameElements[type].push(el);
 		}
 
-		let startIdx = index[type];
+		const startIdx = index[type];
 		frameElements[type][startIdx].style.opacity = '1';
 		frameElements[type][startIdx].style.pointerEvents = '';
 	}
@@ -77,15 +77,15 @@ export function initBannerCarousel(): void {
 	buildFrameElements('banner-image-slot-desktop', 'banner-tpl-desktop', 'desktop');
 
 	function isSlotHiddenByBreakpoint(el) {
-		let cl = el.classList;
-		let isMd = window.matchMedia('(min-width: 768px)').matches;
-		if (cl.contains('md:hidden') && isMd) return true;
-		if (cl.contains('hidden') && !cl.contains('md:hidden') && !isMd) return true;
+		const cl = el.classList;
+		const isMd = window.matchMedia('(min-width: 768px)').matches;
+		if (cl.contains('md:hidden') && isMd) {return true;}
+		if (cl.contains('hidden') && !cl.contains('md:hidden') && !isMd) {return true;}
 		return false;
 	}
 
 	function applyKB(el) {
-		if (!el || isSlotHiddenByBreakpoint(el)) return;
+		if (!el || isSlotHiddenByBreakpoint(el)) {return;}
 		el.classList.remove('banner-kb');
 		void el.offsetWidth;
 		el.classList.add('banner-kb');
@@ -94,19 +94,19 @@ export function initBannerCarousel(): void {
 	let isCrossfading = { mobile: false, desktop: false };
 
 	function crossfadeToIndex(slotClass, totalCount, type, targetIndex) {
-		if (totalCount <= 1) return;
-		if (isCrossfading[type]) return;
+		if (totalCount <= 1) {return;}
+		if (isCrossfading[type]) {return;}
 
-		let frames = frameElements[type];
-		if (!frames || frames.length === 0) return;
+		const frames = frameElements[type];
+		if (!frames || frames.length === 0) {return;}
 
-		let currentIndex = index[type];
-		if (currentIndex === targetIndex) return;
+		const currentIndex = index[type];
+		if (currentIndex === targetIndex) {return;}
 
-		let oldEl = frames[currentIndex];
-		let newEl = frames[targetIndex];
-		if (!oldEl || !newEl) return;
-		if (isSlotHiddenByBreakpoint(oldEl)) return;
+		const oldEl = frames[currentIndex];
+		const newEl = frames[targetIndex];
+		if (!oldEl || !newEl) {return;}
+		if (isSlotHiddenByBreakpoint(oldEl)) {return;}
 
 		isCrossfading[type] = true;
 		index[type] = targetIndex;
@@ -134,10 +134,10 @@ export function initBannerCarousel(): void {
 	}
 
 	function crossfade(slotClass, totalCount, type) {
-		let frames = frameElements[type];
-		if (!frames || frames.length === 0) return;
-		let currentIndex = index[type];
-		let nextIndex = (currentIndex + 1) % frames.length;
+		const frames = frameElements[type];
+		if (!frames || frames.length === 0) {return;}
+		const currentIndex = index[type];
+		const nextIndex = (currentIndex + 1) % frames.length;
 		crossfadeToIndex(slotClass, totalCount, type, nextIndex);
 	}
 
@@ -150,12 +150,12 @@ export function initBannerCarousel(): void {
 
 	function startCarousel() {
 		stopCarousel();
-		if (isPaused) return;
+		if (isPaused) {return;}
 
-		let mobileIdx = index.mobile;
-		let desktopIdx = index.desktop;
-		if (frameElements.mobile[mobileIdx]) applyKB(frameElements.mobile[mobileIdx]);
-		if (frameElements.desktop[desktopIdx]) applyKB(frameElements.desktop[desktopIdx]);
+		const mobileIdx = index.mobile;
+		const desktopIdx = index.desktop;
+		if (frameElements.mobile[mobileIdx]) {applyKB(frameElements.mobile[mobileIdx]);}
+		if (frameElements.desktop[desktopIdx]) {applyKB(frameElements.desktop[desktopIdx]);}
 
 		timerId = setInterval(function() {
 			if (!isPaused) {
@@ -187,9 +187,9 @@ export function initBannerCarousel(): void {
 	};
 
 	const onTouchMove = function(e) {
-		if (!touchStartX || !touchStartY) return;
-		let diffX = Math.abs(e.touches[0].clientX - touchStartX);
-		let diffY = Math.abs(e.touches[0].clientY - touchStartY);
+		if (!touchStartX || !touchStartY) {return;}
+		const diffX = Math.abs(e.touches[0].clientX - touchStartX);
+		const diffY = Math.abs(e.touches[0].clientY - touchStartY);
 		if (diffX > diffY && diffX > 30) {
 			isSwiping = true;
 			e.preventDefault();
@@ -203,19 +203,19 @@ export function initBannerCarousel(): void {
 			return;
 		}
 
-		let endX = e.changedTouches[0].clientX;
-		let diffX = touchStartX - endX;
-		let isMobile = window.innerWidth < 768;
-		let type = isMobile ? 'mobile' : 'desktop';
-		let count = isMobile ? mobileCount : desktopCount;
-		let current = index[type];
+		const endX = e.changedTouches[0].clientX;
+		const diffX = touchStartX - endX;
+		const isMobile = window.innerWidth < 768;
+		const type = isMobile ? 'mobile' : 'desktop';
+		const count = isMobile ? mobileCount : desktopCount;
+		const current = index[type];
 
 		if (Math.abs(diffX) > 50) {
 			if (diffX > 0) {
-				let next = (current + 1) % count;
+				const next = (current + 1) % count;
 				crossfadeToIndex('', count, type, next);
 			} else {
-				let prev = (current - 1 + count) % count;
+				const prev = (current - 1 + count) % count;
 				crossfadeToIndex('', count, type, prev);
 			}
 		}
