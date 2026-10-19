@@ -43,7 +43,7 @@ interface Props {
 	canonical?: string;
 }
 
-let { title, banner, description, lang, setOGTypeArticle, postSlug, canonical } =
+let { title, description, lang, setOGTypeArticle, postSlug, canonical } =
 	Astro.props;
 
 // canonical URL：默认当前路径（无 query），文章页可覆盖为权威 URL
@@ -66,42 +66,8 @@ const navbarTransparentMode =
 const shouldShowTopHighlight =
 	navbarTransparentMode === "full" || navbarTransparentMode === "semifull";
 
-// 获取默认banner图片的辅助函数
-const getDefaultBanner = (): string => {
-	const src = siteConfig.banner.src;
-	if (typeof src === "string") {
-		return src;
-	}
-	if (Array.isArray(src)) {
-		return src[0] || "";
-	}
-	if (src && typeof src === "object") {
-		// 优先使用desktop，如果没有则使用mobile
-		const desktopSrc = src.desktop;
-		const mobileSrc = src.mobile;
-		if (typeof desktopSrc === "string") {
-			return desktopSrc;
-		}
-		if (Array.isArray(desktopSrc) && desktopSrc.length > 0) {
-			return desktopSrc[0];
-		}
-		if (typeof mobileSrc === "string") {
-			return mobileSrc;
-		}
-		if (Array.isArray(mobileSrc) && mobileSrc.length > 0) {
-			return mobileSrc[0];
-		}
-	}
-	return "";
-};
-
-if (!banner || typeof banner !== "string" || banner.trim() === "") {
-	banner = getDefaultBanner();
-}
-
-// TODO don't use post cover as banner for now
-banner = getDefaultBanner();
-
+// 布局层不使用 banner 变量：图片由 Banner 组件自行从 siteConfig 取。
+// 历史上这里算了两次（一次按 props、一次强制默认），结果都没被消费，已删。
 const enableBanner = !!siteConfig.banner.src;
 
 let pageTitle: string;
