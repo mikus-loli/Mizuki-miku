@@ -22,14 +22,11 @@ import { LinkPreset } from "./types/config";
 
 // 定义站点语言
 const SITE_LANG = "zh_CN"; // 语言代码，例如：'en', 'zh_CN', 'ja' 等。
-const SITE_TIMEZONE = 8; //设置你的网站时区 from -12 to 12 default in UTC+8
 export const siteConfig: SiteConfig = {
 	title: "mikus",
 	subtitle: "Ciallo～(∠・ω< )⌒☆",
 	siteURL: "https://mikus.ink/", // 请替换为你的站点URL，以斜杠结尾
 	siteStartDate: "2024-01-01", // 站点开始运行日期，用于站点统计组件计算运行天数
-
-	timeZone: SITE_TIMEZONE,
 
 	lang: SITE_LANG,
 
@@ -148,8 +145,6 @@ export const siteConfig: SiteConfig = {
 
 		waves: {
 			enable: true, // 是否启用水波纹效果(这个功能比较吃性能)
-			performanceMode: false, // 性能模式：减少动画复杂度(性能提升40%)
-			mobileDisable: false, // 移动端禁用
 		},
 
 		// PicFlow API支持(智能图片API)

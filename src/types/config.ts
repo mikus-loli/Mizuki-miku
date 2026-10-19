@@ -13,32 +13,6 @@ export interface SiteConfig {
 	keywords?: string[]; // 站点关键词，用于生成 <meta name="keywords">
 	siteStartDate?: string; // 站点开始日期，格式：YYYY-MM-DD，用于计算运行天数
 
-	timeZone:
-		| -12
-		| -11
-		| -10
-		| -9
-		| -8
-		| -7
-		| -6
-		| -5
-		| -4
-		| -3
-		| -2
-		| -1
-		| 0
-		| 1
-		| 2
-		| 3
-		| 4
-		| 5
-		| 6
-		| 7
-		| 8
-		| 9
-		| 10
-		| 11
-		| 12;
 
 	lang:
 		| "en"
@@ -153,8 +127,6 @@ export interface SiteConfig {
 		};
 		waves?: {
 			enable: boolean; // 是否启用水波纹效果
-			performanceMode?: boolean; // 性能模式：减少动画复杂度
-			mobileDisable?: boolean; // 移动端禁用
 		};
 		imageApi?: {
 			enable: boolean; // 是否启用图片API
