@@ -99,20 +99,6 @@ export function calculateActiveIndicatorPosition(
 }
 
 /**
- * 防抖函数
- */
-export function debounce<T extends (...args: unknown[]) => unknown>(
-	fn: T,
-	delay: number,
-): (...args: Parameters<T>) => void {
-	let timeoutId: ReturnType<typeof setTimeout>;
-	return (...args: Parameters<T>) => {
-		clearTimeout(timeoutId);
-		timeoutId = setTimeout(() => fn(...args), delay);
-	};
-}
-
-/**
  * 节流函数
  */
 export function throttle<T extends (...args: unknown[]) => unknown>(

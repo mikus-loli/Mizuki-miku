@@ -28,7 +28,6 @@ export type {
 export {
 	calculateReadingProgress,
 	createHeadingObserver,
-	debounce,
 	extractHeadings,
 	generateTOCItems,
 	getMinLevel,
@@ -63,7 +62,6 @@ export {
 export {
 	calculateActiveIndicatorPosition,
 	createScrollHandler,
-	debounce as debounceScroll,
 	calculateReadingProgress as getReadingProgress,
 	scrollActiveIntoView,
 	throttle as throttleScroll,
