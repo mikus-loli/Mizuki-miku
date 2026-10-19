@@ -1,212 +1,89 @@
+/**
+ * Iconify 图标加载的薄适配层。
+ *
+ * 真正的加载逻辑只有一处：`components/misc/IconifyLoader.astro` 注入的窗口级单例
+ * `window.__iconifyLoader`（由 MainGridLayout 在 head 中挂载）。
+ * 这里只负责「有全局实例就交给它、没有就最小化兜底」，不再自带一份 class 实现。
+ */
+
 interface IconifyLoadOptions {
 	timeout?: number;
 	retryCount?: number;
-	retryDelay?: number;
 }
 
-interface GlobalIconifyLoader {
-	isLoaded: boolean;
-	isLoading: boolean;
-	load: (options?: IconifyLoadOptions) => Promise<void>;
-	onLoad: (callback: () => void) => void;
-	addToPreloadQueue: (icons: string | string[]) => void;
-	preloadIcons: (icons: string[]) => Promise<void>;
+const ICONIFY_SRC = "/cdn/iconify/iconify-icon.min.js";
+const DEFAULT_TIMEOUT = 10000;
+
+function isIconifyReady(): boolean {
+	return typeof window !== "undefined" && !!window.customElements?.get("iconify-icon");
 }
 
-function getGlobalLoader(): GlobalIconifyLoader | null {
-	if (typeof window !== "undefined" && window.__iconifyLoader) {
-		return window.__iconifyLoader;
+function whenIconifyReady(timeout: number): Promise<void> {
+	if (isIconifyReady()) {
+		return Promise.resolve();
 	}
-	return null;
-}
-
-class IconLoader {
-	private static instance: IconLoader;
-	private observers = new Set<() => void>();
-
-	private constructor() {}
-
-	static getInstance(): IconLoader {
-		if (!IconLoader.instance) {
-			IconLoader.instance = new IconLoader();
-		}
-		return IconLoader.instance;
-	}
-
-	async loadIconify(options: IconifyLoadOptions = {}): Promise<void> {
-		const globalLoader = getGlobalLoader();
-		if (globalLoader) {
-			await globalLoader.load(options);
-			this.notifyObservers();
-			return;
-		}
-
-		if (typeof window !== "undefined" && "customElements" in window && customElements.get("iconify-icon")) {
-			return;
-		}
-
-		console.warn("Iconify global loader not found, attempting direct load");
-		await this.directLoad(options);
-		this.notifyObservers();
-	}
-
-	private async directLoad(options: IconifyLoadOptions = {}): Promise<void> {
-		const { timeout = 10000, retryCount = 3, retryDelay = 1000 } = options;
-
-		for (let attempt = 1; attempt <= retryCount; attempt++) {
-			try {
-				await this.loadScript(timeout);
-				return;
-			} catch (error) {
-				console.warn(`Iconify load attempt ${attempt} failed:`, error);
-				if (attempt === retryCount) {
-					throw new Error(`Failed to load Iconify after ${retryCount} attempts`);
-				}
-				await new Promise((resolve) => setTimeout(resolve, retryDelay));
-			}
-		}
-	}
-
-	private loadScript(timeout: number): Promise<void> {
-		return new Promise((resolve, reject) => {
-			if (typeof window !== "undefined" && "customElements" in window && customElements.get("iconify-icon")) {
+	return new Promise((resolve, reject) => {
+		const started = Date.now();
+		const tick = () => {
+			if (isIconifyReady()) {
 				resolve();
 				return;
 			}
-
-			const existingScript = document.querySelector('script[src*="iconify-icon"]');
-			if (existingScript) {
-				this.waitForIconifyReady().then(resolve).catch(reject);
+			if (Date.now() - started > timeout) {
+				reject(new Error("Iconify initialization timeout"));
 				return;
 			}
+			setTimeout(tick, 100);
+		};
+		tick();
+	});
+}
 
+/** 全局实例缺失时的最小兜底：插一次 script 并等待就绪，失败按原逻辑重试。 */
+async function fallbackLoad(timeout: number, retryCount = 3): Promise<void> {
+	for (let attempt = 1; attempt <= retryCount; attempt++) {
+		if (isIconifyReady()) {
+			return;
+		}
+		if (!document.querySelector('script[src*="iconify-icon"]')) {
 			const script = document.createElement("script");
-			script.src = "/cdn/iconify/iconify-icon.min.js";
+			script.src = ICONIFY_SRC;
 			script.async = true;
-
-			const timeoutId = setTimeout(() => {
-				script.remove();
-				reject(new Error("Iconify script load timeout"));
-			}, timeout);
-
-			script.onload = () => {
-				clearTimeout(timeoutId);
-				this.waitForIconifyReady().then(resolve).catch(reject);
-			};
-
-			script.onerror = () => {
-				clearTimeout(timeoutId);
-				script.remove();
-				reject(new Error("Failed to load Iconify script"));
-			};
-
+			script.crossOrigin = "anonymous";
 			document.head.appendChild(script);
-		});
-	}
-
-	private waitForIconifyReady(maxWait = 5000): Promise<void> {
-		return new Promise((resolve, reject) => {
-			const startTime = Date.now();
-			const checkReady = () => {
-				if (typeof window !== "undefined" && "customElements" in window && customElements.get("iconify-icon")) {
-					resolve();
-					return;
-				}
-				if (Date.now() - startTime > maxWait) {
-					reject(new Error("Iconify initialization timeout"));
-					return;
-				}
-				setTimeout(checkReady, 100);
-			};
-			checkReady();
-		});
-	}
-
-	onLoad(callback: () => void): void {
-		const globalLoader = getGlobalLoader();
-		if (globalLoader) {
-			globalLoader.onLoad(callback);
+		}
+		try {
+			await whenIconifyReady(timeout);
 			return;
-		}
-		if (typeof window !== "undefined" && "customElements" in window && customElements.get("iconify-icon")) {
-			callback();
-		} else {
-			this.observers.add(callback);
-		}
-	}
-
-	offLoad(callback: () => void): void {
-		this.observers.delete(callback);
-	}
-
-	private notifyObservers(): void {
-		this.observers.forEach((callback) => {
-			try {
-				callback();
-			} catch (error) {
-				console.error("Error in icon load observer:", error);
+		} catch (error) {
+			if (attempt === retryCount) {
+				throw error;
 			}
-		});
-		this.observers.clear();
-	}
-
-	getLoadState(): { isLoaded: boolean; isLoading: boolean } {
-		const globalLoader = getGlobalLoader();
-		if (globalLoader) {
-			return { isLoaded: globalLoader.isLoaded, isLoading: globalLoader.isLoading };
+			await new Promise((resolve) => setTimeout(resolve, 1000));
 		}
-		const isLoaded = typeof window !== "undefined" && "customElements" in window && customElements.get("iconify-icon") !== undefined;
-		return { isLoaded, isLoading: false };
-	}
-
-	async preloadIcons(icons: string[]): Promise<void> {
-		const globalLoader = getGlobalLoader();
-		if (globalLoader) {
-			globalLoader.addToPreloadQueue(icons);
-			return;
-		}
-
-		if (icons.length === 0) {return;}
-
-		return new Promise((resolve) => {
-			let loadedCount = 0;
-			const totalIcons = icons.length;
-			const tempElements: HTMLElement[] = [];
-
-			const cleanup = () => {
-				tempElements.forEach((el) => {
-					if (el.parentNode) {el.parentNode.removeChild(el);}
-				});
-			};
-
-			const checkComplete = () => {
-				loadedCount++;
-				if (loadedCount >= totalIcons) {
-					cleanup();
-					resolve();
-				}
-			};
-
-			icons.forEach((icon) => {
-				const tempIcon = document.createElement("iconify-icon");
-				tempIcon.setAttribute("icon", icon);
-				tempIcon.style.cssText = "position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;";
-				tempIcon.addEventListener("load", checkComplete);
-				tempIcon.addEventListener("error", checkComplete);
-				tempElements.push(tempIcon);
-				document.body.appendChild(tempIcon);
-			});
-
-			setTimeout(() => {
-				cleanup();
-				resolve();
-			}, 5000);
-		});
 	}
 }
 
-export const iconLoader = IconLoader.getInstance();
+/** 确保 Iconify 已就绪（优先走全局 loader）。 */
+export async function loadIconify(options: IconifyLoadOptions = {}): Promise<void> {
+	const timeout = options.timeout ?? DEFAULT_TIMEOUT;
+	const loader = typeof window !== "undefined" ? window.__iconifyLoader : undefined;
+	if (loader) {
+		await loader.load(options);
+		return;
+	}
+	await fallbackLoad(timeout, options.retryCount);
+}
 
-export const loadIconify = (options?: IconifyLoadOptions) =>
-	iconLoader.loadIconify(options);
-export const preloadIcons = (icons: string[]) => iconLoader.preloadIcons(icons);
+/** 预加载图标（走全局 loader 的队列）。 */
+export function preloadIcons(icons: string[]): void {
+	if (icons.length === 0) {
+		return;
+	}
+	const loader = typeof window !== "undefined" ? window.__iconifyLoader : undefined;
+	if (loader) {
+		loader.addToPreloadQueue(icons);
+		return;
+	}
+	void fallbackLoad(DEFAULT_TIMEOUT);
+}
