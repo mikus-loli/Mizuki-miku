@@ -25,7 +25,6 @@ export const zh_TW: Translation = {
 	[Key.announcement]: "公告",
 	[Key.announcementClose]: "關閉",
 
-	[Key.comments]: "評論",
 	[Key.friends]: "友鏈",
 	[Key.friendsSubtitle]: "發現更多優秀網站",
 	[Key.friendsSearchPlaceholder]: "搜索友鏈名稱或描述...",

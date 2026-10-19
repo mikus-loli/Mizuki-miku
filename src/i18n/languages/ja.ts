@@ -25,7 +25,6 @@ export const ja: Translation = {
 	[Key.announcement]: "お知らせ",
 	[Key.announcementClose]: "閉じる",
 
-	[Key.comments]: "コメント",
 	[Key.friends]: "友達",
 	[Key.friendsSubtitle]: "もっと素敵なウェブサイトを見つける",
 	[Key.friendsSearchPlaceholder]: "友達の名前または説明を検索...",

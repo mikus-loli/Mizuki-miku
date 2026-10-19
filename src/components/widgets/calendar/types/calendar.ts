@@ -22,5 +22,3 @@ export interface CalendarGridCell {
 	isEmpty: boolean;
 }
 
-export type MonthNames = string[];
-export type WeekDays = string[];

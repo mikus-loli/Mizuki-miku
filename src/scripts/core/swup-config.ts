@@ -113,31 +113,6 @@ export const SCROLL_CONFIG = {
 	navbarHideOffset: 88,
 } as const;
 
-export interface PerformanceConfig {
-	// 是否启用 wave 动画
-	waveAnimation: {
-		enabled: boolean;
-		layers: number; // 桌面端波浪层数
-		layersMobile: number; // 移动端波浪层数
-	};
-	// 樱花效果配置
-	sakuraEffect: {
-		enabled: boolean;
-		maxParticles: number; // 桌面端最大粒子数
-		maxParticlesMobile: number; // 移动端最大粒子数
-	};
-	// Live2D/Pio 配置
-	live2D: {
-		enabled: boolean;
-		hideOnMobile: boolean;
-	};
-	// 打字机效果
-	typewriter: {
-		enabled: boolean;
-		hideOnMobile: boolean;
-	};
-}
-
 // Fancybox 配置类型
 export interface FancyboxConfig {
 	Thumbs: {
