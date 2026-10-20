@@ -45,6 +45,10 @@ export function initBannerCarousel(): void {
 		const initialSlot = root.querySelector('.' + slotClass);
 		if (!initialSlot) {return;}
 
+		// 隐藏的那一组图即使 display:none，浏览器仍会下载（实测桌面端白下 715KB）。
+		// 因此只构建当前断点可见的一组，跨断点由 media query 监听补建。
+		if (isSlotHiddenByBreakpoint(initialSlot)) {return;}
+
 		const baseClass = initialSlot.className.replace(/\bbanner-kb\b/g, '').trim();
 		const templates = root.querySelectorAll('.' + tplClass);
 
@@ -257,7 +261,16 @@ export function initBannerCarousel(): void {
 
 	startCarousel();
 
+	const desktopQuery = window.matchMedia('(min-width: 768px)');
+	const onBreakpointChange = function() {
+		buildFrameElements('banner-image-slot-mobile', 'banner-tpl-mobile', 'mobile');
+		buildFrameElements('banner-image-slot-desktop', 'banner-tpl-desktop', 'desktop');
+		startCarousel();
+	};
+	desktopQuery.addEventListener('change', onBreakpointChange);
+
 	window.__bannerCarouselCleanup = function() {
+		desktopQuery.removeEventListener('change', onBreakpointChange);
 		stopCarousel();
 		document.removeEventListener('visibilitychange', visibilityHandler);
 		if ('ontouchstart' in window) {
