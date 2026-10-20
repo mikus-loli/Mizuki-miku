@@ -6,6 +6,9 @@
  * 同一份代码全站共用、可缓存、可类型检查，行为保持不变。
  */
 
+// 副作用导入：把 @iconify/svelte 的数据源指到同源镜像，必须早于任何 Svelte 图标水合。
+import "./iconify-local-api";
+
 export interface IconifyLoaderOptions {
 	/** 预加载的图标名列表，如 "fa7-brands:github"。 */
 	preloadIcons?: string[];
