@@ -6,7 +6,7 @@
 		"sync-content": "node scripts/sync-content.js",
 		"init-content": "node scripts/init-content-repo.js",
 		"predev": "node scripts/sync-content.js",
-		"prebuild": "node scripts/sync-content.js && node scripts/copy-iconify-icons.js && node scripts/trim-iconify.mjs",
+		"prebuild": "node scripts/sync-content.js && node scripts/trim-iconify.mjs",
 		"dev": "astro dev",
 		"start": "astro dev",
 		"check": "astro check",
