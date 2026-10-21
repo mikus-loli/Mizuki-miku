@@ -27,6 +27,8 @@ interface Props {
 	// Open Graph
 	ogImageUrl?: string;
 	setOGTypeArticle?: boolean;
+	/** 规范 URL，og:url / twitter:url 跟随它，与 <link rel="canonical"> 保持一致 */
+	canonicalUrl?: string;
 
 	// 配置
 	configHue: number;
@@ -37,6 +39,7 @@ const {
 	description,
 	ogImageUrl,
 	setOGTypeArticle = false,
+	canonicalUrl = Astro.url,
 	configHue,
 } = Astro.props;
 
@@ -133,7 +136,7 @@ const lcpImages = await getLcpPreloadImages();
 
 <!-- Open Graph Tags -->
 <meta property="og:site_name" content={siteConfig.title} />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:url" content={canonicalUrl} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description || title} />
 {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
@@ -147,7 +150,7 @@ const lcpImages = await getLcpPreloadImages();
 
 <!-- Twitter Card Tags -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:url" content={canonicalUrl} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description || title} />
 {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
