@@ -94,6 +94,10 @@ let ogImageUrl: string | undefined;
 if (siteConfig.generateOgImages && postSlug) {
 	ogImageUrl = new URL(`/og/${postSlug}.png`, Astro.site).toString();
 }
+// 兜底：没有按文章生成的 OG 图时，用站点默认图（社交平台没有 og:image 就不出预览卡）
+if (!ogImageUrl) {
+	ogImageUrl = new URL("/og-image.webp", Astro.site).toString();
+}
 
 // const siteLang = siteConfig.lang.replace('_', '-')
 if (!lang) {

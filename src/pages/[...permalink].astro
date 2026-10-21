@@ -103,9 +103,18 @@ const jsonLd = {
 		url: Astro.site,
 	},
 	datePublished: formatDateToYYYYMMDD(entry.data.published),
+	...(entry.data.updated && {
+		dateModified: formatDateToYYYYMMDD(entry.data.updated),
+	}),
 	inLanguage: entry.data.lang
 		? entry.data.lang.replace("_", "-")
 		: siteConfig.lang.replace("_", "-"),
+	image: new URL("/og-image.webp", Astro.site).toString(),
+	url: new URL(Astro.url.pathname, Astro.site).toString(),
+	mainEntityOfPage: {
+		"@type": "WebPage",
+		"@id": new URL(Astro.url.pathname, Astro.site).toString(),
+	},
 };
 ---
 
