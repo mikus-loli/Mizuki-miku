@@ -13,4 +13,4 @@ Allow: /projects/
 Allow: /skills/
 Allow: /timeline/
 
-Sitemap: https://mikus.ink/sitemap-index.xml
+Sitemap: https://blog.mikus.ink/sitemap-index.xml

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://mikus.ink/</link><language>zh_CN</language><item><title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title><link>https://mikus.ink/posts/deepseek-to-opencode-go/</link><guid isPermaLink="true">https://mikus.ink/posts/deepseek-to-opencode-go/</guid><description>从 DeepSeek 官方 API 迁移到 OpenCode Go 订阅的体验分享，对比两者的定价、额度、模型选择和实际使用性价比。</description><pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>mikus</title><description>Ciallo～(∠・ω&lt; )⌒☆</description><link>https://blog.mikus.ink/</link><language>zh_CN</language><item><title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title><link>https://blog.mikus.ink/posts/deepseek-to-opencode-go/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/deepseek-to-opencode-go/</guid><description>从 DeepSeek 官方 API 迁移到 OpenCode Go 订阅的体验分享，对比两者的定价、额度、模型选择和实际使用性价比。</description><pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验&lt;/h1&gt;
 &lt;p&gt;如果你在用 AI 辅助编程，一定听过 &lt;strong&gt;DeepSeek&lt;/strong&gt;——国产模型的骄傲，V4 系列发布后一度是编程领域性价比之王。但最近我把它换成了 &lt;strong&gt;OpenCode Go&lt;/strong&gt;，体验出乎意料地好。这次就来聊聊为什么。&lt;/p&gt;
 &lt;h2&gt;背景&lt;/h2&gt;
 &lt;p&gt;之前我的 Hermes Agent 一直跑 DeepSeek V4 Flash，走的是官方 API。每月账单虽然不算贵，但问题是：&lt;/p&gt;
@@ -204,7 +204,7 @@
 &lt;a href=&quot;https://opencode.ai/go?ref=09085J0PTV&quot;&gt;opencode.ai/go?ref=09085J0PTV&lt;/a&gt;
 首月仅 5 美元，没有长期合约，随时可取消。
 :::&lt;/p&gt;
-</content:encoded></item><item><title>Komari Theme Market CN — EdgeOne 加速国内主题市场</title><link>https://mikus.ink/posts/theme-market-cn/</link><guid isPermaLink="true">https://mikus.ink/posts/theme-market-cn/</guid><description>利用 EdgeOne Pages 为 Komari 监控主题市场搭建国内加速镜像，解决 GitHub 资源访问慢的问题</description><pubDate>Sun, 26 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://github.com/komari-monitor/komari&quot;&gt;Komari&lt;/a&gt; 是一款精致的服务器监控面板，它的主题市场默认从 GitHub 拉取主题目录和资源。但在国内，GitHub 的访问速度懂的都懂——预览图加载慢、主题包下载超时，体验很打折扣。&lt;/p&gt;
+</content:encoded></item><item><title>Komari Theme Market CN — EdgeOne 加速国内主题市场</title><link>https://blog.mikus.ink/posts/theme-market-cn/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/theme-market-cn/</guid><description>利用 EdgeOne Pages 为 Komari 监控主题市场搭建国内加速镜像，解决 GitHub 资源访问慢的问题</description><pubDate>Sun, 26 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://github.com/komari-monitor/komari&quot;&gt;Komari&lt;/a&gt; 是一款精致的服务器监控面板，它的主题市场默认从 GitHub 拉取主题目录和资源。但在国内，GitHub 的访问速度懂的都懂——预览图加载慢、主题包下载超时，体验很打折扣。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Komari Theme Market CN&lt;/strong&gt; 就是为了解决这个问题而生的：它通过 EdgeOne Pages 为 Komari 主题市场搭建了一个国内加速镜像站。&lt;/p&gt;
 &lt;p&gt;项目地址：&lt;a href=&quot;https://github.com/mikus-loli/theme-market-cn&quot;&gt;github.com/mikus-loli/theme-market-cn&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;工作原理&lt;/h2&gt;
@@ -313,7 +313,7 @@ data/v1.json  ──►  构建脚本下载所有 preview / download 资源
 &lt;p&gt;Komari Theme Market CN 本质上是一个思路很简单的项目——GitHub 慢，就在国内 CDN 上存一份。通过 EdgeOne Pages 的 Git 集成，配合 GitHub Actions 实现全自动的同步 → 构建 → 部署流水线。&lt;/p&gt;
 &lt;p&gt;如果你也在用 Komari，可以参考这个项目的思路来解决类似的问题。&lt;/p&gt;
 &lt;p&gt;::github{repo=&quot;mikus-loli/theme-market-cn&quot;}&lt;/p&gt;
-</content:encoded></item><item><title>Windows 启用 OpenSSH 指南</title><link>https://mikus.ink/posts/windows-ssh/</link><guid isPermaLink="true">https://mikus.ink/posts/windows-ssh/</guid><description>在 Windows 10/11 上启用 OpenSSH Server 和 Client 的完整教程，包括安装、配置、密钥认证和常见问题排查</description><pubDate>Sat, 25 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Windows 10 1809 和 Windows 11 已经内置了 OpenSSH，不需要装第三方工具就能当 SSH 服务端用。本文记录完整的启用和配置流程。&lt;/p&gt;
+</content:encoded></item><item><title>Windows 启用 OpenSSH 指南</title><link>https://blog.mikus.ink/posts/windows-ssh/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/windows-ssh/</guid><description>在 Windows 10/11 上启用 OpenSSH Server 和 Client 的完整教程，包括安装、配置、密钥认证和常见问题排查</description><pubDate>Sat, 25 Jul 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Windows 10 1809 和 Windows 11 已经内置了 OpenSSH，不需要装第三方工具就能当 SSH 服务端用。本文记录完整的启用和配置流程。&lt;/p&gt;
 &lt;h2&gt;检查是否已安装&lt;/h2&gt;
 &lt;p&gt;先看看系统里有没有装好。以管理员身份打开 PowerShell，执行：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Get-WindowsCapability -Online | Where-Object Name -like &apos;OpenSSH*&apos;
@@ -416,7 +416,7 @@ PubkeyAuthentication yes
 &lt;h2&gt;总结&lt;/h2&gt;
 &lt;p&gt;Windows 自带的 OpenSSH 已经够用了，不用折腾 Cygwin 或者第三方 SSH 服务器。装好配好密钥登录，日常管理 Windows 远程机器就方便多了。&lt;/p&gt;
 &lt;p&gt;如果需要管理多台 Windows 机器，可以考虑配合 Ansible 统一管理，那就是另一个话题了喵~&lt;/p&gt;
-</content:encoded></item><item><title>Meting-API - 多平台音乐 API 服务</title><link>https://mikus.ink/posts/meting/</link><guid isPermaLink="true">https://mikus.ink/posts/meting/</guid><description>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期及监控通知功能</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API - 多平台音乐 API 服务&lt;/h1&gt;
+</content:encoded></item><item><title>Meting-API - 多平台音乐 API 服务</title><link>https://blog.mikus.ink/posts/meting/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/meting/</guid><description>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期及监控通知功能</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API - 多平台音乐 API 服务&lt;/h1&gt;
 &lt;h2&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;::github{repo=&quot;mikus-loli/Meting-API&quot;}
 Meting-API 是一个开源的多平台音乐 API 服务，由 mikus-loli 开发维护。该项目 Fork 自 xizeyoupan/Meting-API，并在此之上做了大量功能增强与优化。它支持网易云音乐和 QQ 音乐两大主流音乐平台，提供了完整的 Cookie 管理系统、VIP 歌曲播放能力、自动续期机制以及完善的监测通知功能。&lt;/p&gt;
@@ -757,7 +757,7 @@ GET /api?server=tencent&amp;amp;type=lrc&amp;amp;id=004Yi5BD3ksoAN
 &lt;/ul&gt;
 &lt;h2&gt;开源协议&lt;/h2&gt;
 &lt;p&gt;该项目采用 MIT 协议开源，用户可以自由使用、修改和分发。&lt;/p&gt;
-</content:encoded></item><item><title>Music-Cookie</title><link>https://mikus.ink/posts/music-cookie/</link><guid isPermaLink="true">https://mikus.ink/posts/music-cookie/</guid><description>是一个自动抓取 QQ 音乐和网易云音乐客户端 Cookie 的工具</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;项目简介&lt;/h2&gt;
+</content:encoded></item><item><title>Music-Cookie</title><link>https://blog.mikus.ink/posts/music-cookie/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/music-cookie/</guid><description>是一个自动抓取 QQ 音乐和网易云音乐客户端 Cookie 的工具</description><pubDate>Fri, 05 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;项目简介&lt;/h2&gt;
 &lt;p&gt;Music Cookie 是一款自动抓取 QQ 音乐和网易云音乐客户端 Cookie 的工具。它通过 MITM 代理拦截客户端网络请求来提取登录凭证，并自动发送到 &lt;a href=&quot;https://github.com/mikus-loli/Meting-API&quot;&gt;Meting-API&lt;/a&gt; 进行统一管理。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;项目地址&lt;/strong&gt;:
 ::github{repo=&quot;mikus-loli/Music-Cookie&quot;}&lt;/p&gt;
@@ -1364,7 +1364,7 @@ MIOTIFY_TOKEN=你的App_Token_（UUID格式）
 &lt;li&gt;确保已登录账号&lt;/li&gt;
 &lt;li&gt;检查代理日志 &lt;code&gt;logs/proxy.log&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Komari Mikus 主题</title><link>https://mikus.ink/posts/komari-mikus/</link><guid isPermaLink="true">https://mikus.ink/posts/komari-mikus/</guid><description>一款精致优雅的 Komari 监控主题，纯 ES Modules 架构，支持双主题切换、WebSocket 实时监控、Canvas 图表与多种数据处理算法</description><pubDate>Tue, 21 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;项目地址&lt;/h2&gt;
+</content:encoded></item><item><title>Komari Mikus 主题</title><link>https://blog.mikus.ink/posts/komari-mikus/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/komari-mikus/</guid><description>一款精致优雅的 Komari 监控主题，纯 ES Modules 架构，支持双主题切换、WebSocket 实时监控、Canvas 图表与多种数据处理算法</description><pubDate>Tue, 21 Apr 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;项目地址&lt;/h2&gt;
 &lt;p&gt;::github{repo=&quot;mikus-loli/komari-mikus&quot;}&lt;/p&gt;
 &lt;h2&gt;特性&lt;/h2&gt;
 &lt;ul&gt;
@@ -1483,7 +1483,7 @@ renderChartByConfig(config, records, hours);
 &lt;img src=&quot;%E4%B8%BB%E9%A1%B5.png&quot; alt=&quot;主题预览&quot; title=&quot;Komari Mikus 主题预览&quot; /&gt;
 &lt;img src=&quot;%E8%AF%A6%E6%83%85.png&quot; alt=&quot;主题预览&quot; title=&quot;Komari Mikus 主题预览&quot; /&gt;
 &lt;img src=&quot;%E5%BB%B6%E8%BF%9F.png&quot; alt=&quot;主题预览&quot; title=&quot;Komari Mikus 主题预览&quot; /&gt;&lt;/p&gt;
-</content:encoded></item><item><title>Meting-API 解决网易云音乐VIP播放限制</title><link>https://mikus.ink/posts/meting-api-vip/</link><guid isPermaLink="true">https://mikus.ink/posts/meting-api-vip/</guid><description>通过 Meting-API 配置网易云音乐 Cookie，解决 VIP 歌曲的播放限制问题</description><pubDate>Tue, 24 Mar 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API 解决网易云音乐VIP播放限制&lt;/h1&gt;
+</content:encoded></item><item><title>Meting-API 解决网易云音乐VIP播放限制</title><link>https://blog.mikus.ink/posts/meting-api-vip/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/meting-api-vip/</guid><description>通过 Meting-API 配置网易云音乐 Cookie，解决 VIP 歌曲的播放限制问题</description><pubDate>Tue, 24 Mar 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting-API 解决网易云音乐VIP播放限制&lt;/h1&gt;
 &lt;p&gt;Mizuki 使用 meting 来提供音乐播放功能，但 meting 默认提供的 API 存在不稳定、下线或无人维护的风险。而最关键的问题是：它无法播放 VIP 歌曲，而网易云音乐上大部分歌曲都需要 VIP 才能播放。&lt;/p&gt;
 &lt;h2&gt;网易云解决方法&lt;/h2&gt;
 &lt;h3&gt;1. 获取网易云音乐 Cookie&lt;/h3&gt;
@@ -1718,7 +1718,7 @@ export const map_song_list = (song_list) =&amp;gt; {
 &lt;li&gt;如有疑问或建议，欢迎通过博客评论区或邮箱联系博主
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Umami Docker 部署</title><link>https://mikus.ink/posts/umami/</link><guid isPermaLink="true">https://mikus.ink/posts/umami/</guid><description>Umami 是一款开源、轻量级的网站分析工具，支持 Docker 快速部署，在保护用户隐私的同时提供详尽的流量统计数据</description><pubDate>Thu, 29 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Umami Docker 部署&lt;/h1&gt;
+</content:encoded></item><item><title>Umami Docker 部署</title><link>https://blog.mikus.ink/posts/umami/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/umami/</guid><description>Umami 是一款开源、轻量级的网站分析工具，支持 Docker 快速部署，在保护用户隐私的同时提供详尽的流量统计数据</description><pubDate>Thu, 29 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Umami Docker 部署&lt;/h1&gt;
 &lt;h2&gt;项目介绍&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&quot;https://umami.is/&quot;&gt;Umami&lt;/a&gt; 是一款开源的网站分析工具，以简洁、轻量且注重隐私保护而著称。与 Google Analytics 等传统分析服务不同，Umami 不会追踪用户的个人信息，所有数据均存储在您自己的服务器上，全程可控可管。&lt;/p&gt;
 &lt;h3&gt;主要特点&lt;/h3&gt;
@@ -1861,7 +1861,7 @@ docker-compose up -d
 &lt;li&gt;&lt;a href=&quot;https://docs.docker.com/&quot;&gt;Docker 官方文档&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;希望这篇教程能助您顺利完成 Umami 的部署！如有任何疑问或建议，欢迎在评论区留言交流。&lt;/p&gt;
-</content:encoded></item><item><title>Mikutap Docker版部署指南</title><link>https://mikus.ink/posts/mikutap/</link><guid isPermaLink="true">https://mikus.ink/posts/mikutap/</guid><description>Mikutap Docker 部署指南 — 一键搭建初音未来风格电音交互页面，支持自定义构建与国内镜像加速</description><pubDate>Wed, 21 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Mikutap Docker版部署指南&lt;/h1&gt;
+</content:encoded></item><item><title>Mikutap Docker版部署指南</title><link>https://blog.mikus.ink/posts/mikutap/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/mikutap/</guid><description>Mikutap Docker 部署指南 — 一键搭建初音未来风格电音交互页面，支持自定义构建与国内镜像加速</description><pubDate>Wed, 21 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Mikutap Docker版部署指南&lt;/h1&gt;
 &lt;p&gt;::github{repo=&quot;AkariRin/mikutap&quot;}&lt;/p&gt;
 &lt;h2&gt;介绍&lt;/h2&gt;
 &lt;p&gt;Mikutap 是由日本知名 Vocaloid 音乐人 &lt;em&gt;daniwell&lt;/em&gt; 开发的一款极简交互式声音艺术装置，灵感来源于 Patatap。其核心特点是无需任何音乐基础，只需通过简单的点击操作就能生成初音未来风格的电音旋律，配合绚丽的粒子动画，带来极致的解压体验。它没有复杂的规则，没有失败的惩罚，只有纯粹的创作乐趣与感官享受。miku厨狂喜&lt;/p&gt;
@@ -1951,7 +1951,7 @@ docker logs mikutap
 &lt;li&gt;如有疑问或建议，可通过博客评论区或邮箱联系博主
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Komari Nezha-V1 主题美化</title><link>https://mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/</link><guid isPermaLink="true">https://mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/</guid><description>为 Komari 的 Nezha-V1 主题打造一套精致的美化方案，全面提升面板的视觉体验</description><pubDate>Mon, 19 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Komari Nezha-V1 主题美化&lt;/h1&gt;
+</content:encoded></item><item><title>Komari Nezha-V1 主题美化</title><link>https://blog.mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/</guid><description>为 Komari 的 Nezha-V1 主题打造一套精致的美化方案，全面提升面板的视觉体验</description><pubDate>Mon, 19 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Komari Nezha-V1 主题美化&lt;/h1&gt;
 &lt;h2&gt;原项目&lt;/h2&gt;
 &lt;p&gt;::github{repo=&quot;Akizon77/nezha-dash-v1&quot;}
 感谢 &lt;em&gt;Akizon77&lt;/em&gt; 大佬的移植以及 &lt;em&gt;まも&lt;/em&gt; 大佬的美化\
@@ -2282,7 +2282,7 @@ mikus在 &lt;em&gt;まも&lt;/em&gt; 大佬的基础上进行了一番调整，�
 &lt;li&gt;若有疑问或建议，可通过博客评论区或邮箱联系博主
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Github加速源</title><link>https://mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/</link><guid isPermaLink="true">https://mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/</guid><description>mikus 自建的 GitHub 加速源，支持 Releases 下载、Raw 文件获取及仓库克隆，解决国内访问 GitHub 速度慢的问题</description><pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Github加速源&lt;/h1&gt;
+</content:encoded></item><item><title>Github加速源</title><link>https://blog.mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/</guid><description>mikus 自建的 GitHub 加速源，支持 Releases 下载、Raw 文件获取及仓库克隆，解决国内访问 GitHub 速度慢的问题</description><pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Github加速源&lt;/h1&gt;
 &lt;p&gt;由于国内网络环境限制，直接访问 GitHub 下载 Releases 资源、获取 Raw 文件或执行 &lt;code&gt;git clone&lt;/code&gt; 往往速度缓慢甚至超时。mikus 搭建了一套基于 &lt;code&gt;mirror.mikus.ink&lt;/code&gt; 的反向代理加速服务，只需在原始 GitHub 链接前加上镜像前缀即可享受高速下载。&lt;/p&gt;
 &lt;h2&gt;使用方法&lt;/h2&gt;
 &lt;p&gt;在任意 GitHub 链接（Releases、Raw 文件或仓库地址）前加上 &lt;code&gt;https://mirror.mikus.ink/&lt;/code&gt; 即可。以下以 hubproxy 项目为例：&lt;/p&gt;
@@ -2308,7 +2308,7 @@ mikus在 &lt;em&gt;まも&lt;/em&gt; 大佬的基础上进行了一番调整，�
 &lt;li&gt;若有疑问或建议，欢迎通过博客评论区或邮箱联系博主
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>NodeQuality 适配国内环境</title><link>https://mikus.ink/posts/nodequality/</link><guid isPermaLink="true">https://mikus.ink/posts/nodequality/</guid><description>NodeQuality 是一款服务器性能测试脚本，mikus 针对国内网络环境进行了适配和优化。</description><pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;NodeQuality 适配国内环境&lt;/h1&gt;
+</content:encoded></item><item><title>NodeQuality 适配国内环境</title><link>https://blog.mikus.ink/posts/nodequality/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/nodequality/</guid><description>NodeQuality 是一款服务器性能测试脚本，mikus 针对国内网络环境进行了适配和优化。</description><pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;NodeQuality 适配国内环境&lt;/h1&gt;
 &lt;h2&gt;项目介绍&lt;/h2&gt;
 &lt;p&gt;NodeQuality 是一款功能强大的服务器性能测试工具，能够全面评估服务器的各项性能指标，包括网络延迟、带宽、CPU 性能、内存使用等。&lt;/p&gt;
 &lt;h2&gt;原项目&lt;/h2&gt;
@@ -2338,7 +2338,7 @@ mikus在 &lt;em&gt;まも&lt;/em&gt; 大佬的基础上进行了一番调整，�
 &lt;li&gt;如有疑问或建议，可通过博客评论区或邮箱联系博主
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>小米ax3000t 开启ssh</title><link>https://mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/</link><guid isPermaLink="true">https://mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/</guid><description>开启小米 AX3000T 的 SSH 功能</description><pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;小米ax3000t 开启ssh&lt;/h1&gt;
+</content:encoded></item><item><title>小米ax3000t 开启ssh</title><link>https://blog.mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/</guid><description>开启小米 AX3000T 的 SSH 功能</description><pubDate>Sun, 18 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;小米ax3000t 开启ssh&lt;/h1&gt;
 &lt;h2&gt;方案一&lt;/h2&gt;
 &lt;h3&gt;1.开启ssh&lt;/h3&gt;
 &lt;p&gt;:::caution[注意]
@@ -2394,7 +2394,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;amp
 &lt;li&gt;固化 SSH，选择【8】，再选择【7】固化 SSH。&lt;/li&gt;
 &lt;li&gt;使用 SSH 工具连接到终端，出现 Banner &quot;ARE U OK&quot; 则表示成功。&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Meting API</title><link>https://mikus.ink/posts/meting-api/</link><guid isPermaLink="true">https://mikus.ink/posts/meting-api/</guid><description>mikus 自建的 Meting API 服务，支持 VIP 歌曲解析</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting API&lt;/h1&gt;
+</content:encoded></item><item><title>Meting API</title><link>https://blog.mikus.ink/posts/meting-api/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/meting-api/</guid><description>mikus 自建的 Meting API 服务，支持 VIP 歌曲解析</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Meting API&lt;/h1&gt;
 &lt;p&gt;Meting API 地址：https://meting.mikus.ink&lt;/p&gt;
 &lt;h2&gt;API 参数&lt;/h2&gt;
 &lt;h3&gt;服务器地址 (server)&lt;/h3&gt;
@@ -2505,7 +2505,7 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;amp
 &lt;li&gt;请勿滥用，否则可能被限制访问或封禁 IP&lt;/li&gt;
 &lt;li&gt;如有疑问或建议，可通过博客评论区或邮箱联系博主&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Picflow API</title><link>https://mikus.ink/posts/picflow-api/</link><guid isPermaLink="true">https://mikus.ink/posts/picflow-api/</guid><description>Mikus 自建的智能图片服务 API，支持格式转换、设备自适应与外链模式</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Picflow API&lt;/h1&gt;
+</content:encoded></item><item><title>Picflow API</title><link>https://blog.mikus.ink/posts/picflow-api/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/picflow-api/</guid><description>Mikus 自建的智能图片服务 API，支持格式转换、设备自适应与外链模式</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Picflow API&lt;/h1&gt;
 &lt;p&gt;PicFlow API 地址: https://picflow-api.mikus.ink&lt;/p&gt;
 &lt;h2&gt;接口用法&lt;/h2&gt;
 &lt;p&gt;PicFlow API 是一款智能图片服务接口，支持多种图片格式转换、设备自适应以及外链模式。&lt;/p&gt;
@@ -2830,7 +2830,7 @@ if ($data[&apos;success&apos;]) {
 &lt;li&gt;若有疑问或建议，可通过博客评论区或邮箱联系博主
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Random-pic API-随机图片</title><link>https://mikus.ink/posts/random-api/</link><guid isPermaLink="true">https://mikus.ink/posts/random-api/</guid><description>Mikus 自建的 Random-pic API，提供高颜值随机图片接口，支持横屏（PC）与竖屏（Mobile）两种尺寸，适合用于个人项目、网站背景或开发测试</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Random-pic API-随机图片&lt;/h1&gt;
+</content:encoded></item><item><title>Random-pic API-随机图片</title><link>https://blog.mikus.ink/posts/random-api/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/random-api/</guid><description>Mikus 自建的 Random-pic API，提供高颜值随机图片接口，支持横屏（PC）与竖屏（Mobile）两种尺寸，适合用于个人项目、网站背景或开发测试</description><pubDate>Thu, 15 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Random-pic API-随机图片&lt;/h1&gt;
 &lt;p&gt;random-pic 是一个轻量、快速的随机图片 API 服务，由 Mikus 自建并维护。通过简单的 HTTP 请求即可获取一张随机图片，适合用作网站背景、个人项目占位图、Demo 开发测试等场景。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;API 地址&lt;/strong&gt;: https://random.mikus.ink&lt;/p&gt;
 &lt;h2&gt;接口用法&lt;/h2&gt;
@@ -2855,7 +2855,7 @@ if ($data[&apos;success&apos;]) {
 &lt;li&gt;如有疑问、建议或发现图片链接失效，欢迎通过博客评论区或发送邮件联系博主反馈
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Docker加速源</title><link>https://mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</link><guid isPermaLink="true">https://mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</guid><description>mikus 自建的 Docker 镜像加速源，支持 Docker Hub、GHCR、Quay、K8s 等多个主流仓库的镜像拉取加速</description><pubDate>Wed, 14 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Docker加速源&lt;/h1&gt;
+</content:encoded></item><item><title>Docker加速源</title><link>https://blog.mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</guid><description>mikus 自建的 Docker 镜像加速源，支持 Docker Hub、GHCR、Quay、K8s 等多个主流仓库的镜像拉取加速</description><pubDate>Wed, 14 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Docker加速源&lt;/h1&gt;
 &lt;p&gt;国内直接拉取 Docker 镜像时常遇到速度缓慢或连接超时的问题。本文介绍的是一套自建的 Docker 镜像加速服务，覆盖 Docker Hub、GHCR、Quay、K8s 等主流仓库，可帮助大家更顺畅地拉取容器镜像。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Docker Hub 加速源 https://mirror.mikus.ink&lt;/li&gt;
@@ -2923,7 +2923,7 @@ sudo service docker restart
 &lt;li&gt;如有疑问或建议，欢迎通过博客评论区或邮箱联系博主
 :::&lt;/li&gt;
 &lt;/ol&gt;
-</content:encoded></item><item><title>Live2D API</title><link>https://mikus.ink/posts/live2d-api/</link><guid isPermaLink="true">https://mikus.ink/posts/live2d-api/</guid><description>mikus 自建的 Live2D API 服务，支持 Cubism 2.x 和 4.x 模型，提供完整的 Web 管理后台与 Docker 一键部署方案</description><pubDate>Wed, 14 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Live2D API&lt;/h1&gt;
+</content:encoded></item><item><title>Live2D API</title><link>https://blog.mikus.ink/posts/live2d-api/</link><guid isPermaLink="true">https://blog.mikus.ink/posts/live2d-api/</guid><description>mikus 自建的 Live2D API 服务，支持 Cubism 2.x 和 4.x 模型，提供完整的 Web 管理后台与 Docker 一键部署方案</description><pubDate>Wed, 14 Jan 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Live2D API&lt;/h1&gt;
 &lt;p&gt;本 API 是专为 Live2D 看板娘插件设计的后端服务，旨在为您的网站或博客轻松增添生动可爱的 Live2D 角色交互体验。通过 HTTP 接口即可获取模型列表、切换皮肤、调整动作与表情，并内置了丰富的模型资源库，开箱即用。&lt;/p&gt;
 &lt;p&gt;Live2D 看板娘插件后端 API，全面支持 Cubism 2.x 和 4.x 格式模型，提供完整的 Web 管理后台与 Docker 一键部署方案。&lt;/p&gt;
 &lt;p&gt;::github{repo=&quot;mikus-loli/live2d_api&quot;}&lt;/p&gt;

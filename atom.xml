@@ -2,15 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>mikus</title>
   <subtitle>Ciallo～(∠・ω&lt; )⌒☆</subtitle>
-  <link href="https://mikus.ink/" rel="alternate" type="text/html"/>
-  <link href="https://mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
-  <id>https://mikus.ink/</id>
-  <updated>2026-10-20T15:04:58.837Z</updated>
+  <link href="https://blog.mikus.ink/" rel="alternate" type="text/html"/>
+  <link href="https://blog.mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
+  <id>https://blog.mikus.ink/</id>
+  <updated>2026-10-21T02:32:06.986Z</updated>
   <language>zh_CN</language>
   <entry>
     <title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title>
-    <link href="https://mikus.ink/posts/deepseek-to-opencode-go/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/deepseek-to-opencode-go/</id>
+    <link href="https://blog.mikus.ink/posts/deepseek-to-opencode-go/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/deepseek-to-opencode-go/</id>
     <published>2026-07-30T00:00:00.000Z</published>
     <updated>2026-07-30T00:00:00.000Z</updated>
     <summary>从 DeepSeek 官方 API 迁移到 OpenCode Go 订阅的体验分享，对比两者的定价、额度、模型选择和实际使用性价比。</summary>
@@ -228,8 +228,8 @@
   </entry>
   <entry>
     <title>Komari Theme Market CN — EdgeOne 加速国内主题市场</title>
-    <link href="https://mikus.ink/posts/theme-market-cn/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/theme-market-cn/</id>
+    <link href="https://blog.mikus.ink/posts/theme-market-cn/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/theme-market-cn/</id>
     <published>2026-07-26T00:00:00.000Z</published>
     <updated>2026-07-26T00:00:00.000Z</updated>
     <summary>利用 EdgeOne Pages 为 Komari 监控主题市场搭建国内加速镜像，解决 GitHub 资源访问慢的问题</summary>
@@ -350,8 +350,8 @@ data/v1.json  ──►  构建脚本下载所有 preview / download 资源
   </entry>
   <entry>
     <title>Windows 启用 OpenSSH 指南</title>
-    <link href="https://mikus.ink/posts/windows-ssh/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/windows-ssh/</id>
+    <link href="https://blog.mikus.ink/posts/windows-ssh/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/windows-ssh/</id>
     <published>2026-07-25T00:00:00.000Z</published>
     <updated>2026-07-25T00:00:00.000Z</updated>
     <summary>在 Windows 10/11 上启用 OpenSSH Server 和 Client 的完整教程，包括安装、配置、密钥认证和常见问题排查</summary>
@@ -466,8 +466,8 @@ PubkeyAuthentication yes
   </entry>
   <entry>
     <title>Meting-API - 多平台音乐 API 服务</title>
-    <link href="https://mikus.ink/posts/meting/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/meting/</id>
+    <link href="https://blog.mikus.ink/posts/meting/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/meting/</id>
     <published>2026-06-05T00:00:00.000Z</published>
     <updated>2026-06-05T00:00:00.000Z</updated>
     <summary>一个功能强大的多平台音乐 API 服务，支持网易云音乐和 QQ 音乐，提供完整的 Cookie 管理、VIP 歌曲播放、自动续期及监控通知功能</summary>
@@ -820,8 +820,8 @@ GET /api?server=tencent&amp;type=lrc&amp;id=004Yi5BD3ksoAN
   </entry>
   <entry>
     <title>Music-Cookie</title>
-    <link href="https://mikus.ink/posts/music-cookie/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/music-cookie/</id>
+    <link href="https://blog.mikus.ink/posts/music-cookie/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/music-cookie/</id>
     <published>2026-06-05T00:00:00.000Z</published>
     <updated>2026-06-05T00:00:00.000Z</updated>
     <summary>是一个自动抓取 QQ 音乐和网易云音乐客户端 Cookie 的工具</summary>
@@ -1440,8 +1440,8 @@ MIOTIFY_TOKEN=你的App_Token_（UUID格式）
   </entry>
   <entry>
     <title>Komari Mikus 主题</title>
-    <link href="https://mikus.ink/posts/komari-mikus/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/komari-mikus/</id>
+    <link href="https://blog.mikus.ink/posts/komari-mikus/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/komari-mikus/</id>
     <published>2026-04-21T00:00:00.000Z</published>
     <updated>2026-04-21T00:00:00.000Z</updated>
     <summary>一款精致优雅的 Komari 监控主题，纯 ES Modules 架构，支持双主题切换、WebSocket 实时监控、Canvas 图表与多种数据处理算法</summary>
@@ -1572,8 +1572,8 @@ renderChartByConfig(config, records, hours);
   </entry>
   <entry>
     <title>Meting-API 解决网易云音乐VIP播放限制</title>
-    <link href="https://mikus.ink/posts/meting-api-vip/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/meting-api-vip/</id>
+    <link href="https://blog.mikus.ink/posts/meting-api-vip/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/meting-api-vip/</id>
     <published>2026-03-24T00:00:00.000Z</published>
     <updated>2026-03-24T00:00:00.000Z</updated>
     <summary>通过 Meting-API 配置网易云音乐 Cookie，解决 VIP 歌曲的播放限制问题</summary>
@@ -1820,8 +1820,8 @@ export const map_song_list = (song_list) =&gt; {
   </entry>
   <entry>
     <title>Umami Docker 部署</title>
-    <link href="https://mikus.ink/posts/umami/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/umami/</id>
+    <link href="https://blog.mikus.ink/posts/umami/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/umami/</id>
     <published>2026-01-29T00:00:00.000Z</published>
     <updated>2026-01-29T00:00:00.000Z</updated>
     <summary>Umami 是一款开源、轻量级的网站分析工具，支持 Docker 快速部署，在保护用户隐私的同时提供详尽的流量统计数据</summary>
@@ -1976,8 +1976,8 @@ docker-compose up -d
   </entry>
   <entry>
     <title>Mikutap Docker版部署指南</title>
-    <link href="https://mikus.ink/posts/mikutap/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/mikutap/</id>
+    <link href="https://blog.mikus.ink/posts/mikutap/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/mikutap/</id>
     <published>2026-01-21T00:00:00.000Z</published>
     <updated>2026-01-21T00:00:00.000Z</updated>
     <summary>Mikutap Docker 部署指南 — 一键搭建初音未来风格电音交互页面，支持自定义构建与国内镜像加速</summary>
@@ -2079,8 +2079,8 @@ docker logs mikutap
   </entry>
   <entry>
     <title>Komari Nezha-V1 主题美化</title>
-    <link href="https://mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/</id>
+    <link href="https://blog.mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/komari-nezha-v1%E7%BE%8E%E5%8C%96/</id>
     <published>2026-01-19T00:00:00.000Z</published>
     <updated>2026-01-19T00:00:00.000Z</updated>
     <summary>为 Komari 的 Nezha-V1 主题打造一套精致的美化方案，全面提升面板的视觉体验</summary>
@@ -2423,8 +2423,8 @@ mikus在 <em>まも</em> 大佬的基础上进行了一番调整，并添加了�
   </entry>
   <entry>
     <title>Github加速源</title>
-    <link href="https://mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/</id>
+    <link href="https://blog.mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/git%E5%8A%A0%E9%80%9F%E6%BA%90/</id>
     <published>2026-01-18T00:00:00.000Z</published>
     <updated>2026-01-18T00:00:00.000Z</updated>
     <summary>mikus 自建的 GitHub 加速源，支持 Releases 下载、Raw 文件获取及仓库克隆，解决国内访问 GitHub 速度慢的问题</summary>
@@ -2462,8 +2462,8 @@ mikus在 <em>まも</em> 大佬的基础上进行了一番调整，并添加了�
   </entry>
   <entry>
     <title>NodeQuality 适配国内环境</title>
-    <link href="https://mikus.ink/posts/nodequality/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/nodequality/</id>
+    <link href="https://blog.mikus.ink/posts/nodequality/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/nodequality/</id>
     <published>2026-01-18T00:00:00.000Z</published>
     <updated>2026-01-18T00:00:00.000Z</updated>
     <summary>NodeQuality 是一款服务器性能测试脚本，mikus 针对国内网络环境进行了适配和优化。</summary>
@@ -2505,8 +2505,8 @@ mikus在 <em>まも</em> 大佬的基础上进行了一番调整，并添加了�
   </entry>
   <entry>
     <title>小米ax3000t 开启ssh</title>
-    <link href="https://mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/</id>
+    <link href="https://blog.mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/%E5%B0%8F%E7%B1%B3ax3000t/</id>
     <published>2026-01-18T00:00:00.000Z</published>
     <updated>2026-01-18T00:00:00.000Z</updated>
     <summary>开启小米 AX3000T 的 SSH 功能</summary>
@@ -2574,8 +2574,8 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
   </entry>
   <entry>
     <title>Meting API</title>
-    <link href="https://mikus.ink/posts/meting-api/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/meting-api/</id>
+    <link href="https://blog.mikus.ink/posts/meting-api/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/meting-api/</id>
     <published>2026-01-15T00:00:00.000Z</published>
     <updated>2026-01-15T00:00:00.000Z</updated>
     <summary>mikus 自建的 Meting API 服务，支持 VIP 歌曲解析</summary>
@@ -2698,8 +2698,8 @@ curl -kfsSL -O https://cdn.jsdelivr.net/gh/lemoeo/AX6S@main/auto_ssh.sh &amp;&am
   </entry>
   <entry>
     <title>Picflow API</title>
-    <link href="https://mikus.ink/posts/picflow-api/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/picflow-api/</id>
+    <link href="https://blog.mikus.ink/posts/picflow-api/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/picflow-api/</id>
     <published>2026-01-15T00:00:00.000Z</published>
     <updated>2026-01-15T00:00:00.000Z</updated>
     <summary>Mikus 自建的智能图片服务 API，支持格式转换、设备自适应与外链模式</summary>
@@ -3036,8 +3036,8 @@ if ($data['success']) {
   </entry>
   <entry>
     <title>Random-pic API-随机图片</title>
-    <link href="https://mikus.ink/posts/random-api/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/random-api/</id>
+    <link href="https://blog.mikus.ink/posts/random-api/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/random-api/</id>
     <published>2026-01-15T00:00:00.000Z</published>
     <updated>2026-01-15T00:00:00.000Z</updated>
     <summary>Mikus 自建的 Random-pic API，提供高颜值随机图片接口，支持横屏（PC）与竖屏（Mobile）两种尺寸，适合用于个人项目、网站背景或开发测试</summary>
@@ -3074,8 +3074,8 @@ if ($data['success']) {
   </entry>
   <entry>
     <title>Docker加速源</title>
-    <link href="https://mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</id>
+    <link href="https://blog.mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/docker%E5%8A%A0%E9%80%9F%E6%BA%90/</id>
     <published>2026-01-14T00:00:00.000Z</published>
     <updated>2026-01-14T00:00:00.000Z</updated>
     <summary>mikus 自建的 Docker 镜像加速源，支持 Docker Hub、GHCR、Quay、K8s 等多个主流仓库的镜像拉取加速</summary>
@@ -3155,8 +3155,8 @@ sudo service docker restart
   </entry>
   <entry>
     <title>Live2D API</title>
-    <link href="https://mikus.ink/posts/live2d-api/" rel="alternate" type="text/html"/>
-    <id>https://mikus.ink/posts/live2d-api/</id>
+    <link href="https://blog.mikus.ink/posts/live2d-api/" rel="alternate" type="text/html"/>
+    <id>https://blog.mikus.ink/posts/live2d-api/</id>
     <published>2026-01-14T00:00:00.000Z</published>
     <updated>2026-01-14T00:00:00.000Z</updated>
     <summary>mikus 自建的 Live2D API 服务，支持 Cubism 2.x 和 4.x 模型，提供完整的 Web 管理后台与 Docker 一键部署方案</summary>
