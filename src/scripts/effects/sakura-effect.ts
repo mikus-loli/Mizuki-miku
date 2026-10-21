@@ -17,7 +17,7 @@ export class SakuraEffectHandler {
 	/**
 	 * 初始化 Sakura 特效
 	 */
-	init(widgetConfigs: any): void {
+	init(widgetConfigs: { sakura?: SakuraConfig } | null): void {
 		const sakuraConfig = widgetConfigs?.sakura;
 		if (!sakuraConfig || !sakuraConfig.enable) {
 			return;
@@ -65,7 +65,7 @@ export function getSakuraEffectHandler(): SakuraEffectHandler {
 /**
  * 初始化 Sakura 特效（便捷函数）
  */
-export function setupSakura(widgetConfigs: any): void {
+export function setupSakura(widgetConfigs: { sakura?: SakuraConfig } | null): void {
 	const handler = getSakuraEffectHandler();
 	handler.init(widgetConfigs);
 }
@@ -73,7 +73,7 @@ export function setupSakura(widgetConfigs: any): void {
 /**
  * 设置 Sakura 特效初始化的 DOM 监听
  */
-export function setupSakuraOnDOMReady(widgetConfigs: any): void {
+export function setupSakuraOnDOMReady(widgetConfigs: { sakura?: SakuraConfig } | null): void {
 	const handler = getSakuraEffectHandler();
 
 	const init = () => {

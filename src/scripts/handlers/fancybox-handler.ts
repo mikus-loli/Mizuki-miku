@@ -89,7 +89,7 @@ export class FancyboxHandler {
 		// 绑定相册链接
 		this.Fancybox.bind(FANCYBOX_SELECTORS.albumLinks, {
 			...commonConfig,
-			source: (el: any) => {
+			source: (el: HTMLElement) => {
 				return el.getAttribute("data-src") || el.getAttribute("href");
 			},
 		});

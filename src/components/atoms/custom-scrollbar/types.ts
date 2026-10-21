@@ -1,5 +1,5 @@
 export interface CustomScrollbarProps {
-	children: any;
+	children?: unknown;
 	orientation?: "horizontal" | "vertical";
 	class?: string;
 }

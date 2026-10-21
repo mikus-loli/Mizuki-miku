@@ -12,6 +12,13 @@ interface PanelConfig {
 }
 
 /**
+ * 面板管理器的结构类型：动态导入的实例未导出类型，这里只声明本文件用到的方法
+ */
+interface PanelManagerLike {
+	closePanel(id: string): Promise<void>;
+}
+
+/**
  * 面板处理器类
  * 负责初始化面板的点击外部关闭功能
  */
@@ -39,7 +46,7 @@ export class PanelHandler {
 		},
 	];
 
-	private panelManager: any = null;
+	private panelManager: PanelManagerLike | null = null;
 	private boundClickHandlers = new Map<string, (event: MouseEvent) => void>();
 
 	/**
@@ -135,7 +142,7 @@ export class PanelHandler {
 	/**
 	 * 获取面板管理器实例
 	 */
-	getPanelManager(): any {
+	getPanelManager(): PanelManagerLike | null {
 		return this.panelManager;
 	}
 }

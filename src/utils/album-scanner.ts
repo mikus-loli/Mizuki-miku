@@ -164,7 +164,7 @@ function scanPhotos(folderPath: string, albumId: string): Photo[] {
 }
 
 function processExternalPhotos(
-	externalPhotos: any[],
+	externalPhotos: Array<Partial<Photo>>,
 	albumId: string,
 ): Photo[] {
 	const photos: Photo[] = [];
