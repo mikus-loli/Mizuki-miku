@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
   <title>mikus</title>
   <subtitle>Ciallo～(∠・ω&lt; )⌒☆</subtitle>
   <link href="https://blog.mikus.ink/" rel="alternate" type="text/html"/>
   <link href="https://blog.mikus.ink/atom.xml" rel="self" type="application/atom+xml"/>
   <id>https://blog.mikus.ink/</id>
-  <updated>2026-10-21T04:58:58.579Z</updated>
-  <language>zh_CN</language>
+  <updated>2026-10-21T05:37:51.313Z</updated>
+  <generator uri="https://astro.build/">Astro</generator>
   <entry>
     <title>从 DeepSeek 到 OpenCode Go：我的 AI 编程模型迁移体验</title>
     <link href="https://blog.mikus.ink/posts/deepseek-to-opencode-go/" rel="alternate" type="text/html"/>
