@@ -4,6 +4,8 @@ import MusicPlayer from "@components/widgets/music-player/MusicPlayer.svelte";
 import Pio from "@components/features/pio/Pio.svelte"; // 使用 Svelte 版本的 Pio 组件
 import { PageProgressBar } from "@components/control/PageProgressBar";
 import { pioConfig, profileConfig, siteConfig, musicPlayerConfig } from "@/config";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
 
 const BANNER_HEIGHT = 35;
 const BANNER_HEIGHT_EXTEND = 30;
@@ -219,6 +221,10 @@ if (siteConfig.font) {
 		style={bodyFontFamily ? `font-family: ${bodyFontFamily};` : ""}
 		data-overlayscrollbars-initialize
 	>
+		<!-- 键盘跳过导航：默认视觉隐藏，Tab 聚焦时才显示，不影响任何正常渲染 -->
+		<a href="#swup-container" class="skip-link">
+			{i18n(I18nKey.skipToContent)}
+		</a>
 		<noscript
 			><iframe
 				src="https://www.googletagmanager.com/ns.html?id=GTM-KRX3XGVH"
@@ -316,6 +322,20 @@ if (siteConfig.font) {
 		.navbar-hidden {
 			@apply opacity-0 -translate-y-16;
 		}
+	}
+	/* 键盘跳过链接：仅聚焦时可见（aria-hidden 的视觉隐藏写法，屏幕阅读器始终可访问） */
+	.skip-link {
+		position: absolute;
+		top: -100%;
+		left: 1rem;
+		z-index: 100;
+		padding: 0.5rem 1rem;
+		background: var(--card-bg);
+		color: var(--primary);
+		border-radius: var(--radius-large);
+	}
+	.skip-link:focus {
+		top: 1rem;
 	}
 </style>
 
