@@ -117,7 +117,16 @@ export default defineConfig({
 		svelte({
 			preprocess: vitePreprocess(),
 		}),
-		sitemap(),
+		sitemap({
+			// 关掉的功能页在静态产物里只是 「200 + meta refresh 到 /404/」的跳转页，
+			// 把它们交给搜索引擎就是 soft-404，会拉低收录质量
+			filter: (page) => {
+				const path = new URL(page).pathname;
+				return !Object.entries(siteConfig.featurePages).some(
+					([name, enabled]) => !enabled && path === `/${name}/`,
+				);
+			},
+		}),
 	],
 	markdown: {
 		remarkPlugins: [
