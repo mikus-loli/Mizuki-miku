@@ -123,11 +123,21 @@ console.warn(						`Failed to load image: ${importPath} for post: ${post.id}`,		
 		});
 	}
 
+	// RSS 2.0 用 RFC 1766 语言标签，下划线形式（zh_CN）不合规
+	const lang = siteConfig.lang.replace("_", "-");
+	const selfUrl = new URL("rss.xml", context.site).href;
+
 	return rss({
 		title: siteConfig.title,
 		description: siteConfig.subtitle || "No description",
 		site: context.site,
 		items: feed,
-		customData: `<language>${siteConfig.lang}</language>`,
+		xmlns: { atom: "http://www.w3.org/2005/Atom" },
+		customData: [
+			`<language>${lang}</language>`,
+			`<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`,
+			"<generator>Astro</generator>",
+			`<atom:link href="${selfUrl}" rel="self" type="application/rss+xml"/>`,
+		].join(""),
 	});
 }

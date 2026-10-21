@@ -43,14 +43,14 @@ export async function GET(context: APIContext) {
 
 	// 创建Atom feed头部
 	let atomFeed = `<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="${siteConfig.lang.replace("_", "-")}">
   <title>${escapeXml(siteConfig.title)}</title>
   <subtitle>${escapeXml(siteConfig.subtitle || "No description")}</subtitle>
   <link href="${context.site}" rel="alternate" type="text/html"/>
   <link href="${new URL("atom.xml", context.site)}" rel="self" type="application/atom+xml"/>
   <id>${context.site}</id>
   <updated>${new Date().toISOString()}</updated>
-  <language>${siteConfig.lang}</language>`;
+  <generator uri="https://astro.build/">Astro</generator>`;
 
 	for (const post of posts) {
 		// convert markdown to html string, ensure post.body is a string
