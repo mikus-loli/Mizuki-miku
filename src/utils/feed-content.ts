@@ -16,8 +16,8 @@ const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
 	"/src/content/**/*.{jpeg,jpg,png,gif,webp}",
 );
 
-/** 把 src 解析成 /src/content 下的实际文件路径；无法判定时返回 null */
-function resolveContentImagePath(postId: string, src: string): string | null {
+/** 把 src 解析成 /src/content 下的实际文件路径 */
+function resolveContentImagePath(postId: string, src: string): string {
 	// 文章可能在子目录里（bestimageapi/index.md），相对路径要带上这层目录
 	const postDir = postId.includes("/") ? postId.split("/")[0] : "";
 
