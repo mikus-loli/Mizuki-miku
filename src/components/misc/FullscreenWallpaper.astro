@@ -1,5 +1,6 @@
 ---
 import type { ImageMetadata } from "astro";
+
 import { siteConfig } from "../../config";
 import type { FullscreenWallpaperConfig } from "../../types/config";
 
@@ -18,9 +19,9 @@ const bannerAssets = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 const resolveSrc = (src: string): string => {
-	if (/^(https?:)?\/\//.test(src) || src.startsWith("data:")) return src;
+	if (/^(https?:)?\/\//.test(src) || src.startsWith("data:")) {return src;}
 	const match = src.match(/((?:desktop|mobile)-banner)\/([^/]+)$/);
-	if (!match) return src;
+	if (!match) {return src;}
 	const hit = bannerAssets[`../../assets/${match[1]}/${match[2]}`];
 	return hit?.default?.src ?? src;
 };
