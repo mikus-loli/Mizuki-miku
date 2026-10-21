@@ -16,7 +16,6 @@ export const en: Translation = {
 
 	[Key.tags]: "Tags",
 	[Key.categories]: "Categories",
-	[Key.recentPosts]: "Recent Posts",
 	[Key.postList]: "Post List",
 	[Key.tableOfContents]: "Table of Contents",
 	[Key.tocEmpty]: "No table of contents",
@@ -69,8 +68,6 @@ export const en: Translation = {
 
 	[Key.themeColor]: "Theme Color",
 
-	[Key.lightMode]: "Light",
-	[Key.darkMode]: "Dark",
 
 	[Key.more]: "More",
 

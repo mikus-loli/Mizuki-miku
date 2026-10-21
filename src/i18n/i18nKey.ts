@@ -13,7 +13,6 @@ enum I18nKey {
 
 	tags = "tags",
 	categories = "categories",
-	recentPosts = "recentPosts",
 	postList = "postList",
 	tableOfContents = "tableOfContents",
 	tocEmpty = "tocEmpty",
@@ -35,8 +34,6 @@ enum I18nKey {
 
 	themeColor = "themeColor",
 
-	lightMode = "lightMode",
-	darkMode = "darkMode",
 
 	more = "more",
 

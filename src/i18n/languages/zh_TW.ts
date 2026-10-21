@@ -16,7 +16,6 @@ export const zh_TW: Translation = {
 
 	[Key.tags]: "標籤",
 	[Key.categories]: "分類",
-	[Key.recentPosts]: "最新文章",
 	[Key.postList]: "文章列表",
 	[Key.tableOfContents]: "目錄",
 	[Key.tocEmpty]: "當前頁面沒有目錄",
@@ -69,8 +68,6 @@ export const zh_TW: Translation = {
 
 	[Key.themeColor]: "主題色",
 
-	[Key.lightMode]: "亮色",
-	[Key.darkMode]: "暗色",
 
 	[Key.more]: "更多",
 
