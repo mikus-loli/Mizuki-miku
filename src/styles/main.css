@@ -418,7 +418,7 @@ html {
   /* 悬浮TOC样式 */
   .floating-toc-item {
     @apply flex items-center gap-2 py-2 px-2 rounded-lg text-sm leading-relaxed;
-    @apply text-black/70 dark:text-white/70;
+    @apply text-black/85 dark:text-white/70;
     @apply hover:bg-(--btn-plain-bg-hover) hover:text-(--primary);
     @apply transition-all duration-150;
     text-decoration: none;
