@@ -117,6 +117,7 @@ export const zh_TW: Translation = {
 	[Key.notFoundTitle]: "頁面未找到",
 	[Key.notFoundDescription]: "抱歉，您訪問的頁面不存在或已被移動。",
 	[Key.backToHome]: "返回首頁",
+	[Key.skipToContent]: "跳至主要內容",
 
 	// 音樂播放器
 	[Key.musicPlayer]: "音樂播放器",

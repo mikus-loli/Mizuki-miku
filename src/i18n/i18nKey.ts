@@ -111,6 +111,9 @@ enum I18nKey {
 	notFoundDescription = "notFoundDescription",
 	backToHome = "backToHome",
 
+	// 无障碍
+	skipToContent = "skipToContent",
+
 	// 音乐播放器
 	musicPlayer = "musicPlayer",
 	musicPlayerShow = "musicPlayerShow",

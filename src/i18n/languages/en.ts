@@ -116,6 +116,7 @@ export const en: Translation = {
 	[Key.notFoundDescription]:
 		"Sorry, the page you visited does not exist or has been moved.",
 	[Key.backToHome]: "Back to Home",
+	[Key.skipToContent]: "Skip to main content",
 
 	// Music Player
 	[Key.musicPlayer]: "Music Player",

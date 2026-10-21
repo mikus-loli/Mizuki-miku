@@ -116,6 +116,7 @@ export const ja: Translation = {
 	[Key.notFoundDescription]:
 		"申し訳ありません、アクセスしたページは存在しないか移動されています。",
 	[Key.backToHome]: "ホームに戻る",
+	[Key.skipToContent]: "メインコンテンツへスキップ",
 
 	// 音楽プレーヤー
 	[Key.musicPlayer]: "音楽プレーヤー",
