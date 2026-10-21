@@ -34,6 +34,7 @@ export const en: Translation = {
 	[Key.friendsCopyLink]: "Copy Link",
 	[Key.friendsCopySuccess]: "Copied",
 	[Key.copyFailed]: "Copy failed, please copy manually",
+	[Key.pageNumber]: "Page {n}",
 	[Key.rssSubtitle]: "Subscribe with any RSS reader and new posts show up automatically.",
 	[Key.rssLink]: "Feed URL",
 	[Key.rssCopyToReader]: "Copy the URL below and paste it into your reader.",

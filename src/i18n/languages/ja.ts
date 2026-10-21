@@ -34,6 +34,7 @@ export const ja: Translation = {
 	[Key.friendsCopyLink]: "リンク",
 	[Key.friendsCopySuccess]: "コピーしました",
 	[Key.copyFailed]: "コピーに失敗しました。手動でコピーしてください",
+	[Key.pageNumber]: "{n} ページ目",
 	[Key.rssSubtitle]: "お好みの RSS リーダーで購読すると、新しい記事が自動で届きます",
 	[Key.rssLink]: "購読 URL",
 	[Key.rssCopyToReader]: "下の URL をコピーしてリーダーに貼り付けてください",

@@ -34,6 +34,7 @@ export const zh_TW: Translation = {
 	[Key.friendsCopyLink]: "複製鏈接",
 	[Key.friendsCopySuccess]: "已複製",
 	[Key.copyFailed]: "複製失敗，請手動複製",
+	[Key.pageNumber]: "第 {n} 頁",
 	[Key.rssSubtitle]: "用任意 RSS 閱讀器訂閱本站，新文章會自動出現在你的閱讀器裡",
 	[Key.rssLink]: "訂閱網址",
 	[Key.rssCopyToReader]: "複製下面的網址，貼到你的閱讀器",

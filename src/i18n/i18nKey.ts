@@ -51,6 +51,7 @@ enum I18nKey {
 	friendsVisit = "friendsVisit",
 	friendsCopyLink = "friendsCopyLink",
 	copyFailed = "copyFailed",
+	pageNumber = "pageNumber",
 
 	// RSS / Atom 订阅页
 	rssSubtitle = "rssSubtitle",

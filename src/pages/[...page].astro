@@ -7,6 +7,8 @@ import type { GetStaticPaths } from "astro";
 
 import { siteConfig } from "../config";
 import { PAGE_SIZE } from "../constants/constants";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
 import { getSortedPosts } from "../utils/content-utils";
 import { initPostIdMap } from "../utils/permalink-utils";
 
@@ -23,9 +25,18 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 
 const len = page.data.length;
+
+// 第 2 页起标题/描述要和首页区分开，否则搜索引擎看到两个完全相同的页面
+const pageLabel =
+	page.currentPage > 1
+		? i18n(I18nKey.pageNumber, { n: page.currentPage })
+		: undefined;
 ---
 
-<MainGridLayout>
+<MainGridLayout
+	title={pageLabel}
+	description={pageLabel ? `${pageLabel} - ${siteConfig.subtitle}` : undefined}
+>
 	{showCategoryBar && <CategoryBar />}
 	<PostPage page={page} />
 	<Pagination
