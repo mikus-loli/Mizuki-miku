@@ -128,7 +128,7 @@ const hasLinks = item.links && item.links.length > 0;
 					</div>
 					{
 						item.organization && (
-							<p class="text-sm text-black/60 dark:text-white/60">
+							<p class="text-sm text-black/90 dark:text-white/60">
 								{item.organization}
 								{item.position ? ` · ${item.position}` : ""}
 							</p>
@@ -173,7 +173,7 @@ const hasLinks = item.links && item.links.length > 0;
 			{
 				item.achievements && item.achievements.length > 0 && (
 					<div class="mb-4">
-						<h4 class="text-xs font-semibold text-black/50 dark:text-white/50 uppercase tracking-wider mb-2">
+						<h4 class="text-xs font-semibold text-black/85 dark:text-white/50 uppercase tracking-wider mb-2">
 							{i18n(I18nKey.timelineAchievements)}
 						</h4>
 						<ul class="space-y-1.5">
@@ -194,7 +194,7 @@ const hasLinks = item.links && item.links.length > 0;
 			}
 
 			<div
-				class="flex items-center gap-4 text-xs text-black/50 dark:text-white/50 mb-1 pt-3 border-t border-black/5 dark:border-white/5"
+				class="flex items-center gap-4 text-xs text-black/85 dark:text-white/50 mb-1 pt-3 border-t border-black/5 dark:border-white/5"
 			>
 				<span class="flex items-center gap-1">
 					<iconify-icon

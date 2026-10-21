@@ -246,7 +246,7 @@
 
 	{#if isHomePage}
 		{#if postItems.length === 0}
-			<div class="text-center py-8 text-black/50 dark:text-white/50">
+			<div class="text-center py-8 text-black/85 dark:text-white/50">
 				<Icon
 					icon="material-symbols:article-outline"
 					class="text-2xl mb-2"
@@ -274,7 +274,7 @@
 			</div>
 		{/if}
 	{:else if tocItems.length === 0}
-		<div class="text-center py-8 text-black/50 dark:text-white/50">
+		<div class="text-center py-8 text-black/85 dark:text-white/50">
 			<p>{i18n(I18nKey.tocEmpty)}</p>
 		</div>
 	{:else}

@@ -260,7 +260,7 @@
 			class="absolute text-[1.25rem] pointer-events-none {isDesktopSearchExpanded
 				? 'left-3'
 				: 'left-1/2 -translate-x-1/2'} transition top-1/2 -translate-y-1/2 {isDesktopSearchExpanded
-				? 'text-black/30 dark:text-white/30'
+				? 'text-black/85 dark:text-white/30'
 				: ''}"
 		></Icon>
 		<input
@@ -278,7 +278,7 @@
 			class="transition-all pl-10 text-sm bg-transparent outline-0
                 h-full {isDesktopSearchExpanded
 				? 'w-36'
-				: 'w-0'} text-black/50 dark:text-white/50"
+				: 'w-0'} text-black/85 dark:text-white/50"
 		/>
 	</div>
 </div>
@@ -308,13 +308,13 @@
 	>
 		<Icon
 			icon="material-symbols:search"
-			class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/30 dark:text-white/30"
+			class="absolute text-[1.25rem] pointer-events-none ml-3 transition my-auto text-black/85 dark:text-white/30"
 		></Icon>
 		<input
 			placeholder={i18n(I18nKey.search)}
 			bind:value={keywordMobile}
 			class="pl-10 absolute inset-0 text-sm bg-transparent outline-0
-               focus:w-60 text-black/50 dark:text-white/50"
+               focus:w-60 text-black/85 dark:text-white/50"
 		/>
 	</div>
 	<!-- search results -->

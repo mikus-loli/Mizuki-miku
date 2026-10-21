@@ -76,7 +76,7 @@ const getStatusText = (status: string) => {
 		</div>
 
 		<p
-			class="text-sm text-black/60 dark:text-white/60 mb-4 line-clamp-2 min-h-[2.5rem]"
+			class="text-sm text-black/90 dark:text-white/60 mb-4 line-clamp-2 min-h-[2.5rem]"
 		>
 			{project.description}
 		</p>
@@ -90,7 +90,7 @@ const getStatusText = (status: string) => {
 						</span>
 					))}
 					{project.techStack.length > maxTechStack && (
-						<span class="px-2 py-1 text-xs rounded-md bg-[var(--btn-regular-bg)] text-black/50 dark:text-white/50 font-medium">
+						<span class="px-2 py-1 text-xs rounded-md bg-[var(--btn-regular-bg)] text-black/85 dark:text-white/50 font-medium">
 							+{project.techStack.length - maxTechStack}
 						</span>
 					)}
