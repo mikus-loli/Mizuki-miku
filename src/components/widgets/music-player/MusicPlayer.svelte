@@ -225,6 +225,7 @@
 				/>
 				<span class="text-sm flex-1">{state.errorMessage}</span>
 				<button
+					aria-label="关闭提示"
 					onclick={hideError}
 					class="text-white/80 hover:text-white transition-colors"
 				>

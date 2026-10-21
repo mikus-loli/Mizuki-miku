@@ -33,6 +33,7 @@ export const zh_TW: Translation = {
 	[Key.friendsVisit]: "訪問",
 	[Key.friendsCopyLink]: "複製鏈接",
 	[Key.friendsCopySuccess]: "已複製",
+	[Key.copyFailed]: "複製失敗，請手動複製",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "無標籤",
 

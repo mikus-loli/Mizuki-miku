@@ -121,6 +121,7 @@
 		{#snippet children()}
 			<button
 				class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
+				aria-label="折叠播放器"
 				onclick={onCollapseClick}
 				title={i18n(Key.musicPlayerCollapse)}
 			>

@@ -33,6 +33,7 @@ export const ja: Translation = {
 	[Key.friendsVisit]: "訪問",
 	[Key.friendsCopyLink]: "リンク",
 	[Key.friendsCopySuccess]: "コピーしました",
+	[Key.copyFailed]: "コピーに失敗しました。手動でコピーしてください",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "タグはありません",
 

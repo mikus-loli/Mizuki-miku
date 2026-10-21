@@ -82,6 +82,7 @@
 			</button>
 			<button
 				class="btn-plain w-8 h-8 rounded-lg flex items-center justify-center"
+				aria-label="展开播放器"
 				onclick={(e) => {
 					e.stopPropagation();
 					onExpandClick?.();

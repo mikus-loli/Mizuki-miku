@@ -22,6 +22,7 @@
 
 {#if mode === "shuffle"}
 	<button
+		aria-label="随机播放"
 		class="w-10 h-10 rounded-lg"
 		class:btn-regular={isActive}
 		class:btn-plain={!isActive}
@@ -32,6 +33,7 @@
 	</button>
 {:else}
 	<button
+		aria-label="循环模式"
 		class="w-10 h-10 rounded-lg"
 		class:btn-regular={isActive}
 		class:btn-plain={!isActive}

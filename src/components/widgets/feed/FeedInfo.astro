@@ -76,8 +76,11 @@ const t = (key: string) => i18n(key as I18nKey);
 						id={`copy-${prefix}-btn`}
 						class="px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:opacity-80 transition-all duration-200 font-medium text-sm whitespace-nowrap"
 						data-url={`${Astro.site}${feedUrl}`}
+						data-copied={t("copied")}
+						data-failed={t("copyFailed")}
+						aria-label={t("copyLink")}
 					>
-						{t(`${prefix}CopyLink`)}
+						{t("copyLink")}
 					</button>
 				</div>
 			</div>
@@ -168,10 +171,8 @@ const t = (key: string) => i18n(key as I18nKey);
 					}
 					try {
 						await navigator.clipboard.writeText(url);
-						const originalText = this.textContent || "Copy Link";
-						this.textContent = url.includes("rss")
-							? "RSS link copied to clipboard!"
-							: "Atom link copied to clipboard!";
+						const originalText = this.textContent || "";
+						this.textContent = this.getAttribute("data-copied") || "OK";
 						this.style.backgroundColor =
 							"var(--success-color, #10b981)";
 
@@ -181,9 +182,9 @@ const t = (key: string) => i18n(key as I18nKey);
 						}, 2000);
 					} catch (err) {
 						console.error("复制失败:", err);
-						const originalText = this.textContent || "Copy Link";
+						const originalText = this.textContent || "";
 						this.textContent =
-							"Copy failed, please copy the link manually";
+							this.getAttribute("data-failed") || "Copy failed";
 						setTimeout(() => {
 							this.textContent = originalText;
 						}, 2000);

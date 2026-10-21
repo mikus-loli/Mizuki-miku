@@ -50,6 +50,7 @@ enum I18nKey {
 	friendsNoResults = "friendsNoResults",
 	friendsVisit = "friendsVisit",
 	friendsCopyLink = "friendsCopyLink",
+	copyFailed = "copyFailed",
 	friendsCopySuccess = "friendsCopySuccess",
 	anime = "anime",
 	diary = "diary",

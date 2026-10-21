@@ -10,7 +10,11 @@
 	const { volume, isMuted, onclick }: Props = $props();
 </script>
 
-<button class="btn-plain w-8 h-8 rounded-lg" {onclick}>
+<button
+	class="btn-plain w-8 h-8 rounded-lg"
+	aria-label={isMuted ? "取消静音" : "静音"}
+	{onclick}
+>
 	{#if isMuted || volume === 0}
 		<Icon icon="material-symbols:volume-off" class="text-lg" />
 	{:else if volume < 0.5}

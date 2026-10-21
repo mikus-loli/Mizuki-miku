@@ -33,6 +33,7 @@ export const en: Translation = {
 	[Key.friendsVisit]: "Visit",
 	[Key.friendsCopyLink]: "Copy Link",
 	[Key.friendsCopySuccess]: "Copied",
+	[Key.copyFailed]: "Copy failed, please copy manually",
 	[Key.uncategorized]: "Uncategorized",
 	[Key.noTags]: "No Tags",
 
