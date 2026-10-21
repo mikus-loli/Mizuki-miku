@@ -1,4 +1,8 @@
 {
+	"redirects": [
+		{ "source": "/index.html", "destination": "/", "statusCode": 301 },
+		{ "source": "/*/index.html", "destination": "/:splat/", "statusCode": 301 }
+	],
 	"headers": [
 		{
 			"source": "/_astro/*",
