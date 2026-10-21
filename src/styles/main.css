@@ -53,6 +53,14 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* 键盘可达性：仅键盘导航时显示焦点环（:focus-visible 不覆盖鼠标点击，对视觉浏览零影响）。
+   用 :where() 保持零特异性，不压制组件自身已定义的焦点/悬停样式。
+   焦点色跟随主题强调色 --primary，不引入新颜色。 */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 /* 页面顶部渐变高光效果 */
 .top-gradient-highlight {
   position: fixed;
