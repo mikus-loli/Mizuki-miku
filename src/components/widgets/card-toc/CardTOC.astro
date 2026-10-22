@@ -109,10 +109,6 @@ const { class: className, style } = Astro.props;
 		initAllCardTOCs();
 	}
 
-	document.addEventListener("swup:contentReplaced", () => {
-		setTimeout(initAllCardTOCs, 100);
-	});
-
 	document.addEventListener("astro:page-load", () => {
 		setTimeout(initAllCardTOCs, 100);
 	});

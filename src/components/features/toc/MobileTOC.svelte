@@ -125,20 +125,16 @@
 			if (w.swup) {
 				setupSwupListeners();
 			} else {
-				const checkSwup = () => {
+				// @swup/astro 不派发 swup:enable；短轮询等待 window.swup。
+				let attempts = 0;
+				const retryTimer = setInterval(() => {
 					if (w.swup) {
 						setupSwupListeners();
-						document.removeEventListener("swup:enable", checkSwup);
+						clearInterval(retryTimer);
+					} else if (++attempts >= 50) {
+						clearInterval(retryTimer);
 					}
-				};
-
-				document.addEventListener("swup:enable", checkSwup);
-				setTimeout(() => {
-					if (w.swup) {
-						setupSwupListeners();
-						document.removeEventListener("swup:enable", checkSwup);
-					}
-				}, 1000);
+				}, 100);
 			}
 		}
 	};

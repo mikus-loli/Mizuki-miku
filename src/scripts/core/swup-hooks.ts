@@ -68,13 +68,16 @@ export class SwupHooksManager {
 		this.cachedElements.clear();
 	}
 
+	private hooksRegistered = false;
+
 	/**
 	 * 注册所有 Swup 钩子
 	 */
 	registerHooks(): void {
-		if (!window.swup) {
+		if (!window.swup || this.hooksRegistered) {
 			return;
 		}
+		this.hooksRegistered = true;
 		this.registerLinkClickHook();
 		this.registerContentReplaceHook();
 		this.registerVisitStartHook();

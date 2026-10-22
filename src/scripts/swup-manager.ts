@@ -127,10 +127,28 @@ export class SwupManager {
 			checkKatex();
 			this.hooksManager.registerHooks();
 		} else {
-			// 监听 Swup 就绪事件
+			// @swup/astro 不派发 swup:enable；用短轮询等待 window.swup，保留事件监听兼容。
+			let attempts = 0;
+			const tryRegisterHooks = () => {
+				if (!window?.swup?.hooks || !this.hooksManager) {
+					return false;
+				}
+				this.hooksManager.registerHooks();
+				return true;
+			};
+			const retryTimer = setInterval(() => {
+				if (tryRegisterHooks() || ++attempts >= 50) {
+					clearInterval(retryTimer);
+					if (attempts >= 50) {
+						console.warn(
+							"[SwupManager] Swup not ready after timeout",
+						);
+					}
+				}
+			}, 100);
 			document.addEventListener("swup:enable", () => {
-				if (this.hooksManager) {
-					this.hooksManager.registerHooks();
+				if (tryRegisterHooks()) {
+					clearInterval(retryTimer);
 				}
 			});
 

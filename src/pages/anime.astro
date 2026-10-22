@@ -533,23 +533,36 @@ const emptyMessage = i18n(I18nKey.animeEmpty);
 			}
 		}
 
+		// 保存当前页面脚本的初始化函数，供只绑定一次的 Swup hooks 调用最新闭包
+		window.__animeInitFilterButtons = initFilterButtons;
 		document.addEventListener("DOMContentLoaded", initFilterButtons);
 		function setupSwupListeners() {
-			if (window.swup) {
-				window.swup.hooks.on("content:replace", () =>
-					setTimeout(initFilterButtons, 150),
-				);
-				window.swup.hooks.on("page:view", () =>
-					setTimeout(initFilterButtons, 150),
-				);
+			if (window.__animeSwupHooksBound || !window.swup) {
+				return;
 			}
+			window.__animeSwupHooksBound = true;
+			window.swup.hooks.on("content:replace", () =>
+				setTimeout(() => window.__animeInitFilterButtons?.(), 150),
+			);
+			window.swup.hooks.on("page:view", () =>
+				setTimeout(() => window.__animeInitFilterButtons?.(), 150),
+			);
 		}
 
 		if (typeof window !== "undefined") {
 			if (window.swup) {
 				setupSwupListeners();
 			} else {
-				document.addEventListener("swup:enable", setupSwupListeners);
+				// @swup/astro 不派发 swup:enable；短轮询等待 window.swup。
+				let attempts = 0;
+				const retryTimer = setInterval(() => {
+					if (window.swup) {
+						setupSwupListeners();
+						clearInterval(retryTimer);
+					} else if (++attempts >= 50) {
+						clearInterval(retryTimer);
+					}
+				}, 100);
 			}
 		}
 	</script>
