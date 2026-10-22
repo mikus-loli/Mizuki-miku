@@ -171,6 +171,11 @@ class CodeBlockCollapser {
 			return;
 		}
 
+		if (frame.querySelector(":scope > .collapse-toggle-btn")) {
+			this.log("Collapse button already exists, skipping");
+			return;
+		}
+
 		this.log("Adding collapse feature to code block");
 		codeBlock.classList.add("collapsible", "expanded");
 
