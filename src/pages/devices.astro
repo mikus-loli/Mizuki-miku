@@ -6,6 +6,7 @@ import { devicesData } from "../data/devices";
 import I18nKey from "../i18n/i18nKey";
 import { i18n } from "../i18n/translation";
 import MainGridLayout from "../layouts/MainGridLayout.astro";
+import { stringifyForInlineJson } from "../utils/json-ld";
 
 export const prerender = true;
 
@@ -81,13 +82,13 @@ const viewDetailsText = i18n(I18nKey.devicesViewDetails);
 				is:inline
 				id="devices-data"
 				type="application/json"
-				set:html={JSON.stringify(devices)}
+				set:html={stringifyForInlineJson(devices)}
 			/>
 			<script
 				is:inline
 				id="i18n-data"
 				type="application/json"
-				set:html={JSON.stringify({ viewDetails: viewDetailsText })}
+				set:html={stringifyForInlineJson({ viewDetails: viewDetailsText })}
 			/>
 		</div>
 	</div>

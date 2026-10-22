@@ -20,6 +20,7 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getSortedPosts } from "@utils/content-utils";
+import { stringifyForInlineJson } from "@utils/json-ld";
 import {
 	generatePermalinkSlug,
 	hasCustomPermalink,
@@ -132,7 +133,7 @@ const jsonLd = {
 		is:inline
 		slot="head"
 		type="application/ld+json"
-		set:html={JSON.stringify(jsonLd)}
+		set:html={stringifyForInlineJson(jsonLd)}
 	/>
 	<script>
 		import("../scripts/right-sidebar-layout");
