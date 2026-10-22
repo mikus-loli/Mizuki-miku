@@ -8,6 +8,16 @@ import { renderFeedContent } from "@/utils/feed-content";
 import { initPostIdMap } from "@/utils/permalink-utils";
 import { getPostUrl } from "@/utils/url-utils";
 
+/** XML 属性转义，防止 self URL 中的 & 等字符破坏 feed */
+function escapeXml(str: string): string {
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
+}
+
 export async function GET(context: APIContext) {
 	if (!context.site) {
 		throw Error("site not set");
@@ -35,7 +45,7 @@ export async function GET(context: APIContext) {
 
 	// RSS 2.0 用 RFC 1766 语言标签，下划线形式（zh_CN）不合规
 	const lang = siteConfig.lang.replace("_", "-");
-	const selfUrl = new URL("rss.xml", context.site).href;
+	const selfUrl = escapeXml(new URL("rss.xml", context.site).href);
 
 	return rss({
 		title: siteConfig.title,
