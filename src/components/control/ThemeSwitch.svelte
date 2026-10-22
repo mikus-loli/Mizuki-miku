@@ -53,10 +53,8 @@
 						clearInterval(retryTimer);
 					}
 				}, 100);
-				document.addEventListener("swup:enable", onSwupEnable);
 				cleanupFns.push(() => {
 					clearInterval(retryTimer);
-					document.removeEventListener("swup:enable", onSwupEnable);
 				});
 			}
 

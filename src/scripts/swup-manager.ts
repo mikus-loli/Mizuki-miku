@@ -127,7 +127,7 @@ export class SwupManager {
 			checkKatex();
 			this.hooksManager.registerHooks();
 		} else {
-			// @swup/astro 不派发 swup:enable；用短轮询等待 window.swup，保留事件监听兼容。
+			// @swup/astro 不派发 swup:enable；用短轮询等待 window.swup。
 			let attempts = 0;
 			const tryRegisterHooks = () => {
 				if (!window?.swup?.hooks || !this.hooksManager) {
@@ -146,11 +146,6 @@ export class SwupManager {
 					}
 				}
 			}, 100);
-			document.addEventListener("swup:enable", () => {
-				if (tryRegisterHooks()) {
-					clearInterval(retryTimer);
-				}
-			});
 
 			// 监听 DOM 加载（确保首屏也能加载优化组件）
 			if (document.readyState === "loading") {

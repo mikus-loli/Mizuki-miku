@@ -394,7 +394,7 @@ import { onDestroy, onMount } from "svelte";
 			return;
 		}
 
-		// @swup/astro 不派发 swup:enable；用短轮询兜底，并保留事件监听兼容未来版本。
+		// @swup/astro 不派发 swup:enable；用短轮询兜底。
 		let attempts = 0;
 		const retryTimer = setInterval(() => {
 			if (setup() || ++attempts >= 50) {
@@ -404,15 +404,8 @@ import { onDestroy, onMount } from "svelte";
 				}
 			}
 		}, 100);
-		const onSwupEnable = () => {
-			if (setup()) {
-				document.removeEventListener("swup:enable", onSwupEnable);
-			}
-		};
-		document.addEventListener("swup:enable", onSwupEnable);
 		swupCleanupFns.push(() => {
 			clearInterval(retryTimer);
-			document.removeEventListener("swup:enable", onSwupEnable);
 		});
 	}
 </script>

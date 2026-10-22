@@ -366,19 +366,12 @@ function setupSwupHooks(): boolean {
 	return false;
 }
 
-// 尝试立即设置 Swup 钩子
-if (!setupSwupHooks()) {
-	// 如果 Swup 尚未初始化，等待它加载
-	codeBlockCollapser.log("Swup not ready, waiting for initialization");
+	// 尝试立即设置 Swup 钩子
+	if (!setupSwupHooks()) {
+		// Swup 尚未初始化时用短轮询等待（@swup/astro 不派发 swup:enable）
+		codeBlockCollapser.log("Swup not ready, waiting for initialization");
 
-	// 监听 swup:enable 事件
-	document.addEventListener("swup:enable", () => {
-		codeBlockCollapser.log("Swup enabled, setting up hooks");
-		setupSwupHooks();
-	});
-
-	// 额外的延迟重试机制，确保捕获到 Swup
-	const retryInterval: ReturnType<typeof setInterval> = setInterval(() => {
+		const retryInterval: ReturnType<typeof setInterval> = setInterval(() => {
 		if (setupSwupHooks()) {
 			codeBlockCollapser.log("Swup hooks set up successfully via retry");
 			clearInterval(retryInterval);

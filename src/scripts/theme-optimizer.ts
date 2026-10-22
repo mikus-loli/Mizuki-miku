@@ -127,12 +127,7 @@ class ThemeOptimizer {
 
 		// 尝试立即设置 Swup 钩子
 		if (!setupHooks()) {
-			// 如果 Swup 尚未初始化，等待它加载
-			document.addEventListener("swup:enable", () => {
-				setupHooks();
-			});
-
-			// 额外的延迟重试机制，确保捕获到 Swup
+			// Swup 尚未初始化时用短轮询等待（@swup/astro 不派发 swup:enable）
 			const retryInterval: ReturnType<typeof setInterval> = setInterval(
 				() => {
 					if (setupHooks()) {
