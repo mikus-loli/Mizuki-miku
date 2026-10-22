@@ -368,8 +368,8 @@ const {
 		}, 2000);
 	}
 
-	// 支持 Swup 页面过渡
-	document.addEventListener("swup:page:view", function () {
+	// 支持 Swup 页面过渡（@swup/astro 派发 astro:page-load）
+	document.addEventListener("astro:page-load", function () {
 		applyWallpaperMode();
 
 		// 在Swup页面切换时也要重新应用布局模式

@@ -58,19 +58,6 @@ function initPageLayout(pageType: string): void {
 			}
 		}, 100);
 	});
-
-	// 监听SWUP导航事件
-	document.addEventListener("swup:contentReplaced", () => {
-		setTimeout(() => {
-			const currentLayout: string =
-				localStorage.getItem("postListLayout") || "list";
-			if (currentLayout === "grid") {
-				hideRightSidebar();
-			} else {
-				showRightSidebar();
-			}
-		}, 100);
-	});
 }
 
 /**

@@ -281,8 +281,8 @@ const lcpImages = await getLcpPreloadImages();
 			// 监听窗口大小变化
 			window.addEventListener("resize", adjustPageScale);
 
-			// Swup 页面切换后也需要检查
-			document.addEventListener("swup:page:view", adjustPageScale);
+			// Swup 页面切换后也需要检查（@swup/astro 派发 astro:page-load）
+			document.addEventListener("astro:page-load", adjustPageScale);
 			window.addEventListener("orientationchange", adjustPageScale);
 		}
 	})();
@@ -292,7 +292,7 @@ const lcpImages = await getLcpPreloadImages();
 <script is:inline define:vars={{ IS_DEV: import.meta.env.DEV }}>
 	// Dev 模式下，避免 swup 在页面切换时反复替换 head 中的样式标签，导致偶发样式丢失
 	if (IS_DEV) {
-		document.addEventListener("swup:enable", () => {
+		document.addEventListener("astro:page-load", () => {
 			if (window?.swup?.options) {
 				window.swup.options.updateHead = false;
 			}

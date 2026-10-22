@@ -45,8 +45,8 @@ class CodeBlockCollapser {
 			this.syncWithThemeOptimizer();
 		});
 
-		// 监听页面切换事件，确保同步
-		document.addEventListener("swup:pageView", () => {
+		// 监听页面切换事件，确保同步（@swup/astro 派发 astro:page-load）
+		document.addEventListener("astro:page-load", () => {
 			// 延迟同步，确保主题优化器已经处理完代码块
 			setTimeout(() => {
 				this.syncWithThemeOptimizer();
