@@ -81,6 +81,10 @@ class MusicPlayerStore {
 	private listeners = new Set<(state: MusicPlayerState) => void>();
 	private lastTimeupdateBroadcast = 0;
 	private timeupdateRafId: number | null = null;
+	private skipErrorTimer: ReturnType<typeof setTimeout> | null = null;
+	private errorHideTimer: ReturnType<typeof setTimeout> | null = null;
+	private fetchController: AbortController | null = null;
+	private fetchGeneration = 0;
 
 	constructor() {
 		this.state = this.createInitialState();
@@ -221,8 +225,15 @@ class MusicPlayerStore {
 		this.state.isLoading = false;
 		this.showError(i18n(Key.musicPlayerErrorSong));
 
+		if (this.skipErrorTimer) {
+			clearTimeout(this.skipErrorTimer);
+			this.skipErrorTimer = null;
+		}
 		if (this.state.playlist.length > 1) {
-			setTimeout(() => this.next(true), SKIP_ERROR_DELAY);
+			this.skipErrorTimer = setTimeout(() => {
+				this.skipErrorTimer = null;
+				this.next(true);
+			}, SKIP_ERROR_DELAY);
 		} else if (this.state.playlist.length <= 1) {
 			this.showError(i18n(Key.musicPlayerErrorEmpty));
 		}
@@ -249,6 +260,8 @@ class MusicPlayerStore {
 				});
 			}
 		}
+		// willAutoPlay 是一次性意图，loadeddata 处理完即消费，避免后续事件再次自动播放
+		this.state.willAutoPlay = false;
 		this.broadcastState();
 	}
 
@@ -329,19 +342,27 @@ class MusicPlayerStore {
 			.replace(":auth", "")
 			.replace(":r", Date.now().toString());
 
-		try {
-			const controller = new AbortController();
-			const timeoutId = setTimeout(
-				() => controller.abort(),
-				FETCH_TIMEOUT_MS,
-			);
-			const res = await fetch(apiUrl, { signal: controller.signal });
-			clearTimeout(timeoutId);
+		this.fetchController?.abort();
+		const controller = new AbortController();
+		this.fetchController = controller;
+		const generation = ++this.fetchGeneration;
+		const timeoutId = setTimeout(
+			() => controller.abort(),
+			FETCH_TIMEOUT_MS,
+		);
 
+		try {
+			const res = await fetch(apiUrl, { signal: controller.signal });
 			if (!res.ok) {
 				throw new Error(`Meting API error: ${res.status}`);
 			}
 			const list: MetingSong[] = await res.json();
+			if (
+				generation !== this.fetchGeneration ||
+				!this.isInitialized
+			) {
+				return;
+			}
 			this.state.playlist = list.map((song) =>
 				this.convertMetingSong(song),
 			);
@@ -351,9 +372,20 @@ class MusicPlayerStore {
 				this.loadSong(this.state.playlist[0], false);
 			}
 		} catch (e) {
+			if (generation !== this.fetchGeneration || !this.isInitialized) {
+				return;
+			}
 			console.warn("Failed to fetch Meting playlist:", e);
 			this.showError(i18n(Key.musicPlayerErrorPlaylist));
 			this.state.isLoading = false;
+		} finally {
+			clearTimeout(timeoutId);
+			if (this.fetchController === controller) {
+				this.fetchController = null;
+			}
+		}
+		if (generation !== this.fetchGeneration || !this.isInitialized) {
+			return;
 		}
 		this.broadcastState();
 	}
@@ -420,7 +452,11 @@ class MusicPlayerStore {
 	private showError(message: string): void {
 		this.state.errorMessage = message;
 		this.state.showError = true;
-		setTimeout(() => {
+		if (this.errorHideTimer) {
+			clearTimeout(this.errorHideTimer);
+		}
+		this.errorHideTimer = setTimeout(() => {
+			this.errorHideTimer = null;
 			this.state.showError = false;
 			this.broadcastState();
 		}, ERROR_DISPLAY_DURATION);
@@ -437,6 +473,7 @@ class MusicPlayerStore {
 			return;
 		}
 		if (this.state.isPlaying) {
+			this.state.willAutoPlay = false;
 			this.audio.pause();
 		} else {
 			this.audio.play().catch((err) => {
@@ -458,6 +495,7 @@ class MusicPlayerStore {
 		if (!this.audio) {
 			return;
 		}
+		this.state.willAutoPlay = false;
 		this.audio.pause();
 	}
 
@@ -623,6 +661,19 @@ class MusicPlayerStore {
 	}
 
 	destroy(): void {
+		this.fetchGeneration++;
+		if (this.fetchController) {
+			this.fetchController.abort();
+			this.fetchController = null;
+		}
+		if (this.skipErrorTimer) {
+			clearTimeout(this.skipErrorTimer);
+			this.skipErrorTimer = null;
+		}
+		if (this.errorHideTimer) {
+			clearTimeout(this.errorHideTimer);
+			this.errorHideTimer = null;
+		}
 		if (this.unregisterInteraction) {
 			this.unregisterInteraction();
 		}
