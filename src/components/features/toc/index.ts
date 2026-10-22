@@ -12,7 +12,6 @@ export { default as SidebarTOC } from "./SidebarTOC.astro";
 // 子组件导出
 export { default as TOCBadge } from "./components/TOCBadge.astro";
 export { default as TOCItemComponent } from "./components/TOCItem.astro";
-export { default as TOCProgressBar } from "./components/TOCProgressBar.astro";
 
 // 类型导出
 export type {
@@ -34,19 +33,6 @@ export {
 	getTOCConfig,
 	scrollToHeading,
 } from "./utils/toc-utils";
-
-// Hooks 导出
-export * from "./hooks/useFloatingTOC";
-
-// Navigation hooks
-export {
-	createHeadingClickHandler,
-	extractHeadingsFromDOM,
-	getContainerSelector,
-	getTOCConfig as getTocConfig,
-	isPostPage,
-	scrollToHeading as scrollToTocHeading,
-} from "./hooks/useTocNavigation";
 
 // Highlight hooks
 export {
