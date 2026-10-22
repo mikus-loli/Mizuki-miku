@@ -7,143 +7,198 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import { globSync } from "glob";
 
-/**
- * 从 LHCI JSON 报告文件中提取指标
- */
-function extractMetricsFromReport(reportPath) {
-  try {
-    const report = JSON.parse(readFileSync(reportPath, "utf-8"));
-    const results = {};
+import { aggregateReports, isScoreMetric } from "./lhci-metrics.js";
 
-    if (report.results) {
-      for (const result of report.results) {
-        const url = result.requestedUrl;
-        const categories = result.categories || {};
-        const audits = result.audits || {};
-
-        results[url] = {
-          performance: categories.performance?.score || 0,
-          "first-contentful-paint": audits["first-contentful-paint"]?.numericValue || 0,
-          "largest-contentful-paint": audits["largest-contentful-paint"]?.numericValue || 0,
-          "cumulative-layout-shift": audits["cumulative-layout-shift"]?.numericValue || 0,
-          "total-blocking-time": audits["total-blocking-time"]?.numericValue || 0,
-          "speed-index": audits["speed-index"]?.numericValue || 0,
-          interactive: audits["interactive"]?.numericValue || 0,
-          accessibility: categories.accessibility?.score || 0,
-          "best-practices": categories["best-practices"]?.score || 0,
-          seo: categories.seo?.score || 0,
-        };
-      }
-    }
-
-    return results;
-  } catch (err) {
-    console.error("Failed to parse LHCI report:", err.message);
-    return {};
-  }
-}
+const DEFAULT_THRESHOLDS = {
+	performance: 0.85,
+	"first-contentful-paint": 2000,
+	"largest-contentful-paint": 4000,
+	"cumulative-layout-shift": 0.1,
+	"total-blocking-time": 500,
+	"speed-index": 4000,
+	interactive: 5000,
+	regressionPercent: 10,
+};
 
 /**
  * 加载性能基准
  */
 function loadBaseline(baselinePath) {
-  try {
-    const data = JSON.parse(readFileSync(baselinePath, "utf-8"));
-    return {
-      baseline: data.baseline,
-      thresholds: data.thresholds,
-    };
-  } catch (err) {
-    console.error("Failed to load baseline file:", err.message);
-    return {
-      baseline: {},
-      thresholds: { regressionPercent: 10 },
-    };
-  }
+	try {
+		const data = JSON.parse(readFileSync(baselinePath, "utf-8"));
+		if (!data.baseline || typeof data.baseline !== "object") {
+			throw new Error("missing baseline object");
+		}
+		return {
+			baseline: data.baseline,
+			thresholds: {
+				...DEFAULT_THRESHOLDS,
+				...(data.thresholds || {}),
+			},
+		};
+	} catch (err) {
+		console.error("Failed to load baseline file:", err.message);
+		return { baseline: {}, thresholds: DEFAULT_THRESHOLDS };
+	}
 }
 
 /**
- * 检查性能回归
+ * 检查性能回归。
+ * 分数类指标越高越好，耗时类指标越低越好；统一换算成"正数=变差"。
+ * 同时检查相对阈值（regressionPercent）与 baseline 中的绝对预算。
  */
-function checkPerformanceRegression(currentMetrics, baselineMetrics, thresholds) {
-  const regressions = [];
+function checkPerformanceRegression(
+	currentMetrics,
+	baselineMetrics,
+	thresholds,
+) {
+	const regressions = [];
+	const regressionPercent = thresholds.regressionPercent ?? 10;
 
-  for (const [metric, currentValue] of Object.entries(currentMetrics)) {
-    const baselineValue = baselineMetrics[metric];
-    if (baselineValue === undefined || baselineValue === 0) continue;
+	for (const [metric, currentValue] of Object.entries(currentMetrics)) {
+		if (typeof currentValue !== "number" || currentValue <= 0) {
+			continue;
+		}
 
-    const percentChange = ((currentValue - baselineValue) / baselineValue) * 100;
+		const baselineValue = baselineMetrics[metric];
+		if (typeof baselineValue !== "number" || baselineValue <= 0) {
+			continue;
+		}
 
-    if (percentChange > thresholds.regressionPercent) {
-      regressions.push({
-        metric,
-        current: currentValue,
-        baseline: baselineValue,
-        percent: percentChange,
-      });
-    }
-  }
+		const isScore = isScoreMetric(metric);
+		const percentChange = isScore
+			? ((baselineValue - currentValue) / baselineValue) * 100
+			: ((currentValue - baselineValue) / baselineValue) * 100;
 
-  return regressions;
+		const budget = thresholds[metric];
+		const exceedsBudget =
+			typeof budget === "number" &&
+			(isScore ? currentValue < budget : currentValue > budget);
+
+		if (percentChange > regressionPercent || exceedsBudget) {
+			regressions.push({
+				metric,
+				current: currentValue,
+				baseline: baselineValue,
+				percent: percentChange,
+				exceedsBudget,
+				budget: typeof budget === "number" ? budget : undefined,
+				isScore,
+			});
+		}
+	}
+
+	return regressions;
+}
+
+function formatValue(metric, value) {
+	if (isScoreMetric(metric)) {
+		return value.toFixed(2);
+	}
+	if (metric === "cumulative-layout-shift") {
+		return value.toFixed(3);
+	}
+	return `${(value / 1000).toFixed(2)}s`;
 }
 
 /**
  * 主函数
  */
 async function main() {
-  const baselinePath = join(process.cwd(), "performance-baseline.json");
-  const lhciDir = join(process.cwd(), ".lighthouseci");
+	const baselinePath = join(process.cwd(), "performance-baseline.json");
+	const lhciDir = join(process.cwd(), ".lighthouseci");
 
-  console.log("Loading baseline...");
-  const { baseline, thresholds } = loadBaseline(baselinePath);
+	console.log("Loading baseline...");
+	const { baseline, thresholds } = loadBaseline(baselinePath);
 
-  console.log("Extracting metrics from reports...");
-  const reportFiles = globSync(join(lhciDir, "lhr-*.json"));
-  const currentMetrics = {};
+	const reportFiles = globSync(join(lhciDir, "lhr-*.json"));
+	if (reportFiles.length === 0) {
+		console.error(
+			`No LHCI reports found in ${lhciDir}. Run 'pnpm lhci' first.`,
+		);
+		process.exit(1);
+	}
 
-  for (const reportPath of reportFiles) {
-    const metrics = extractMetricsFromReport(reportPath);
-    Object.assign(currentMetrics, metrics);
-  }
+	console.log("Extracting metrics from reports...");
+	const { metrics: currentMetrics, runs } = aggregateReports(
+		reportFiles,
+		(path) => JSON.parse(readFileSync(path, "utf-8")),
+	);
 
-  console.log("\n=== Performance Regression Check ===\n");
+	if (Object.keys(currentMetrics).length === 0) {
+		console.error("LHCI reports contained no usable results.");
+		process.exit(1);
+	}
 
-  let hasRegressions = false;
+	console.log("\n=== Performance Regression Check ===\n");
 
-  for (const [url, metrics] of Object.entries(currentMetrics)) {
-    const urlKey = Object.keys(baseline).find((key) => baseline[key].url === url);
-    if (!urlKey) continue;
+	let hasRegressions = false;
+	let compared = 0;
 
-    const baselineMetrics = baseline[urlKey].metrics;
-    const regressions = checkPerformanceRegression(metrics, baselineMetrics, thresholds);
+	for (const [url, metrics] of Object.entries(currentMetrics)) {
+		const urlKey = Object.keys(baseline).find(
+			(key) => baseline[key].url === url,
+		);
+		if (!urlKey) {
+			console.log(`⚠️  ${url} - no baseline entry, skipped`);
+			continue;
+		}
 
-    if (regressions.length > 0) {
-      hasRegressions = true;
-      console.log(`Regressions found for: ${url}\n`);
+		compared++;
+		const baselineMetrics = baseline[urlKey].metrics || {};
+		const regressions = checkPerformanceRegression(
+			metrics,
+			baselineMetrics,
+			thresholds,
+		);
 
-      for (const reg of regressions) {
-        console.log(`  ❌ ${reg.metric}`);
-        console.log(`     Current: ${reg.current.toFixed(2)}`);
-        console.log(`     Baseline: ${reg.baseline.toFixed(2)}`);
-        console.log(`     Change: +${reg.percent.toFixed(1)}%\n`);
-      }
-    } else {
-      console.log(`✅ ${url} - No regressions found`);
-    }
-  }
+		if (regressions.length > 0) {
+			hasRegressions = true;
+			console.log(
+				`Regressions found for: ${url} (${runs[url]} run${runs[url] > 1 ? "s" : ""})\n`,
+			);
 
-  console.log("\n=== Summary ===");
-  if (hasRegressions) {
-    console.log("⚠️  Performance regressions detected!");
-    console.log("Please investigate and fix before merging.");
-    process.exit(1);
-  } else {
-    console.log("✅ All performance checks passed!");
-    process.exit(0);
-  }
+			for (const reg of regressions) {
+				const direction = reg.isScore ? "下降" : "上升";
+				const budget = reg.exceedsBudget
+					? `，超出预算 ${formatValue(reg.metric, reg.budget)}`
+					: "";
+				console.log(`  ❌ ${reg.metric}`);
+				console.log(
+					`     Current: ${formatValue(reg.metric, reg.current)}`,
+				);
+				console.log(
+					`     Baseline: ${formatValue(reg.metric, reg.baseline)}`,
+				);
+				console.log(
+					`     Change: ${direction} ${reg.percent.toFixed(1)}%${budget}\n`,
+				);
+			}
+		} else {
+			console.log(
+				`✅ ${url} - No regressions found (${runs[url]} run${runs[url] > 1 ? "s" : ""})`,
+			);
+		}
+	}
+
+	console.log("\n=== Summary ===");
+	if (compared === 0) {
+		console.error(
+			"No current URL matched a baseline entry. Check the baseline URLs or regenerate it with 'pnpm performance:baseline -- --update'.",
+		);
+		process.exit(1);
+	}
+	if (hasRegressions) {
+		console.log("⚠️  Performance regressions detected!");
+		console.log("Please investigate and fix before merging.");
+		process.exit(1);
+	}
+
+	console.log("✅ All performance checks passed!");
+	process.exit(0);
 }
 
 main().catch((error) => {
-  console.error("Error running performance check:", error);
-  process.exit(1);
+	console.error("Error running performance check:", error);
+	process.exit(1);
 });
