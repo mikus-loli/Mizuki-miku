@@ -208,6 +208,7 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 	class FloatingTOC {
 		state: FloatingTOCState;
 		navbarOffset = 80;
+		documentEventsBound = false;
 
 		constructor() {
 			this.state = {
@@ -343,17 +344,11 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 		}
 
 		bindEvents() {
-			const { btn, content, wrapper } = this.state;
+			const { btn, content } = this.state;
 
 			btn?.addEventListener("click", (e) => {
 				e.stopPropagation();
 				this.toggle();
-			});
-
-			document.addEventListener("click", (e) => {
-				if (this.state.isOpen && !wrapper?.contains(e.target as Node)) {
-					this.close();
-				}
 			});
 
 			content?.addEventListener("click", (e) => {
@@ -365,6 +360,20 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 						scrollToHeading(id, this.navbarOffset);
 						this.close();
 					}
+				}
+			});
+
+			// document 级监听跨 Swup 换页存活，只绑一次；节点引用每次从 state 取，
+			// 避免 reinit 后仍用旧 wrapper/content 判断。
+			if (this.documentEventsBound) return;
+			this.documentEventsBound = true;
+
+			document.addEventListener("click", (e) => {
+				if (
+					this.state.isOpen &&
+					!this.state.wrapper?.contains(e.target as Node)
+				) {
+					this.close();
 				}
 			});
 
@@ -406,6 +415,7 @@ const useJapaneseBadge = siteConfig.toc.useJapaneseBadge;
 			this.state.wrapper = document.querySelector(
 				".floating-toc-wrapper",
 			);
+			this.bindEvents();
 			this.generateTOC();
 			this.observeContent();
 		}
