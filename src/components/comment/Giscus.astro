@@ -18,7 +18,10 @@ const config = {
 		const GISCUS_CONTAINER_ID = "giscus-container";
 		const ROOT_MARGIN = "200px";
 
-		let observer = null;
+		// 跨 Swup 换页共享的桥：脚本每次换页都会重新执行，
+		// 监听与 observer 必须只保留一份，回调始终指向最新闭包。
+		const bridge = (window.__giscusCommentBridge ||= {});
+		bridge.cleanup?.();
 
 		function getCurrentPath() {
 			const pathname = window.location.pathname;
@@ -73,15 +76,13 @@ const config = {
 		}
 
 		function cleanup() {
-			if (observer) {
-				observer.disconnect();
-				observer = null;
+			if (bridge.observer) {
+				bridge.observer.disconnect();
+				bridge.observer = null;
 			}
-			if (observer_theme) {
-				observer_theme.disconnect();
-			}
-			if (window.swup?.hooks) {
-				window.swup.hooks.off("content:replace", initGiscus);
+			if (bridge.themeObserver) {
+				bridge.themeObserver.disconnect();
+				bridge.themeObserver = null;
 			}
 		}
 
@@ -91,17 +92,17 @@ const config = {
 				return;
 			}
 
-			if (observer) {
-				observer.disconnect();
-				observer = null;
+			if (bridge.observer) {
+				bridge.observer.disconnect();
+				bridge.observer = null;
 			}
 
-			observer = new IntersectionObserver(
+			bridge.observer = new IntersectionObserver(
 				(entries) => {
 					if (entries[0].isIntersecting) {
-						if (observer) {
-							observer.disconnect();
-							observer = null;
+						if (bridge.observer) {
+							bridge.observer.disconnect();
+							bridge.observer = null;
 						}
 						initGiscus();
 					}
@@ -109,33 +110,53 @@ const config = {
 				{ rootMargin: ROOT_MARGIN },
 			);
 
-			observer.observe(container);
+			bridge.observer.observe(container);
 		}
+
+		bridge.setupLazyLoad = setupLazyLoad;
+		bridge.cleanup = cleanup;
+		bridge.onContentReplace = () => {
+			setTimeout(() => bridge.setupLazyLoad?.(), 200);
+		};
 
 		function setupSwupHooks() {
-			if (window.swup?.hooks) {
-				window.swup.hooks.on("content:replace", () => {
-					setTimeout(setupLazyLoad, 200);
-				});
-			} else {
-				// @swup/astro 不派发 swup:enable；短轮询等待 window.swup。
-				let attempts = 0;
-				const retryTimer = setInterval(() => {
-					if (window.swup?.hooks) {
-						setupSwupHooks();
-						clearInterval(retryTimer);
-					} else if (++attempts >= 50) {
-						clearInterval(retryTimer);
-					}
-				}, 100);
+			if (bridge.hooksBound) {
+				return;
 			}
+
+			const register = () => {
+				if (!window.swup?.hooks) {
+					return false;
+				}
+				bridge.hooksBound = true;
+				window.swup.hooks.on("content:replace", () => {
+					bridge.onContentReplace?.();
+				});
+				return true;
+			};
+
+			if (register()) {
+				return;
+			}
+
+			// @swup/astro 不派发 swup:enable；短轮询等待 window.swup。
+			let attempts = 0;
+			const retryTimer = setInterval(() => {
+				if (register() || ++attempts >= 50) {
+					clearInterval(retryTimer);
+				}
+			}, 100);
 		}
 
-		document.addEventListener("mizuki:page:loaded", () => {
-			setupLazyLoad();
-		});
-
-		window.addEventListener("beforeunload", cleanup);
+		if (!bridge.globalListenersBound) {
+			bridge.globalListenersBound = true;
+			document.addEventListener("mizuki:page:loaded", () => {
+				bridge.setupLazyLoad?.();
+			});
+			window.addEventListener("beforeunload", () => {
+				bridge.cleanup?.();
+			});
+		}
 
 		if (document.readyState === "loading") {
 			document.addEventListener("DOMContentLoaded", () => {
@@ -147,7 +168,7 @@ const config = {
 			setupSwupHooks();
 		}
 
-		const observer_theme = new MutationObserver((mutations) => {
+		const themeObserver = new MutationObserver((mutations) => {
 			mutations.forEach((mutation) => {
 				if (
 					mutation.attributeName === "class" ||
@@ -173,7 +194,8 @@ const config = {
 			});
 		});
 
-		observer_theme.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "data-theme"] });
+		bridge.themeObserver = themeObserver;
+		themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class", "data-theme"] });
 	})();
 </script>
 
