@@ -32,23 +32,33 @@
 					window.swup.hooks.off("content:replace", handleContentReplace);
 				}
 			});
-		} else {
-			const onSwupEnable = () => {
-				const swup = window.swup;
-				if (swup?.hooks) {
-					swup.hooks.on("content:replace", handleContentReplace);
-					cleanupFns.push(() => {
-						if (window.swup?.hooks) {
-							window.swup.hooks.off("content:replace", handleContentReplace);
-						}
-					});
-				}
-			};
-			document.addEventListener("swup:enable", onSwupEnable);
-			cleanupFns.push(() => {
-				document.removeEventListener("swup:enable", onSwupEnable);
-			});
-		}
+			} else {
+				const onSwupEnable = () => {
+					const swup = window.swup;
+					if (swup?.hooks) {
+						swup.hooks.on("content:replace", handleContentReplace);
+						cleanupFns.push(() => {
+							if (window.swup?.hooks) {
+								window.swup.hooks.off("content:replace", handleContentReplace);
+							}
+						});
+						return true;
+					}
+					return false;
+				};
+				// @swup/astro 不派发 swup:enable；短轮询等待 window.swup，保留事件兼容。
+				let attempts = 0;
+				const retryTimer = setInterval(() => {
+					if (onSwupEnable() || ++attempts >= 50) {
+						clearInterval(retryTimer);
+					}
+				}, 100);
+				document.addEventListener("swup:enable", onSwupEnable);
+				cleanupFns.push(() => {
+					clearInterval(retryTimer);
+					document.removeEventListener("swup:enable", onSwupEnable);
+				});
+			}
 
 		const onDOMContentLoaded = () => {
 			requestAnimationFrame(() => {

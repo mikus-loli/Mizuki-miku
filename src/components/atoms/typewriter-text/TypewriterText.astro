@@ -155,8 +155,8 @@ const textData = Array.isArray(text) ? JSON.stringify(text) : text;
 		});
 	});
 
-	// 支持页面切换时重新初始化
-	document.addEventListener("swup:contentReplaced", () => {
+	// 支持页面切换时重新初始化（astro:after-swap 只在换页时触发，避免首屏重复初始化）
+	document.addEventListener("astro:after-swap", () => {
 		const typewriterElements = document.querySelectorAll(".typewriter");
 		typewriterElements.forEach((element) => {
 			new TypewriterEffect(element as HTMLElement);

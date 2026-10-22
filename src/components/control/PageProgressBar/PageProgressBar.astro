@@ -49,11 +49,20 @@ const { enable, height, duration } = Astro.props;
 				});
 			}
 
-			if (window.swup) {
-				setupProgressBar();
-			} else {
-				document.addEventListener("swup:enable", setupProgressBar);
-			}
+				if (window.swup) {
+					setupProgressBar();
+				} else {
+					// @swup/astro 不派发 swup:enable；短轮询等待 window.swup。
+					let attempts = 0;
+					const retryTimer = setInterval(() => {
+						if (window.swup) {
+							setupProgressBar();
+							clearInterval(retryTimer);
+						} else if (++attempts >= 50) {
+							clearInterval(retryTimer);
+						}
+					}, 100);
+				}
 		</script>
 	</>
 )}
