@@ -1,4 +1,5 @@
 import * as fs from "node:fs";
+import path from "node:path";
 
 import type { APIContext, GetStaticPaths } from "astro";
 import type { CollectionEntry } from "astro:content";
@@ -42,10 +43,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 let fontCache: { regular: Buffer | null; bold: Buffer | null } | null = null;
 
 // 本地 OG 字体（OFL 开源 Zen Maru Gothic，避免构建机访问 Google Fonts 失败/超时）
-// 与博客正文使用的显示字体一致，保证 OG 图视觉统一
-const LOCAL_OG_FONT_PATH = new URL(
-	"../../../public/assets/font/ZenMaruGothic-Medium.ttf",
-	import.meta.url,
+// 与博客正文使用的显示字体一致，保证 OG 图视觉统一。
+// 用 process.cwd() 而不是 import.meta.url：endpoint 会被打包，相对 URL 在产物中不可靠。
+const LOCAL_OG_FONT_PATH = path.join(
+	process.cwd(),
+	"public/assets/font/ZenMaruGothic-Medium.ttf",
 );
 
 function loadLocalFont(): Buffer | null {
@@ -139,6 +141,45 @@ async function fetchNotoSansSCFonts() {
 	}
 }
 
+// 1x1 透明 PNG：头像/图标缺失时占位，保持模板布局不变
+const TRANSPARENT_PIXEL =
+	"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+
+/** 解析配置里的资源路径：/ 开头相对 public，其余相对 src。 */
+function resolveAssetPath(assetPath: string): string | null {
+	if (!assetPath) {
+		return null;
+	}
+	if (/^https?:\/\//i.test(assetPath)) {
+		// 远程图片不做同步读取，交给调用方回退
+		return null;
+	}
+	if (assetPath.startsWith("/")) {
+		return path.join(process.cwd(), "public", assetPath.slice(1));
+	}
+	return path.join(process.cwd(), "src", assetPath);
+}
+
+/**
+ * 读取本地图片并转成 PNG data URI。
+ * 统一转 PNG 是因为 satori 对 svg/webp/ico data URI 的支持不一致。
+ * 读取或解码失败返回 null，由调用方回退到透明像素。
+ */
+async function loadImageDataUri(assetPath: string): Promise<string | null> {
+	const filePath = resolveAssetPath(assetPath);
+	if (!filePath) {
+		return null;
+	}
+	try {
+		const source = fs.readFileSync(filePath);
+		const png = await sharp(source).png().toBuffer();
+		return `data:image/png;base64,${png.toString("base64")}`;
+	} catch (err) {
+		console.warn(`[og] Failed to load image asset ${assetPath}:`, err);
+		return null;
+	}
+}
+
 export async function GET({
 	props,
 }: APIContext<{ post: CollectionEntry<"posts"> }>) {
@@ -148,16 +189,24 @@ export async function GET({
 	const { regular: fontRegular, bold: fontBold } =
 		await fetchNotoSansSCFonts();
 
-	// Avatar + icon: still read from disk (small assets)
-	const avatarBuffer = fs.readFileSync(`./src/${profileConfig.avatar}`);
-	const avatarBase64 = `data:image/png;base64,${avatarBuffer.toString("base64")}`;
+	// Avatar + icon: 读取失败时回退到透明像素，避免整个 OG 生成因单个资源缺失而崩溃
+	const avatarBase64 =
+		(await loadImageDataUri(profileConfig.avatar ?? "")) ??
+		TRANSPARENT_PIXEL;
 
-	let iconPath = "./public/favicon/favicon.ico";
-	if (siteConfig.favicon.length > 0) {
-		iconPath = `./public${siteConfig.favicon[0].src}`;
+	const configuredIcon =
+		siteConfig.favicon[0]?.src ?? "/favicon/favicon.ico";
+	let iconBase64 = await loadImageDataUri(configuredIcon);
+	if (!iconBase64 && configuredIcon !== "/favicon/favicon.ico") {
+		iconBase64 = await loadImageDataUri("/favicon/favicon.ico");
 	}
-	const iconBuffer = fs.readFileSync(iconPath);
-	const iconBase64 = `data:image/png;base64,${iconBuffer.toString("base64")}`;
+	iconBase64 ??= TRANSPARENT_PIXEL;
+
+	if (!fontRegular) {
+		throw new Error(
+			"[og] No usable font for OG image generation. Expected public/assets/font/ZenMaruGothic-Medium.ttf or network access to Google Fonts.",
+		);
+	}
 
 	const hue = siteConfig.themeColor.hue;
 	const primaryColor = `hsl(${hue}, 90%, 65%)`;
