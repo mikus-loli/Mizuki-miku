@@ -48,8 +48,12 @@ interface Props {
 let { title, description, lang, setOGTypeArticle, postSlug, canonical } =
 	Astro.props;
 
-// canonical URL：默认当前路径（无 query），文章页可覆盖为权威 URL
-const canonicalUrl = canonical ?? new URL(Astro.url.pathname, siteConfig.siteURL).href;
+// canonical URL：默认当前路径（无 query），文章页可覆盖为权威 URL。
+// 统一转绝对地址，确保 canonical / og:url / twitter:url 始终跟随 siteURL。
+const canonicalUrl = new URL(
+	canonical ?? Astro.url.pathname,
+	siteConfig.siteURL,
+).href;
 
 // 首屏就会用到的跨域主机，提前建连（只握手，不下载内容）。
 // 统计脚本、歌单接口、图床都在别的子域上，等到元素解析到才握手要多走 1-2 个 RTT。

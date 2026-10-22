@@ -205,7 +205,7 @@ const jsonLd = {
 	setOGTypeArticle={true}
 	postSlug={entry.id}
 	headings={headings}
-	canonical={hasCustomPermalink(entry) ? getPostUrl(entry) : undefined}
+	canonical={getPostUrl(entry)}
 >
 	<script
 		is:inline
