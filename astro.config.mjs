@@ -193,9 +193,7 @@ export default defineConfig({
 			// CSS 代码分割
 			cssCodeSplit: true,
 			cssMinify: "esbuild",
-			// 内联小型 CSS 文件以减少网络请求
-			inlineStylesheets: "auto",
-			// 生产环境移除 console 和 debugger
+			// 生产环境移除 console.log/debug 与 debugger，保留 warn/error 便于线上排障
 			minify: "esbuild",
 			rollupOptions: {
 				onwarn(warning, warn) {
@@ -213,11 +211,13 @@ export default defineConfig({
 				},
 			},
 		},
-		// 生产环境移除 console.log 和 debugger
-		esbuildOptions: {
-			drop:
+		// 生产环境移除 console.log/debug 与 debugger，保留 warn/error 便于线上排障。
+		// 注意：Vite 3+ 的配置键是 esbuild（旧的 esbuildOptions 已被移除）。
+		esbuild: {
+			drop: process.env.NODE_ENV === "production" ? ["debugger"] : [],
+			pure:
 				process.env.NODE_ENV === "production"
-					? ["console", "debugger"]
+					? ["console.log", "console.debug"]
 					: [],
 		},
 	},
