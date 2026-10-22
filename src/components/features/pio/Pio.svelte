@@ -59,12 +59,14 @@ import { onDestroy, onMount } from "svelte";
 	let isLoaded = $state(false);
 	let isVisible = $state(false);
 	let shouldRender = $state(false);
-	const resizeObserver: ResizeObserver | null = null;
 	let mediaQuery: MediaQueryList | null = null;
 	let initRetryCount = 0;
 	const MAX_INIT_RETRIES = 30;
 	let swupCleanupFns: (() => void)[] = [];
 	let lazyLoadTimeout: ReturnType<typeof setTimeout> | null = null;
+	let initRetryTimeout: ReturnType<typeof setTimeout> | null = null;
+	let cleanupInteractionListeners: (() => void) | null = null;
+	const scriptLoadPromises = new Map<string, Promise<void>>();
 
 	// 检查分辨率是否满足显示条件
 	function checkResolution(): boolean {
@@ -113,6 +115,16 @@ import { onDestroy, onMount } from "svelte";
 		}
 	}
 
+	function scheduleInitRetry() {
+		if (initRetryTimeout) {
+			clearTimeout(initRetryTimeout);
+		}
+		initRetryTimeout = setTimeout(() => {
+			initRetryTimeout = null;
+			initPio();
+		}, 100);
+	}
+
 	function initPio() {
 		if (typeof window === "undefined") {return;}
 
@@ -131,7 +143,7 @@ import { onDestroy, onMount } from "svelte";
 			}
 			initRetryCount++;
 			console.warn("[Pio] Paul_Pio not available yet, retrying...");
-			setTimeout(initPio, 100);
+			scheduleInitRetry();
 			return;
 		}
 
@@ -144,7 +156,7 @@ import { onDestroy, onMount } from "svelte";
 			}
 			initRetryCount++;
 			console.warn("[Pio] DOM elements not found, retrying...");
-			setTimeout(initPio, 100);
+			scheduleInitRetry();
 			return;
 		}
 
@@ -160,9 +172,42 @@ import { onDestroy, onMount } from "svelte";
 			win.__pioInstance = new win.Paul_Pio(pioOptions);
 			win.__pioInitialized = true;
 			isLoaded = true;
+			initRetryCount = 0;
 		} catch (e) {
 			console.error("[Pio] Initialization error:", e);
 		}
+	}
+
+	function loadScript(src: string, id: string): Promise<void> {
+		const pending = scriptLoadPromises.get(id);
+		if (pending) {
+			return pending;
+		}
+		if (document.querySelector(`#${id}`)) {
+			return Promise.resolve();
+		}
+
+		const promise = new Promise<void>((resolve, reject) => {
+			const script = document.createElement("script");
+			script.id = id;
+			script.src = src;
+			script.async = true;
+			script.defer = true;
+			script.onload = () => {
+				scriptLoadPromises.delete(id);
+				resolve();
+			};
+			script.onerror = () => {
+				scriptLoadPromises.delete(id);
+				// 失败标签必须移除，否则下次 querySelector 会把它误判为已加载
+				script.remove();
+				reject(new Error(`Failed to load ${src}`));
+			};
+			document.head.appendChild(script);
+		});
+
+		scriptLoadPromises.set(id, promise);
+		return promise;
 	}
 
 	async function loadPioAssets() {
@@ -171,26 +216,9 @@ import { onDestroy, onMount } from "svelte";
 		const win = window as PioWindow;
 
 		if (win.__pioScriptsLoaded) {
-			setTimeout(initPio, 100);
+			scheduleInitRetry();
 			return;
 		}
-
-		const loadScript = (src: string, id: string): Promise<void> => {
-			return new Promise((resolve, reject) => {
-				if (document.querySelector(`#${id}`)) {
-					resolve();
-					return;
-				}
-				const script = document.createElement("script");
-				script.id = id;
-				script.src = src;
-				script.async = true;
-				script.defer = true;
-				script.onload = () => resolve();
-				script.onerror = reject;
-				document.head.appendChild(script);
-			});
-		};
 
 		try {
 
@@ -216,7 +244,7 @@ import { onDestroy, onMount } from "svelte";
 			}
 
 			win.__pioScriptsLoaded = true;
-			setTimeout(initPio, 100);
+			scheduleInitRetry();
 		} catch (error) {
 			console.error("[Pio] Failed to load scripts:", error);
 		}
@@ -237,8 +265,12 @@ import { onDestroy, onMount } from "svelte";
 		};
 
 		// 兜底：固定延迟后无论是否交互都加载（真实用户最终能看到看板娘）
+		if (lazyLoadTimeout) {
+			clearTimeout(lazyLoadTimeout);
+		}
 		lazyLoadTimeout = setTimeout(doLoad, LAZY_LOAD_DELAY);
 
+		cleanupInteractionListeners?.();
 		const interactionEvents = [
 			"mousemove",
 			"touchstart",
@@ -246,19 +278,25 @@ import { onDestroy, onMount } from "svelte";
 			"keydown",
 		];
 		const onInteraction = () => {
-			interactionEvents.forEach((e) =>
-				document.removeEventListener(e, onInteraction),
-			);
+			cleanupInteractionListeners?.();
+			cleanupInteractionListeners = null;
 			if (!isLoaded && isVisible) {
 				// 用户交互后 1s 内快速加载——此监听只服务真实用户
 				//（自动化环境已被上方 navigator.webdriver 检测拦截）
-				clearTimeout(lazyLoadTimeout!);
+				if (lazyLoadTimeout) {
+					clearTimeout(lazyLoadTimeout);
+				}
 				lazyLoadTimeout = setTimeout(doLoad, 1000);
 			}
 		};
 		interactionEvents.forEach((e) =>
 			document.addEventListener(e, onInteraction, { passive: true }),
 		);
+		cleanupInteractionListeners = () => {
+			interactionEvents.forEach((e) =>
+				document.removeEventListener(e, onInteraction),
+			);
+		};
 	}
 
 	function setupResizeListener() {
@@ -287,6 +325,11 @@ import { onDestroy, onMount } from "svelte";
 		// 初始检查分辨率
 		isVisible = checkResolution();
 
+		// 监听与 Swup hooks 无论初始是否可见都要注册，
+		// 否则窄窗口启动后拉宽永远不会触发加载。
+		setupSwupHooks();
+		setupResizeListener();
+
 		if (!isVisible) {
 			return;
 		}
@@ -294,10 +337,6 @@ import { onDestroy, onMount } from "svelte";
 		// 分辨率满足条件，延迟加载 Live2D（确保 LCP 完成）
 		shouldRender = true;
 		scheduleLazyLoad();
-		setupSwupHooks();
-
-		// 设置分辨率监听
-		setupResizeListener();
 	});
 
 	onDestroy(() => {
@@ -306,7 +345,14 @@ import { onDestroy, onMount } from "svelte";
 		swupCleanupFns = [];
 		if (lazyLoadTimeout) {
 			clearTimeout(lazyLoadTimeout);
+			lazyLoadTimeout = null;
 		}
+		if (initRetryTimeout) {
+			clearTimeout(initRetryTimeout);
+			initRetryTimeout = null;
+		}
+		cleanupInteractionListeners?.();
+		cleanupInteractionListeners = null;
 	});
 
 	function setupSwupHooks() {
@@ -324,11 +370,14 @@ import { onDestroy, onMount } from "svelte";
 			}
 		};
 
+		let registered = false;
 		const setup = () => {
+			if (registered) {return true;}
 			const swup = window.swup;
 			if (!swup?.hooks) {return false;}
 			swup.hooks.on("visit:start", hideDialog);
 			swup.hooks.on("animation:out:start", hideDialog);
+			registered = true;
 			swupCleanupFns.push(() => {
 				if (window.swup?.hooks) {
 					window.swup.hooks.off("visit:start", hideDialog);
@@ -341,17 +390,30 @@ import { onDestroy, onMount } from "svelte";
 			return true;
 		};
 
-		if (!setup()) {
-			const onSwupEnable = () => {
-				if (setup()) {
-					document.removeEventListener("swup:enable", onSwupEnable);
-				}
-			};
-			document.addEventListener("swup:enable", onSwupEnable);
-			swupCleanupFns.push(() => {
-				document.removeEventListener("swup:enable", onSwupEnable);
-			});
+		if (setup()) {
+			return;
 		}
+
+		// @swup/astro 不派发 swup:enable；用短轮询兜底，并保留事件监听兼容未来版本。
+		let attempts = 0;
+		const retryTimer = setInterval(() => {
+			if (setup() || ++attempts >= 50) {
+				clearInterval(retryTimer);
+				if (attempts >= 50) {
+					console.warn("[Pio] Swup hooks not registered after timeout");
+				}
+			}
+		}, 100);
+		const onSwupEnable = () => {
+			if (setup()) {
+				document.removeEventListener("swup:enable", onSwupEnable);
+			}
+		};
+		document.addEventListener("swup:enable", onSwupEnable);
+		swupCleanupFns.push(() => {
+			clearInterval(retryTimer);
+			document.removeEventListener("swup:enable", onSwupEnable);
+		});
 	}
 </script>
 
