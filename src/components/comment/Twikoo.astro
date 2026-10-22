@@ -197,18 +197,16 @@ const config = {
 					setTimeout(setupLazyLoad, 200);
 				});
 			} else {
-				document.addEventListener(
-					"swup:enable",
-					() => {
-						if (window.swup?.hooks) {
-							window.swup.hooks.on("content:replace", () => {
-								twikooInitialized = false;
-								setTimeout(setupLazyLoad, 200);
-							});
-						}
-					},
-					{ once: true },
-				);
+				// @swup/astro 不派发 swup:enable；短轮询等待 window.swup。
+				let attempts = 0;
+				const retryTimer = setInterval(() => {
+					if (window.swup?.hooks) {
+						setupSwupHooks();
+						clearInterval(retryTimer);
+					} else if (++attempts >= 50) {
+						clearInterval(retryTimer);
+					}
+				}, 100);
 			}
 		}
 
