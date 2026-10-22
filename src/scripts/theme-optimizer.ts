@@ -145,49 +145,19 @@ class ThemeOptimizer {
 	}
 
 	forceApplyThemeTransitionStyles(): void {
-		// 强制应用主题切换样式，确保在页面切换后也能正确工作
+		// 只维护 hide-during-transition 类。隐藏/恢复由 main.css 中的
+		// .is-theme-transitioning .expressive-code 规则统一负责，
+		// 不再写内联 !important，避免换页后样式残留导致代码块不可见。
 		const codeBlocks = document.querySelectorAll(".expressive-code");
 
 		codeBlocks.forEach((block: Element) => {
 			const htmlBlock = block as HTMLElement;
-			// 确保代码块有正确的类
 			if (this.hideCodeBlocksDuringTransition) {
 				htmlBlock.classList.add("hide-during-transition");
 			} else {
 				htmlBlock.classList.remove("hide-during-transition");
 			}
-
-			// 强制重新计算样式
-			void htmlBlock.offsetWidth;
 		});
-
-		// 检查当前是否处于主题切换状态
-		const isTransitioning: boolean =
-			document.documentElement.classList.contains(
-				"is-theme-transitioning",
-			);
-
-		if (isTransitioning) {
-			// 如果正在切换主题，确保样式立即应用
-			codeBlocks.forEach((block: Element) => {
-				const htmlBlock = block as HTMLElement;
-				if (htmlBlock.classList.contains("hide-during-transition")) {
-					htmlBlock.style.setProperty(
-						"content-visibility",
-						"hidden",
-						"important",
-					);
-					htmlBlock.style.setProperty("opacity", "0.99", "important");
-				}
-			});
-		} else {
-			// 如果不在切换状态，确保样式恢复正常
-			codeBlocks.forEach((block: Element) => {
-				const htmlBlock = block as HTMLElement;
-				htmlBlock.style.removeProperty("content-visibility");
-				htmlBlock.style.removeProperty("opacity");
-			});
-		}
 	}
 
 	// ==================== 配置初始化 ====================
@@ -224,39 +194,6 @@ class ThemeOptimizer {
 				block.classList.remove("hide-during-transition");
 			}
 		});
-
-		// 确保临时样式表中的规则与当前设置一致
-		this.updateTempStyleSheet();
-	}
-
-	updateTempStyleSheet(): void {
-		// 如果临时样式表存在，更新其内容以反映当前设置
-		if (this.tempStyleSheet) {
-			// 获取当前内容
-			let content: string | null = this.tempStyleSheet.textContent;
-
-			// 更新代码块隐藏规则
-			const hideRule = `.is-theme-transitioning .expressive-code {
-        content-visibility: hidden !important;
-        /* 避免闪烁 */
-        opacity: 0.99;
-      }`;
-
-			const showRule = `.is-theme-transitioning .expressive-code:not(.hide-during-transition) {
-        /* 保持代码块可见，但禁用过渡效果 */
-        content-visibility: visible !important;
-        opacity: 1 !important;
-      }`;
-
-			// 检查是否已存在这些规则，如果不存在则添加
-			if (
-				content &&
-				!content.includes(".is-theme-transitioning .expressive-code")
-			) {
-				content += "\n" + hideRule + "\n" + showRule;
-				this.tempStyleSheet.textContent = content;
-			}
-		}
 	}
 
 	// ==================== 代码块优化 ====================
@@ -302,6 +239,8 @@ class ThemeOptimizer {
 
 	observeCodeBlocks(): void {
 		this.visibleBlocks.clear();
+		// 换页后旧代码块已从 DOM 移除，先断开观察避免 observer 持有旧节点
+		this.codeBlockObserver?.disconnect();
 
 		requestAnimationFrame(() => {
 			const codeBlocks = document.querySelectorAll(".expressive-code");
@@ -468,21 +407,6 @@ class ThemeOptimizer {
       .is-theme-transitioning .decoration,
       .is-theme-transitioning .animation-element {
         visibility: hidden !important;
-      }
-
-      /* 在主题切换期间临时隐藏代码块以提升性能 */
-      /* 这个行为可以通过配置文件中的 expressiveCodeConfig.hideDuringThemeTransition 控制 */
-      .is-theme-transitioning .expressive-code {
-        content-visibility: hidden !important;
-        /* 避免闪烁 */
-        opacity: 0.99;
-      }
-
-      /* 当禁用隐藏代码块功能时（通过JavaScript动态控制） */
-      .is-theme-transitioning .expressive-code:not(.hide-during-transition) {
-        /* 保持代码块可见，但禁用过渡效果 */
-        content-visibility: visible !important;
-        opacity: 1 !important;
       }
 
       /* 确保打开的TOC面板在主题切换期间保持可点击 */
